@@ -1,0 +1,143 @@
+﻿@page
+@model DiamondStore.Pages.CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "_Layout";
+}
+
+<section id="center" class="center_shop"> 
+    <div class="container">
+        <div class="row">
+            <div class="center_shop_t clearfix">
+                <div class="col-sm-6">
+                    <div class="center_shop_tl clearfix">
+                        <h4 class="mgt">Checkout</h4>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="center_shop_tr text-right clearfix">
+                        <h6 class="col_2">You are here: <a href="/">Home</a> / Checkout</h6>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="checkout" class="clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="checkout_1 clearfix">
+                <div class="col-sm-8">
+                    <div class="checkout_1l clearfix">
+                        <h3 class="mgt">Make Your Checkout Here</h3>
+                        <p>Please register in order to checkout more quickly</p>
+                    </div><br>
+                    <div class="checkout_1l1 clearfix">
+                        <div class="col-sm-6 space_left">
+                            <h5>First Name <span class="col_1">*</span></h5>
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="col-sm-6 space_left">
+                            <h5>Last Name <span class="col_1">*</span></h5>
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+                    <div class="checkout_1l1 clearfix">
+                        <div class="col-sm-6 space_left">
+                            <h5>Email Address <span class="col_1">*</span></h5>
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="col-sm-6 space_left">
+                            <h5>Phone Number <span class="col_1">*</span></h5>
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+                    <div class="checkout_1l1 clearfix">
+                        <div class="col-sm-6 space_left">
+                            <h5>Country <span class="col_1">*</span></h5>
+                            <select class="form-control">
+                                <option>India</option>
+                                <option>Paksitan</option>
+                                <option>Russia</option>
+                                <option>England</option>
+                                <option>Nepal</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 space_left">
+                            <h5>State / Divition <span class="col_1">*</span></h5>
+                            <select class="form-control">
+                                <option>UP</option>
+                                <option>MP</option>
+                                <option>Bihar</option>
+                                <option>Delhi</option>
+                                <option>Jharkhand</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkout_1l1 clearfix">
+                        <div class="col-sm-6 space_left">
+                            <h5>Address Line 1 <span class="col_1">*</span></h5>
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="col-sm-6 space_left">
+                            <h5>Address Line 2 <span class="col_1">*</span></h5>
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+                    <div class="checkout_1l1 clearfix">
+                        <div class="col-sm-6 space_left">
+                            <h5>Postal Code <span class="col_1">*</span></h5>
+                            <input class="form-control" type="text">
+                        </div>
+                        <div class="col-sm-6 space_left">
+                            <h5>Company <span class="col_1">*</span></h5>
+                            <select class="form-control">
+                                <option>Microsoft</option>
+                                <option>Xaiomi</option>
+                                <option>Apple</option>
+                                <option>Samsung</option>
+                                <option>Motorola</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkout_1l clearfix">
+                        <p><input type="checkbox"> Create an account?</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="checkout_1r clearfix">
+                        <h4 class="mgt">CART TOTALS</h4>
+                        <hr class="hr_1">
+                        <h5>Sub Total <span class="pull-right">$230.00</span></h5>
+                        <h5>(+) Shipping <span class="pull-right">$20.00</span></h5>
+                        <hr class="hr_2"> 
+                        <h5>Total <span class="pull-right">$250.00</span></h5><br>
+                        <h4>PAYMENTS</h4>
+                        <hr class="hr_1">
+                        <p><input type="radio"> <span>Check Payments</span></p>
+                        <p><input type="radio"> <span>Cash On Delivery</span></p>
+                        <p><input type="radio"> <span>PayPal</span></p><br>
+                        <h6><a class="button" href="#">PROCEED TO CHECKOUT</a></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            var secondaryNav = $('.cd-secondary-nav'),
+                secondaryNavTopPosition = secondaryNav.offset().top;
+            $(window).on('scroll', function(){
+                if($(window).scrollTop() > secondaryNavTopPosition ) {
+                    secondaryNav.addClass('is-fixed');    
+                } else {
+                    secondaryNav.removeClass('is-fixed');
+                }
+            });    
+        });
+    </script>
+}

@@ -1,0 +1,110 @@
+﻿@page
+@model DiamondStore.Pages.ContactModel
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "_Layout";
+}
+
+<section id="center" class="center_shop"> 
+    <div class="container">
+        <div class="row">
+            <div class="center_shop_t clearfix">
+                <div class="col-sm-6">
+                    <div class="center_shop_tl clearfix">
+                        <h4 class="mgt">Contact</h4>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="center_shop_tr text-right clearfix">
+                        <h6 class="col_2">You are here: <a href="/">Home</a> / Contact</h6>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact_top">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114964.53925916665!2d-80.29949920266738!3d25.782390733064336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9b0a20ec8c111%3A0xff96f271ddad4f65!2sMiami%2C+FL%2C+USA!5e0!3m2!1sen!2sin!4v1530774403788" width="100%" height="500px" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="detail_14 clearfix">
+                    <h2 class="mgt">Get in touch</h2>
+                    <input type="text" class="form-control" placeholder="Name*">
+                    <input type="text" class="form-control" placeholder="E-mail*">
+                    <input type="text" class="form-control" placeholder="Website*">
+                    <textarea class="form-control form_1" placeholder="Message*"></textarea>
+                    <h4><a class="button" href="#">Send Message</a></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact_last">
+    <div class="container">
+        <div class="row">
+            <div class="contact_last_1 clearfix">
+                <div class="col-sm-8">
+                    <div class="contact_last_1l clearfix">
+                        <h2 class="mgt">Ready To Plan A Project With Us</h2>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="contact_last_1r clearfix">
+                        <h4 class="mgt"><a class="button mgt" href="#">Contact Us</a></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="contact_last_2 clearfix">
+                <div class="col-sm-4">
+                    <div class="contact_last_2i clearfix">
+                        <h4 class="bold">LOS ANGELES</h4>
+                        <hr>
+                        <p>123 Virginia Drive Nottingham<br>Los Angeles 12345</p>
+                        <p>+123 444-12xy<br>info@gmail.com</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="contact_last_2i clearfix">
+                        <h4 class="bold">LONDON</h4>
+                        <hr>
+                        <p>123 Virginia Drive Nottingham<br>Los Angeles 12345</p>
+                        <p>+123 444-12xy<br>info@gmail.com</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="contact_last_2i clearfix">
+                        <h4 class="bold">NEW YORK</h4>
+                        <hr>
+                        <p>123 Virginia Drive Nottingham<br>Los Angeles 12345</p>
+                        <p>+123 444-12xy<br>info@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            /*****Fixed Menu******/
+            var secondaryNav = $('.cd-secondary-nav'),
+                secondaryNavTopPosition = secondaryNav.offset().top;
+            $(window).on('scroll', function(){
+                if($(window).scrollTop() > secondaryNavTopPosition ) {
+                    secondaryNav.addClass('is-fixed');    
+                } else {
+                    secondaryNav.removeClass('is-fixed');
+                }
+            });    
+        });
+    </script>
+}
+
