@@ -298,6 +298,7 @@ margin-top:5px;
   font-weight:bold;
   margin-bottom:10px;
   padding: 5px 10px;
+  width: 100%;
 }
 @media (max-width: 768px) {
   .dropdown-menu-large {
@@ -312,6 +313,7 @@ margin-top:5px;
   }
   .dropdown-menu-large .dropdown-header {
     padding: 3px 15px !important;
+	width: 100%;
   }
 }
 
