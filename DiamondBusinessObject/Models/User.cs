@@ -25,10 +25,21 @@ public partial class User
     [StringLength(255)]
     public string Password { get; set; }
 
+    [StringLength(255)]
+    public string PhoneNumber { get; set; }
+
+    [StringLength(255)]
+    public string Address { get; set; }
+
+    public bool? Gender { get; set; }
+
     public bool? Status { get; set; }
 
     [InverseProperty("User")]
-    public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     [ForeignKey("RoleId")]
     [InverseProperty("Users")]

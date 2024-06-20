@@ -30,5 +30,8 @@ public partial class DiamondPrice
 
     public double? PricePerCarat { get; set; }
 
-    public DateOnly? Date { get; set; }
+    public DateOnly? UpdateDate { get; set; }
+
+    [InverseProperty("DiamondPrice")]
+    public virtual ICollection<Diamond> Diamonds { get; set; } = new List<Diamond>();
 }

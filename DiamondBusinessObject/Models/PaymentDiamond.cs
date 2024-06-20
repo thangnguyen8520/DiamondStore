@@ -8,21 +8,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiamondBusinessObject.Models;
 
-[Table("BillDiamond")]
-public partial class BillDiamond
+[Table("PaymentDiamond")]
+public partial class PaymentDiamond
 {
     [Key]
-    public int BillDiamondId { get; set; }
+    public int PaymentDiamondId { get; set; }
 
-    public int? BillId { get; set; }
+    public int? PaymentId { get; set; }
 
     public int? DiamondId { get; set; }
 
-    [ForeignKey("BillId")]
-    [InverseProperty("BillDiamonds")]
-    public virtual Bill Bill { get; set; }
-
     [ForeignKey("DiamondId")]
-    [InverseProperty("BillDiamonds")]
+    [InverseProperty("PaymentDiamonds")]
     public virtual Diamond Diamond { get; set; }
+
+    [ForeignKey("PaymentId")]
+    [InverseProperty("PaymentDiamonds")]
+    public virtual Payment Payment { get; set; }
 }

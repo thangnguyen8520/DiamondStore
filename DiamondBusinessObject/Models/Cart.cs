@@ -14,20 +14,20 @@ public partial class Cart
     [Key]
     public int CartId { get; set; }
 
-    public int? CustomerId { get; set; }
+    public int? UserId { get; set; }
 
     public int? DiamondId { get; set; }
 
     public int? Quantity { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime? AddedDate { get; set; }
-
-    [ForeignKey("CustomerId")]
-    [InverseProperty("Carts")]
-    public virtual Customer Customer { get; set; }
+    public DateTime? CreateDate { get; set; }
 
     [ForeignKey("DiamondId")]
     [InverseProperty("Carts")]
     public virtual Diamond Diamond { get; set; }
+
+    [ForeignKey("UserId")]
+    [InverseProperty("Carts")]
+    public virtual User User { get; set; }
 }

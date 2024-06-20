@@ -15,10 +15,7 @@ public partial class Promotion
     public int PromotionId { get; set; }
 
     [StringLength(255)]
-    public string Type { get; set; }
-
-    [StringLength(255)]
-    public string ApproveManager { get; set; }
+    public string PromotionType { get; set; }
 
     [StringLength(255)]
     public string Description { get; set; }
@@ -31,6 +28,8 @@ public partial class Promotion
     [Column(TypeName = "datetime")]
     public DateTime? EndDate { get; set; }
 
+    public bool? Status { get; set; }
+
     [InverseProperty("Promotion")]
-    public virtual ICollection<BillPromotion> BillPromotions { get; set; } = new List<BillPromotion>();
+    public virtual ICollection<PaymentPromotion> PaymentPromotions { get; set; } = new List<PaymentPromotion>();
 }

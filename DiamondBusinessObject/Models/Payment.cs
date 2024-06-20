@@ -14,7 +14,7 @@ public partial class Payment
     [Key]
     public int PaymentId { get; set; }
 
-    public int? CustomerId { get; set; }
+    public int? UserId { get; set; }
 
     public int? PaymentMethodId { get; set; }
 
@@ -41,10 +41,13 @@ public partial class Payment
     [StringLength(255)]
     public string Status { get; set; }
 
-    [ForeignKey("CustomerId")]
-    [InverseProperty("Payments")]
-    public virtual Customer Customer { get; set; }
+    [InverseProperty("Payment")]
+    public virtual ICollection<PaymentDiamond> PaymentDiamonds { get; set; } = new List<PaymentDiamond>();
 
-    [InverseProperty("PaymentNavigation")]
-    public virtual ICollection<OrderDiamond> OrderDiamonds { get; set; } = new List<OrderDiamond>();
+    [InverseProperty("Payment")]
+    public virtual ICollection<PaymentPromotion> PaymentPromotions { get; set; } = new List<PaymentPromotion>();
+
+    [ForeignKey("UserId")]
+    [InverseProperty("Payments")]
+    public virtual User User { get; set; }
 }

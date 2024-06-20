@@ -15,7 +15,7 @@ public partial class DiamondType
     public int DiamondTypeId { get; set; }
 
     [StringLength(255)]
-    public string Name { get; set; }
+    public string DiamondTypeName { get; set; }
 
     [InverseProperty("DiamondType")]
     public virtual ICollection<Diamond> Diamonds { get; set; } = new List<Diamond>();

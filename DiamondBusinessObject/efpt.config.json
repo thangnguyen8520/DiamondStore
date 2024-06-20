@@ -16,31 +16,11 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[Bill]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[BillDiamond]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[BillPromotion]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Cart]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Customer]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Diamond]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[DiamondMaterial]",
          "ObjectType": 0
       },
       {
@@ -52,15 +32,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Material]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[OrderDiamond]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Payment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PaymentDiamond]",
          "ObjectType": 0
       },
       {
@@ -68,11 +44,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Promotion]",
+         "Name": "[dbo].[PaymentPromotion]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Purchase]",
+         "Name": "[dbo].[Promotion]",
          "ObjectType": 0
       },
       {
@@ -88,7 +64,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "thangnguyen\\thangnguyen.DiamondStore.dbo",
+   "UiHint": "thangnguyen\\thangnguyen.DiamondStoreDB.dbo",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,

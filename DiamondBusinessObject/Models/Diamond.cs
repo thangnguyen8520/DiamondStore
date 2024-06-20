@@ -19,10 +19,7 @@ public partial class Diamond
     public int? DiamondPriceId { get; set; }
 
     [StringLength(255)]
-    public string Name { get; set; }
-
-    [StringLength(255)]
-    public string Barcode { get; set; }
+    public string DiamondName { get; set; }
 
     public bool? IsSold { get; set; }
 
@@ -41,23 +38,18 @@ public partial class Diamond
     public string Cut { get; set; }
 
     [InverseProperty("Diamond")]
-    public virtual ICollection<BillDiamond> BillDiamonds { get; set; } = new List<BillDiamond>();
-
-    [InverseProperty("Diamond")]
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
-    [InverseProperty("Diamond")]
-    public virtual ICollection<DiamondMaterial> DiamondMaterials { get; set; } = new List<DiamondMaterial>();
+    [ForeignKey("DiamondPriceId")]
+    [InverseProperty("Diamonds")]
+    public virtual DiamondPrice DiamondPrice { get; set; }
 
     [ForeignKey("DiamondTypeId")]
     [InverseProperty("Diamonds")]
     public virtual DiamondType DiamondType { get; set; }
 
-    [InverseProperty("Payment")]
-    public virtual ICollection<OrderDiamond> OrderDiamonds { get; set; } = new List<OrderDiamond>();
-
     [InverseProperty("Diamond")]
-    public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+    public virtual ICollection<PaymentDiamond> PaymentDiamonds { get; set; } = new List<PaymentDiamond>();
 
     [InverseProperty("Diamond")]
     public virtual ICollection<Warranty> Warranties { get; set; } = new List<Warranty>();

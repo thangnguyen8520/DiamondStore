@@ -17,35 +17,23 @@ public partial class DiamondStoreContext : DbContext
     {
     }
 
-    public virtual DbSet<Bill> Bills { get; set; }
-
-    public virtual DbSet<BillDiamond> BillDiamonds { get; set; }
-
-    public virtual DbSet<BillPromotion> BillPromotions { get; set; }
-
     public virtual DbSet<Cart> Carts { get; set; }
 
-    public virtual DbSet<Customer> Customers { get; set; }
-
     public virtual DbSet<Diamond> Diamonds { get; set; }
-
-    public virtual DbSet<DiamondMaterial> DiamondMaterials { get; set; }
 
     public virtual DbSet<DiamondPrice> DiamondPrices { get; set; }
 
     public virtual DbSet<DiamondType> DiamondTypes { get; set; }
 
-    public virtual DbSet<Material> Materials { get; set; }
-
-    public virtual DbSet<OrderDiamond> OrderDiamonds { get; set; }
-
     public virtual DbSet<Payment> Payments { get; set; }
+
+    public virtual DbSet<PaymentDiamond> PaymentDiamonds { get; set; }
 
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
-    public virtual DbSet<Promotion> Promotions { get; set; }
+    public virtual DbSet<PaymentPromotion> PaymentPromotions { get; set; }
 
-    public virtual DbSet<Purchase> Purchases { get; set; }
+    public virtual DbSet<Promotion> Promotions { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
@@ -55,170 +43,114 @@ public partial class DiamondStoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=THANGNGUYEN\\THANGNGUYEN;Initial Catalog=DiamondStore;Persist Security Info=True;User ID=sa;Password=Abcd1234");
+        => optionsBuilder.UseSqlServer("Data Source=THANGNGUYEN\\THANGNGUYEN;Initial Catalog=DiamondStoreDB;Persist Security Info=True;User ID=sa;Password=Abcd1234");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Bill>(entity =>
-        {
-            entity.HasKey(e => e.BillId).HasName("PK__Bill__11F2FC6A84903ED3");
-
-            entity.Property(e => e.BillId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Bills).HasConstraintName("FK__Bill__CustomerId__6A30C649");
-        });
-
-        modelBuilder.Entity<BillDiamond>(entity =>
-        {
-            entity.HasKey(e => e.BillDiamondId).HasName("PK__BillDiam__82CC5E523BED3AF3");
-
-            entity.Property(e => e.BillDiamondId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Bill).WithMany(p => p.BillDiamonds).HasConstraintName("FK__BillDiamo__BillI__6B24EA82");
-
-            entity.HasOne(d => d.Diamond).WithMany(p => p.BillDiamonds).HasConstraintName("FK__BillDiamo__Diamo__6C190EBB");
-        });
-
-        modelBuilder.Entity<BillPromotion>(entity =>
-        {
-            entity.HasKey(e => e.BillPromotionId).HasName("PK__BillProm__470D21BE6ACD595D");
-
-            entity.Property(e => e.BillPromotionId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Bill).WithMany(p => p.BillPromotions).HasConstraintName("FK__BillPromo__BillI__6D0D32F4");
-
-            entity.HasOne(d => d.Promotion).WithMany(p => p.BillPromotions).HasConstraintName("FK__BillPromo__Promo__6E01572D");
-        });
-
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD7B74249290D");
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD7B702DFC08F");
 
             entity.Property(e => e.CartId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.Carts).HasConstraintName("FK__Cart__CustomerId__6EF57B66");
+            entity.HasOne(d => d.Diamond).WithMany(p => p.Carts).HasConstraintName("FK__Cart__DiamondId__5EBF139D");
 
-            entity.HasOne(d => d.Diamond).WithMany(p => p.Carts).HasConstraintName("FK__Cart__DiamondId__6FE99F9F");
-        });
-
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64D822138AFD");
-
-            entity.Property(e => e.CustomerId).ValueGeneratedNever();
+            entity.HasOne(d => d.User).WithMany(p => p.Carts).HasConstraintName("FK__Cart__UserId__5FB337D6");
         });
 
         modelBuilder.Entity<Diamond>(entity =>
         {
-            entity.HasKey(e => e.DiamondId).HasName("PK__Diamond__23A8E79B2C547788");
+            entity.HasKey(e => e.DiamondId).HasName("PK__Diamond__23A8E79B205F5F02");
 
             entity.Property(e => e.DiamondId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.DiamondType).WithMany(p => p.Diamonds).HasConstraintName("FK__Diamond__Diamond__70DDC3D8");
-        });
+            entity.HasOne(d => d.DiamondPrice).WithMany(p => p.Diamonds).HasConstraintName("FK__Diamond__Diamond__619B8048");
 
-        modelBuilder.Entity<DiamondMaterial>(entity =>
-        {
-            entity.HasKey(e => e.DiamondMaterialId).HasName("PK__DiamondM__65A626133A0A4532");
-
-            entity.Property(e => e.DiamondMaterialId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Diamond).WithMany(p => p.DiamondMaterials).HasConstraintName("FK__DiamondMa__Diamo__71D1E811");
-
-            entity.HasOne(d => d.Material).WithMany(p => p.DiamondMaterials).HasConstraintName("FK__DiamondMa__Mater__72C60C4A");
+            entity.HasOne(d => d.DiamondType).WithMany(p => p.Diamonds).HasConstraintName("FK__Diamond__Diamond__60A75C0F");
         });
 
         modelBuilder.Entity<DiamondPrice>(entity =>
         {
-            entity.HasKey(e => e.DiamondPriceId).HasName("PK__DiamondP__269074C7EDED8F5E");
+            entity.HasKey(e => e.DiamondPriceId).HasName("PK__DiamondP__269074C7B07A175F");
 
             entity.Property(e => e.DiamondPriceId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<DiamondType>(entity =>
         {
-            entity.HasKey(e => e.DiamondTypeId).HasName("PK__DiamondT__2CC609EE44F76741");
+            entity.HasKey(e => e.DiamondTypeId).HasName("PK__DiamondT__2CC609EEABE7EA08");
 
             entity.Property(e => e.DiamondTypeId).ValueGeneratedNever();
         });
 
-        modelBuilder.Entity<Material>(entity =>
-        {
-            entity.HasKey(e => e.MaterialId).HasName("PK__Material__C50610F7B21E3CF0");
-
-            entity.Property(e => e.MaterialId).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<OrderDiamond>(entity =>
-        {
-            entity.HasKey(e => e.OrderDiamondId).HasName("PK__OrderDia__26F55F1A0EF0D7A7");
-
-            entity.Property(e => e.OrderDiamondId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Payment).WithMany(p => p.OrderDiamonds).HasConstraintName("FK__OrderDiam__Payme__73BA3083");
-
-            entity.HasOne(d => d.PaymentNavigation).WithMany(p => p.OrderDiamonds).HasConstraintName("FK__OrderDiam__Payme__74AE54BC");
-        });
-
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payment__9B556A388DD6FC5C");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payment__9B556A38B99CE75A");
 
             entity.Property(e => e.PaymentId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.Payments).HasConstraintName("FK__Payment__Custome__75A278F5");
+            entity.HasOne(d => d.User).WithMany(p => p.Payments).HasConstraintName("FK__Payment__UserId__628FA481");
+        });
+
+        modelBuilder.Entity<PaymentDiamond>(entity =>
+        {
+            entity.HasKey(e => e.PaymentDiamondId).HasName("PK__PaymentD__3D6EC625A79EB187");
+
+            entity.Property(e => e.PaymentDiamondId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Diamond).WithMany(p => p.PaymentDiamonds).HasConstraintName("FK__PaymentDi__Diamo__6383C8BA");
+
+            entity.HasOne(d => d.Payment).WithMany(p => p.PaymentDiamonds).HasConstraintName("FK__PaymentDi__Payme__6477ECF3");
         });
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__DC31C1D38397F0D5");
+            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__DC31C1D358081776");
 
             entity.Property(e => e.PaymentMethodId).ValueGeneratedNever();
         });
 
+        modelBuilder.Entity<PaymentPromotion>(entity =>
+        {
+            entity.HasKey(e => e.PaymentPromotionId).HasName("PK__PaymentP__44B4A9B57FA2B421");
+
+            entity.Property(e => e.PaymentPromotionId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Payment).WithMany(p => p.PaymentPromotions).HasConstraintName("FK__PaymentPr__Payme__656C112C");
+
+            entity.HasOne(d => d.Promotion).WithMany(p => p.PaymentPromotions).HasConstraintName("FK__PaymentPr__Promo__66603565");
+        });
+
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__52C42FCFECC9AC78");
+            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__52C42FCF9BF65EA8");
 
             entity.Property(e => e.PromotionId).ValueGeneratedNever();
         });
 
-        modelBuilder.Entity<Purchase>(entity =>
-        {
-            entity.HasKey(e => e.PurchaseId).HasName("PK__Purchase__6B0A6BBEA4DAB019");
-
-            entity.Property(e => e.PurchaseId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Purchases).HasConstraintName("FK__Purchase__Custom__76969D2E");
-
-            entity.HasOne(d => d.Diamond).WithMany(p => p.Purchases).HasConstraintName("FK__Purchase__Diamon__778AC167");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Purchases).HasConstraintName("FK__Purchase__UserId__787EE5A0");
-        });
-
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1A58461B1A");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1AEC9838DE");
 
             entity.Property(e => e.RoleId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__1788CC4C87B5A083");
+            entity.HasKey(e => e.UserId).HasName("PK__User__1788CC4C99629D66");
 
             entity.Property(e => e.UserId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Role).WithMany(p => p.Users).HasConstraintName("FK__User__RoleId__797309D9");
+            entity.HasOne(d => d.Role).WithMany(p => p.Users).HasConstraintName("FK__User__RoleId__6754599E");
         });
 
         modelBuilder.Entity<Warranty>(entity =>
         {
-            entity.HasKey(e => e.WarrantyId).HasName("PK__Warranty__2ED31813B12BBA0E");
+            entity.HasKey(e => e.WarrantyId).HasName("PK__Warranty__2ED31813797147CB");
 
             entity.Property(e => e.WarrantyId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Diamond).WithMany(p => p.Warranties).HasConstraintName("FK__Warranty__Diamon__7A672E12");
+            entity.HasOne(d => d.Diamond).WithMany(p => p.Warranties).HasConstraintName("FK__Warranty__Diamon__68487DD7");
         });
 
         OnModelCreatingPartial(modelBuilder);
