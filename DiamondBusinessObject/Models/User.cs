@@ -4,30 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiamondBusinessObject.Models;
 
-[Table("User")]
-public partial class User
+public partial class User : IdentityUser
 {
-    [Key]
-    public int UserId { get; set; }
-
-    public int? RoleId { get; set; }
-
-    [StringLength(255)]
-    public string Username { get; set; }
-
-    [StringLength(255)]
-    public string Email { get; set; }
-
-    [StringLength(255)]
-    public string Password { get; set; }
-
-    [StringLength(255)]
-    public string PhoneNumber { get; set; }
-
     [StringLength(255)]
     public string Address { get; set; }
 
@@ -35,13 +18,17 @@ public partial class User
 
     public bool? Status { get; set; }
 
+    public DateTime? LastLogin { get; set; }
+
+    public int? ImageId { get; set; }
+
+    [ForeignKey("ImageId")]
+    public virtual Image Image { get; set; }
+
     [InverseProperty("User")]
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     [InverseProperty("User")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
-    [ForeignKey("RoleId")]
-    [InverseProperty("Users")]
-    public virtual Role Role { get; set; }
 }

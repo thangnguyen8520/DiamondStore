@@ -27,7 +27,7 @@ public partial class Cart
     [InverseProperty("Carts")]
     public virtual Diamond Diamond { get; set; }
 
-    [ForeignKey("UserId")]
+    [ForeignKey("Id")]
     [InverseProperty("Carts")]
     public virtual User User { get; set; }
 }
