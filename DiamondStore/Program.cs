@@ -1,17 +1,21 @@
-using DiamondStore.Data;
-using Microsoft.AspNetCore.Identity;
+using DiamondBusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddDbContext<DiamondStoreContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
+
+builder.Services.AddDefaultIdentity<User>(options =>
+        options.SignIn.RequireConfirmedAccount = false)
+        .AddEntityFrameworkStores<DiamondStoreContext>();
+
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

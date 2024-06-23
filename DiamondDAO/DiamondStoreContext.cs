@@ -2,11 +2,13 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiamondBusinessObject.Models;
 
-public partial class DiamondStoreContext : DbContext
+public partial class DiamondStoreContext : IdentityDbContext<User>
 {
     public DiamondStoreContext()
     {
@@ -35,126 +37,22 @@ public partial class DiamondStoreContext : DbContext
 
     public virtual DbSet<Promotion> Promotions { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Warranty> Warranties { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=THANGNGUYEN\\THANGNGUYEN;Initial Catalog=DiamondStoreDB;Persist Security Info=True;User ID=sa;Password=Abcd1234");
+    public virtual DbSet<Image> Images { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.Entity<Cart>(entity =>
-        {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD7B702DFC08F");
+        base.OnModelCreating(builder);
 
-            entity.Property(e => e.CartId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Diamond).WithMany(p => p.Carts).HasConstraintName("FK__Cart__DiamondId__5EBF139D");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Carts).HasConstraintName("FK__Cart__UserId__5FB337D6");
-        });
-
-        modelBuilder.Entity<Diamond>(entity =>
-        {
-            entity.HasKey(e => e.DiamondId).HasName("PK__Diamond__23A8E79B205F5F02");
-
-            entity.Property(e => e.DiamondId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.DiamondPrice).WithMany(p => p.Diamonds).HasConstraintName("FK__Diamond__Diamond__619B8048");
-
-            entity.HasOne(d => d.DiamondType).WithMany(p => p.Diamonds).HasConstraintName("FK__Diamond__Diamond__60A75C0F");
-        });
-
-        modelBuilder.Entity<DiamondPrice>(entity =>
-        {
-            entity.HasKey(e => e.DiamondPriceId).HasName("PK__DiamondP__269074C7B07A175F");
-
-            entity.Property(e => e.DiamondPriceId).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<DiamondType>(entity =>
-        {
-            entity.HasKey(e => e.DiamondTypeId).HasName("PK__DiamondT__2CC609EEABE7EA08");
-
-            entity.Property(e => e.DiamondTypeId).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<Payment>(entity =>
-        {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payment__9B556A38B99CE75A");
-
-            entity.Property(e => e.PaymentId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.User).WithMany(p => p.Payments).HasConstraintName("FK__Payment__UserId__628FA481");
-        });
-
-        modelBuilder.Entity<PaymentDiamond>(entity =>
-        {
-            entity.HasKey(e => e.PaymentDiamondId).HasName("PK__PaymentD__3D6EC625A79EB187");
-
-            entity.Property(e => e.PaymentDiamondId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Diamond).WithMany(p => p.PaymentDiamonds).HasConstraintName("FK__PaymentDi__Diamo__6383C8BA");
-
-            entity.HasOne(d => d.Payment).WithMany(p => p.PaymentDiamonds).HasConstraintName("FK__PaymentDi__Payme__6477ECF3");
-        });
-
-        modelBuilder.Entity<PaymentMethod>(entity =>
-        {
-            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__DC31C1D358081776");
-
-            entity.Property(e => e.PaymentMethodId).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<PaymentPromotion>(entity =>
-        {
-            entity.HasKey(e => e.PaymentPromotionId).HasName("PK__PaymentP__44B4A9B57FA2B421");
-
-            entity.Property(e => e.PaymentPromotionId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Payment).WithMany(p => p.PaymentPromotions).HasConstraintName("FK__PaymentPr__Payme__656C112C");
-
-            entity.HasOne(d => d.Promotion).WithMany(p => p.PaymentPromotions).HasConstraintName("FK__PaymentPr__Promo__66603565");
-        });
-
-        modelBuilder.Entity<Promotion>(entity =>
-        {
-            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__52C42FCF9BF65EA8");
-
-            entity.Property(e => e.PromotionId).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1AEC9838DE");
-
-            entity.Property(e => e.RoleId).ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(e => e.UserId).HasName("PK__User__1788CC4C99629D66");
-
-            entity.Property(e => e.UserId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Users).HasConstraintName("FK__User__RoleId__6754599E");
-        });
-
-        modelBuilder.Entity<Warranty>(entity =>
-        {
-            entity.HasKey(e => e.WarrantyId).HasName("PK__Warranty__2ED31813797147CB");
-
-            entity.Property(e => e.WarrantyId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Diamond).WithMany(p => p.Warranties).HasConstraintName("FK__Warranty__Diamon__68487DD7");
-        });
-
-        OnModelCreatingPartial(modelBuilder);
+        builder.Entity<User>(entity => entity.ToTable("User"));
+        builder.Entity<IdentityRole>(entity => entity.ToTable("Role"));
+        builder.Entity<IdentityUserRole<string>>(entity => entity.ToTable("UserRole"));
+        builder.Entity<IdentityUserClaim<string>>(entity => entity.ToTable("UserClaim"));
+        builder.Entity<IdentityUserLogin<string>>(entity => entity.ToTable("UserLogin"));
+        builder.Entity<IdentityUserToken<string>>(entity => entity.ToTable("UserToken"));
+        builder.Entity<IdentityRoleClaim<string>>(entity => entity.ToTable("RoleClaim"));
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
