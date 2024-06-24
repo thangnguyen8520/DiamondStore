@@ -1,4 +1,5 @@
 using DiamondBusinessObject.Models;
+using DiamondStore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -6,16 +7,17 @@ using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddDbContext<DiamondStoreContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
 
+builder.Services.AddInfrastructuresService(builder.Configuration);
 
-builder.Services.AddDbContext<DiamondStoreContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
+//builder.Services.AddDefaultIdentity<User>(options =>
+//        options.SignIn.RequireConfirmedAccount = false)
+//        .AddEntityFrameworkStores<DiamondStoreContext>();
 
-builder.Services.AddDefaultIdentity<User>(options =>
-        options.SignIn.RequireConfirmedAccount = false)
-        .AddEntityFrameworkStores<DiamondStoreContext>();
-
-
+builder.Services.AddSession();
+builder.Services.AddMemoryCache();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -37,6 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthorization();
 
 app.MapRazorPages();

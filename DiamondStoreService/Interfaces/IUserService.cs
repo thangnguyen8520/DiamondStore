@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DiamondStoreService
+namespace DiamondStoreService.Interfaces
 {
-    internal interface IUserService
+    public interface IUserService
     {
     }
 }
