@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Pages\Admin\pages\" />
   </ItemGroup>
 
 </Project>
