@@ -1,4 +1,5 @@
 ﻿using DiamondBusinessObject.Models;
+using DiamondDAO;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
@@ -18,6 +19,10 @@ namespace DiamondStore
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ProductDAO>();
+
 
             // Add DbContext
             services.AddDbContext<DiamondStoreContext>(options =>
