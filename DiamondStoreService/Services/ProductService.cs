@@ -24,7 +24,7 @@ namespace DiamondStoreService.Services
             return await _productRepository.GetDiamonds(pageIndex, pageSize, sortOption, categoryId);
         }
 
-        public async Task<List<DiamondType>> GetCategories()
+        public async Task<List<DiamondType>> GetAllDiamondTypes()
         {
             return await _productRepository.GetAllDiamondTypes();
         }
