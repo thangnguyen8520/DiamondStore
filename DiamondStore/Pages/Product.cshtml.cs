@@ -19,18 +19,29 @@ namespace DiamondStore.Pages
         public List<DiamondType> Categories { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int PageIndex { get; set; } = 0;
+        public int PageIndex { get; set; } = 1; // Start from page 1
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 9;
         [BindProperty(SupportsGet = true)]
-        public string SortOption { get; set; } = "Price, Low To High";
+        public string SortOption { get; set; } = "Date, New To Old";
         [BindProperty(SupportsGet = true)]
         public int? CategoryId { get; set; }
 
         public async Task OnGetAsync()
         {
-            Diamonds = await _productService.GetDiamonds(PageIndex, PageSize, SortOption, CategoryId);
-            Categories = await _productService.GetCategories();
+            // Adjust PageIndex to be 0-based for the service layer
+            int adjustedPageIndex = PageIndex - 1;
+            Diamonds = await _productService.GetDiamonds(adjustedPageIndex, PageSize, SortOption, CategoryId);
+
+            // Ensure PageIndex is within valid range
+            if (PageIndex > Diamonds.TotalPagesCount)
+            {
+                PageIndex = Diamonds.TotalPagesCount > 0 ? Diamonds.TotalPagesCount : 1;
+                adjustedPageIndex = PageIndex - 1;
+                Diamonds = await _productService.GetDiamonds(adjustedPageIndex, PageSize, SortOption, CategoryId);
+            }
+
+            Categories = await _productService.GetAllDiamondTypes();
         }
     }
 }

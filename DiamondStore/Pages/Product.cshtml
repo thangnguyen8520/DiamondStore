@@ -27,6 +27,9 @@
                         <div class="center_shop_1li clearfix">
                             <h5 class="mgt">CATEGORY</h5>
                             <div class="ziehharmonika">
+                                <h3 data-prefix="★" class="@(Model.CategoryId == null ? "active" : "")">
+                                    <a href="?SortOption=@Model.SortOption">All</a>
+                                </h3>
                                 @foreach (var category in Model.Categories)
                                 {
                                     <h3 data-prefix="★" class="@(Model.CategoryId == category.DiamondTypeId ? "active" : "")">
@@ -124,17 +127,17 @@
                         <div class="product_1_last text-center clearfix">
                             <div class="col-sm-12">
                                 <ul>
-                                    <li class="@(Model.Diamonds.PageIndex == 1 ? "disabled" : "")">
-                                        <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@(Model.Diamonds.PageIndex - 1)"><i class="fa fa-chevron-left"></i></a>
+                                    <li class="@(Model.PageIndex == 1 ? "disabled" : "")">
+                                        <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@(Model.PageIndex > 1 ? Model.PageIndex - 1 : 1)"><i class="fa fa-chevron-left"></i></a>
                                     </li>
                                     @for (int i = 1; i <= Model.Diamonds.TotalPagesCount; i++)
                                     {
-                                        <li class="@(Model.Diamonds.PageIndex == i ? "act" : "")">
+                                        <li class="@(Model.PageIndex == i ? "act" : "")">
                                             <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@i">@i</a>
                                         </li>
                                     }
-                                    <li class="@(Model.Diamonds.PageIndex == Model.Diamonds.TotalPagesCount ? "disabled" : "")">
-                                        <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@(Model.Diamonds.PageIndex + 1)"><i class="fa fa-chevron-right"></i></a>
+                                    <li class="@(Model.PageIndex == Model.Diamonds.TotalPagesCount ? "disabled" : "")">
+                                        <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@(Model.PageIndex < Model.Diamonds.TotalPagesCount ? Model.PageIndex + 1 : Model.Diamonds.TotalPagesCount)"><i class="fa fa-chevron-right"></i></a>
                                     </li>
                                 </ul>
                             </div>
