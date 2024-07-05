@@ -20,9 +20,6 @@ namespace DiamondStore.Pages
         [BindProperty]
         public LoginRequest LoginInput { get; set; }
 
-        //[BindProperty]
-        public RegisterRequest SignupInput { get; set; }
-
         public void OnGet()
         {
         }
@@ -43,22 +40,6 @@ namespace DiamondStore.Pages
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostSignupAsync()
-        {
-            if (ModelState.IsValid)
-            {
-                // Thêm logic đăng ký của bạn tại đây
-                // Ví dụ:
-                // var user = new ApplicationUser { UserName = SignupInput.Email, Email = SignupInput.Email };
-                // var result = await _userManager.CreateAsync(user, SignupInput.Password);
-
-                return RedirectToPage("/Index");
-            }
-
-            // Nếu có lỗi, giữ nguyên trang đăng ký
             return Page();
         }
     }

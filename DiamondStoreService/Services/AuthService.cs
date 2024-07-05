@@ -37,25 +37,23 @@ namespace DiamondStoreService.Services
 
             if (user == null)
             {
-                return false; // Người dùng không tồn tại
+                return false;
             }
 
             var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
 
             if (!signInResult.Succeeded)
             {
-                return false; // Đăng nhập không thành công
+                return false;
             }
 
-            // Lấy danh sách các vai trò của người dùng
             var roles = await _userManager.GetRolesAsync(user);
 
-            // Lưu thông tin người dùng vào session
             httpContext.Session.SetString("UserId", user.Id);
             httpContext.Session.SetString("Email", user.Email);
             httpContext.Session.SetString("Roles", string.Join(",", roles));
 
-            return true; // Đăng nhập thành công
+            return true;
         }
     }
 }

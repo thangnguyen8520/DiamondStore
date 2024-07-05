@@ -12,9 +12,14 @@ namespace DiamondStore.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToPage("/Login");
+            }
 
+            return Page();
         }
     }
 }

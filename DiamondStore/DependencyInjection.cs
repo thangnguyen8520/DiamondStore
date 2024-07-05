@@ -5,6 +5,7 @@ using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
 using DiamondStoreService.Mappers;
 using DiamondStoreService.Services;
+using DiamondStoreService.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,8 @@ namespace DiamondStore
         {
             // Add UnitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+          
+            services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
