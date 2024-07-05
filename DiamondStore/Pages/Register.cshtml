@@ -1,0 +1,63 @@
+﻿@page
+@model DiamondStore.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<section>
+    <div class="wrapper" style="margin: 10px auto;">
+        <div class="title-text">
+            <div class="title signup">Sign Up</div>
+        </div>
+        <div class="form-container">
+            <div class="form-inner">
+                <form method="post" asp-page-handler="Signup">
+                    <div class="field">
+                        <input type="email" placeholder="Email Address" asp-for="SignupInput.Email" required>
+                    </div>
+                    <div class="field">
+                        <input type="password" placeholder="Password" asp-for="SignupInput.Password" required>
+                    </div>
+                    <div class="field">
+                        <input type="password" placeholder="Confirm password" asp-for="SignupInput.ConfirmPassword" required>
+                    </div>
+                    <div class="field btn">
+                        <div class="btn-layer"></div>
+                        <input type="submit" value="Signup">
+                    </div>
+                    <div class="signup-link">Already a member? <a href="./Login" id="">Sign In</a></div>
+                    <a asp-page-handler="GoogleLogin" class="google-login-button">Login with Google</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .google-login-button {
+        width: 100%;
+        background-color: #4285F4;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 20px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+        .google-login-button:hover {
+            background-color: #3b79db;
+        }
+
+        .google-login-button img {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+</style>

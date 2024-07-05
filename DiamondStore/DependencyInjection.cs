@@ -5,6 +5,7 @@ using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
 using DiamondStoreService.Mappers;
 using DiamondStoreService.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiamondStore
@@ -29,9 +30,11 @@ namespace DiamondStore
                 options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
 
             // Add Default Identity
-            services.AddDefaultIdentity<User>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
                 options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<DiamondStoreContext>();
+                .AddEntityFrameworkStores<DiamondStoreContext>()
+                .AddSignInManager()
+                .AddRoles<IdentityRole>();
 
             // Add AutoMapper
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);

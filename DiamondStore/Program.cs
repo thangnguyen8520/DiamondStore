@@ -1,5 +1,7 @@
 using DiamondBusinessObject.Models;
 using DiamondStore;
+using DiamondStoreRepository.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,11 +18,21 @@ builder.Services.AddInfrastructuresService(builder.Configuration);
 //        options.SignIn.RequireConfirmedAccount = false)
 //        .AddEntityFrameworkStores<DiamondStoreContext>();
 
+builder.Services.AddTransient<SeedData>();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSession();
 builder.Services.AddMemoryCache();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var seedData = services.GetRequiredService<SeedData>();
+    await seedData.Initialize(services, services.GetRequiredService<RoleManager<IdentityRole>>(), services.GetRequiredService<UserManager<User>>());
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

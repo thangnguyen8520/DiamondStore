@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DiamondStoreService.Models;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,7 @@ namespace DiamondStoreService.Interfaces
 {
     public interface IAuthService
     {
+        Task<bool> Login(LoginRequest request, HttpContext httpContext);
+        //Task<string> Register(string username, string password);
     }
 }

@@ -1,12 +1,13 @@
-using DiamondStoreService.Interfaces;
+using DiamondStoreService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DiamondStore.Pages
 {
-    public class LoginRegisterModel : PageModel
+    public class RegisterModel : PageModel
     {
-        private readonly IAuthService _authService;
+        [BindProperty]
+        public RegisterRequest SignupInput { get; set; }
 
         public void OnGet()
         {
