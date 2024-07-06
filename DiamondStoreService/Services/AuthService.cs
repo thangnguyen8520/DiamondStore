@@ -248,5 +248,47 @@ namespace DiamondStoreService.Services
             };
         }
         #endregion
+
+        #region Forgot Password
+        public async Task<bool> SendForgotPasswordEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+            {
+                // Không tiết lộ rằng người dùng không tồn tại hoặc email chưa xác nhận
+                return false;
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetLink = GeneratePasswordResetLink(token, user.Email);
+
+            await _emailSender.SendEmailAsync(user.Email, "Reset your password",
+                $"Please reset your password by clicking this link: <a href='{resetLink}'>link</a>");
+
+            return true;
+        }
+
+        private string GeneratePasswordResetLink(string token, string email)
+        {
+            var request = _httpContextAccessor.HttpContext.Request;
+            var scheme = request.Scheme;
+            var host = request.Host;
+            var path = "/Auth/ResetPassword";
+
+            return $"{scheme}://{host}{path}?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(email)}";
+        }
+
+        public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            return result.Succeeded;
+        }
+        #endregion
     }
 }
