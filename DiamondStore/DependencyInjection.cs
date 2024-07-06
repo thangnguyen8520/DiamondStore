@@ -34,10 +34,16 @@ namespace DiamondStore
 
             // Add Default Identity
             services.AddIdentity<User, IdentityRole>(options =>
-                options.SignIn.RequireConfirmedAccount = false)
+                options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<DiamondStoreContext>()
                 .AddSignInManager()
+                .AddDefaultTokenProviders()
                 .AddRoles<IdentityRole>();
+
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+             {
+                 options.TokenLifespan = TimeSpan.FromMinutes(10);
+             });
 
             // Add AutoMapper
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);

@@ -5,7 +5,13 @@
 }
 
 <section>
-    @if (!ModelState.IsValid)
+    @if (TempData["ConfirmationSuccess"] != null)
+    {
+        <div class="alert alert-success" style="width: 30%; margin: 0 auto; text-align: center;">
+            @TempData["ConfirmationSuccess"]
+        </div>
+    }
+    else if (!ModelState.IsValid)
     {
         <div class="alert alert-danger" style="width: 30%; margin: 0 auto; text-align: center;">
             @foreach (var modelStateEntry in ModelState.Values)
@@ -13,9 +19,18 @@
                 foreach (var error in modelStateEntry.Errors)
                 {
                     <p>@error.ErrorMessage</p>
+                    @if (TempData["ResendEmail"] != null)
+                    {
+                        <form method="post" asp-page-handler="ResendConfirmation">
+                            <input type="hidden" name="Email" value="@TempData["ResendEmail"]">
+                            <button type="submit" class="btn btn-link">Resend</button>
+                        </form>
+                    }
                 }
             }
         </div>
+
+        
     }
     <div class="wrapper" style="margin: 10px auto">
         <div class="title-text">

@@ -5,6 +5,24 @@
 }
 
 <section>
+    @if (TempData["RegistrationSuccess"] != null)
+    {
+        <div class="alert alert-success" style="width: 30%; margin: 0 auto; text-align: center;">
+            @TempData["RegistrationSuccess"], Please check your <a href="https://mail.google.com/mail/">email</a> to confirm your account.
+        </div>
+    }
+    else if (!ModelState.IsValid)
+    {
+        <div class="alert alert-danger" style="width: 30%; margin: 0 auto; text-align: center;">
+            @foreach (var modelStateEntry in ModelState.Values)
+            {
+                foreach (var error in modelStateEntry.Errors)
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            }
+        </div>
+    }
     <div class="wrapper" style="margin: 10px auto;">
         <div class="title-text">
             <div class="title signup">Sign Up</div>

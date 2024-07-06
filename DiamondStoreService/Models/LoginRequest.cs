@@ -17,4 +17,11 @@ namespace DiamondStoreService.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }
+
+    public class LoginResult
+    {
+        public bool Succeeded { get; set; }
+        public string ErrorMessage { get; set; }
+    }
+
 }

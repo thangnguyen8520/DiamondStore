@@ -28,19 +28,38 @@ namespace DiamondStore.Pages
         {
             if (ModelState.IsValid)
             {
-                bool result = await _authService.Login(LoginInput, _httpContextAccessor.HttpContext);
+                var result = await _authService.Login(LoginInput, _httpContextAccessor.HttpContext);
 
-                if (result)
+                if (result.Succeeded)
                 {
-                    // Đăng nhập thành công, điều hướng đến trang chính hoặc lấy thông tin user từ session
                     return RedirectToPage("/Index");
                 }
 
-                // Thêm lỗi vào ModelState
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                if (result.ErrorMessage == "Email not confirmed.")
+                {
+                    TempData["ResendEmail"] = LoginInput.Email;
+                }
+
+                ModelState.AddModelError(string.Empty, result.ErrorMessage);
             }
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostResendConfirmationAsync(string email)
+        {
+            var success = await _authService.ResendConfirmationEmailAsync(email, _httpContextAccessor.HttpContext);
+
+            if (success)
+            {
+                TempData["ConfirmationSuccess"] = "Confirmation email has been resent. Please check your inbox.";
+            }
+            else
+            {
+                TempData["ConfirmationSuccess"] = "Unable to resend confirmation email. Please try again later.";
+            }
+
+            return RedirectToPage("/Login");
         }
     }
 
