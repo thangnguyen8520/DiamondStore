@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DiamondDAO
+namespace DiamondStoreService.Interfaces
 {
-    public class UserDAO
+    public interface IImageService
     {
     }
 }

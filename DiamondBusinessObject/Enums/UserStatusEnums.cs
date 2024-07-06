@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DiamondDAO
+namespace DiamondBusinessObject.Enums
 {
-    public class UserDAO
+    public enum UserStatusEnums
     {
+        Blocked = 0,
+        Active = 1,
     }
 }

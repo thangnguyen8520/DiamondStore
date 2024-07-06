@@ -5,6 +5,8 @@ using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
 using DiamondStoreService.Mappers;
 using DiamondStoreService.Services;
+using DiamondStoreService.Utils;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiamondStore
@@ -15,10 +17,15 @@ namespace DiamondStore
         {
             // Add UnitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+          
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IGoogleService, GoogleService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ProductDAO>();
@@ -29,9 +36,17 @@ namespace DiamondStore
                 options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
 
             // Add Default Identity
-            services.AddDefaultIdentity<User>(options =>
-                options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<DiamondStoreContext>();
+            services.AddIdentity<User, IdentityRole>(options =>
+                options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<DiamondStoreContext>()
+                .AddSignInManager()
+                .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole>();
+
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+             {
+                 options.TokenLifespan = TimeSpan.FromMinutes(10);
+             });
 
             // Add AutoMapper
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);

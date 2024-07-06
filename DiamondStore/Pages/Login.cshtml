@@ -1,0 +1,91 @@
+﻿@page
+@model DiamondStore.Pages.LoginRegisterModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<section>
+    @if (TempData["ConfirmationSuccess"] != null)
+    {
+        <div class="alert alert-success" style="width: 30%; margin: 0 auto; text-align: center;">
+            @TempData["ConfirmationSuccess"]
+        </div>
+    }
+    else if (!ModelState.IsValid)
+    {
+        <div class="alert alert-danger" style="width: 30%; margin: 0 auto; text-align: center;">
+            @foreach (var modelStateEntry in ModelState.Values)
+            {
+                foreach (var error in modelStateEntry.Errors)
+                {
+                    <p>@error.ErrorMessage</p>
+                    @if (TempData["ResendEmail"] != null)
+                    {
+                        <form method="post" asp-page-handler="ResendConfirmation">
+                            <input type="hidden" name="Email" value="@TempData["ResendEmail"]">
+                            <button type="submit" class="btn btn-link">Resend</button>
+                        </form>
+                    }
+                }
+            }
+        </div>
+
+        
+    }
+    <div class="wrapper" style="margin: 10px auto">
+        <div class="title-text">
+            <div class="title login">Login</div>
+        </div>
+        <div class="form-container">
+            <div class="form-inner">
+                <form method="post" asp-page-handler="Login">
+                    <div class="field">
+                        <input type="email" placeholder="Email Address" asp-for="LoginInput.Email" required>
+                    </div>
+                    <div class="field">
+                        <input type="password" placeholder="Password" asp-for="LoginInput.Password" required>
+                    </div>
+                    <div class="pass-link"><a asp-page="./ForgotPassword">Forgot password?</a></div>
+                    <div class="field btn">
+                        <div class="btn-layer"></div>
+                        <input type="submit" value="Login">
+                    </div>
+                    <div class="signup-link">Not a member? <a href="./Register" id="">Sign Up now</a></div>
+                    <a asp-page-handler="GoogleLogin" class="google-login-button">Login with Google</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+    .google-login-button {
+        width: 100%;
+        background-color: #4285F4;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 20px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+        .google-login-button:hover {
+            background-color: #3b79db;
+        }
+
+        .google-login-button img {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+</style>
+
+

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DiamondBusinessObject.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,12 @@ namespace DiamondBusinessObject.Models;
 
 public partial class User : IdentityUser
 {
+    [StringLength(255)]
+    public string FirstName { get; set; }
+
+    [StringLength(255)]
+    public string LastName { get; set; }
+
     [StringLength(255)]
     public string Address { get; set; }
 
@@ -31,4 +38,17 @@ public partial class User : IdentityUser
     [InverseProperty("User")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
+    [NotMapped]
+    public GenderEnums GenderEnum
+    {
+        get => (bool)Gender ? GenderEnums.Female : GenderEnums.Male;
+        set => Gender = (value == GenderEnums.Female);
+    }
+
+    [NotMapped]
+    public UserStatusEnums StatusEnum
+    {
+        get => (bool)Status ? UserStatusEnums.Active : UserStatusEnums.Blocked;
+        set => Status = (value == UserStatusEnums.Active);
+    }
 }
