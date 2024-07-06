@@ -25,7 +25,7 @@ namespace DiamondStore.Pages
         {
             if (ModelState.IsValid)
             {
-                var result = await _authService.Register(SignupInput, HttpContext);
+                var result = await _authService.Register(SignupInput);
 
                 if (result.Succeeded)
                 {

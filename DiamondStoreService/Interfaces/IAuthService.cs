@@ -11,9 +11,10 @@ namespace DiamondStoreService.Interfaces
 {
     public interface IAuthService
     {
-        Task<LoginResult> Login(LoginRequest request, HttpContext httpContext);
-        Task<IdentityResult> Register(RegisterRequest request, HttpContext httpContext);
+        Task<LoginResult> Login(LoginRequest request);
+        Task<IdentityResult> Register(RegisterRequest request);
         Task<bool> ConfirmEmailAsync(string token, string email);
-        Task<bool> ResendConfirmationEmailAsync(string email, HttpContext httpContext);
+        Task<bool> ResendConfirmationEmailAsync(string email);
+        Task<LoginResult> HandleGoogleCallbackAndSaveAsync();
     }
 }

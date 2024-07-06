@@ -13,6 +13,12 @@ namespace DiamondBusinessObject.Models;
 public partial class User : IdentityUser
 {
     [StringLength(255)]
+    public string FirstName { get; set; }
+
+    [StringLength(255)]
+    public string LastName { get; set; }
+
+    [StringLength(255)]
     public string Address { get; set; }
 
     public bool? Gender { get; set; }

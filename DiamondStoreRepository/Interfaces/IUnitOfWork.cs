@@ -9,6 +9,7 @@ namespace DiamondStoreRepository.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         IUserRepository UserRepository { get; }
+        IImageRepository ImageRepository { get; }
         Task<int> SaveChangeAsync();
     }
 }

@@ -20,8 +20,11 @@ namespace DiamondStoreService.Models
 
     public class LoginResult
     {
-        public bool Succeeded { get; set; }
+        public bool Success { get; set; }
         public string ErrorMessage { get; set; }
+        public string UserId { get; set; }
+        public string Email { get; set; }
+        public IList<string> Roles { get; set; }
     }
 
 }

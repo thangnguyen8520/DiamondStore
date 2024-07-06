@@ -19,10 +19,13 @@ namespace DiamondStore
             services.AddScoped<IUnitOfWork, UnitOfWork>();
           
             services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IGoogleService, GoogleService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ProductDAO>();

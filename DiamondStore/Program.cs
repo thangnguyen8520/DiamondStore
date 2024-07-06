@@ -1,6 +1,9 @@
 using DiamondBusinessObject.Models;
 using DiamondStore;
 using DiamondStoreRepository.Data;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +20,22 @@ builder.Services.AddInfrastructuresService(builder.Configuration);
 //builder.Services.AddDefaultIdentity<User>(options =>
 //        options.SignIn.RequireConfirmedAccount = false)
 //        .AddEntityFrameworkStores<DiamondStoreContext>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(options =>
+{
+    var googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+    options.ClientId = googleAuthSection["ClientId1"] + googleAuthSection["ClientId2"];
+    options.ClientSecret = googleAuthSection["ClientSecret1"] + googleAuthSection["ClientSecret2"];
+    options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+    options.SaveTokens = true;
+});
 
 builder.Services.AddTransient<SeedData>();
 builder.Services.AddHttpContextAccessor();
@@ -52,6 +71,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

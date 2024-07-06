@@ -13,14 +13,17 @@ namespace DiamondStoreRepository.Repositories
     {
         private readonly DiamondStoreContext _context;
         private readonly IUserRepository _userRepository;
+        private readonly IImageRepository _imageRepository;
 
-        public UnitOfWork(DiamondStoreContext context, IUserRepository userRepository)
+        public UnitOfWork(DiamondStoreContext context, IUserRepository userRepository, IImageRepository imageRepository)
         {
             _context = context;
             _userRepository = userRepository;
+            _imageRepository = imageRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
+        public IImageRepository ImageRepository => _imageRepository;
 
         public async Task<int> SaveChangeAsync()
         {
