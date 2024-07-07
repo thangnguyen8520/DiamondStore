@@ -11,5 +11,6 @@ namespace DiamondStoreService.Interfaces
     {
         Task<UserProfileViewDTO> GetUserByIdAsync(string userId);
         Task<ResponseModel> UpdateUserProfileAsync(string userId, UserProfileViewDTO updatedProfile);
+        Task<ResponseModel> UpdateUserAvatarAsync(string userId, string imageUrl);
     }
 }

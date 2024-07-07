@@ -55,5 +55,34 @@ namespace DiamondStoreService.Services
 
             return new ResponseModel { Success = true };
         }
+
+        public async Task<ResponseModel> UpdateUserAvatarAsync(string userId, string imageUrl)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return new ResponseModel { Success = false, ErrorMessage = "User not found." };
+            }
+
+            // Kiểm tra và cập nhật thông tin hình ảnh trong bảng Image (nếu có ImageId)
+            if (user.ImageId.HasValue)
+            {
+                var image = await _unitOfWork.ImageRepository.GetByIdAsync(user.ImageId.Value);
+                if (image != null)
+                {
+                    image.ImageUrl = imageUrl; // Cập nhật URL mới cho hình ảnh
+                    _unitOfWork.ImageRepository.Update(image);
+                }
+            }
+
+            // Cập nhật AvatarUrl cho người dùng
+            user.Image.ImageUrl = imageUrl; // Cập nhật AvatarUrl trong User.Image
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel { Success = true };
+        }
+
+
     }
 }

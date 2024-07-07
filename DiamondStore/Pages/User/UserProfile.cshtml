@@ -31,7 +31,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link px-2" href="#">
+                                <a class="nav-link px-2" href="/Auth/Logout">
                                     <i class="fa-solid fa-arrow-right-from-bracket fa-fw mr-2"></i>
                                     <span>Logout</span>
                                 </a>
@@ -68,11 +68,23 @@
                                     <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">
                                         @string.Format("{0} {1}", Model.UserProfile.LastName, Model.UserProfile.FirstName)
                                     </h4>
-                                    <div class="mt-2" style="margin-top: 15px">
-                                        <button class="btn btn-primary" type="button">
+                                    <div class="mt-2" style="margin-top: 10px">
+                                        @* <button class="btn btn-primary" type="button">
                                             <i class="fa fa-fw fa-camera"></i>
                                             <span>Change Photo</span>
-                                        </button>
+                                        </button> *@
+                                        <form method="post" enctype="multipart/form-data" asp-page-handler="UploadAvatar" style="width: 30%;">
+                                            <input type="file" id="avatarImage" name="avatarImage" accept="image/*" style="display: none;" />
+                                            <button class="btn btn-primary" type="button" onclick="document.getElementById('avatarImage').click();">
+                                                <i class="fa fa-fw fa-camera"></i>
+                                                <span>Change Photo</span>
+                                            </button>
+                                            <div>
+                                                <span hidden id="selectedFileName"></span>
+                                                <input type="submit" value="Upload" class="btn btn-success" style="display: none;" />
+                                            </div>
+                                            
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -148,4 +160,11 @@
     }
 </style>
 
+<script>
+    document.getElementById('avatarImage').addEventListener('change', function (e) {
+        var fileName = e.target.files[0].name;
+        document.getElementById('selectedFileName').textContent = fileName;
+        document.querySelector('input[type="submit"]').style.display = 'inline-block';
+    });
+</script>
 

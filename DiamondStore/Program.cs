@@ -37,8 +37,8 @@ builder.Services.AddAuthentication(options =>
     options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
     options.SaveTokens = true;
 });
-builder.Services.Configure<FirebaseSettings>(builder.Configuration.GetSection("Firebase"));
 
+builder.Services.Configure<FirebaseSettings>(builder.Configuration.GetSection("Firebase"));
 builder.Services.AddTransient<SeedData>();
 builder.Services.AddHttpContextAccessor();
 
