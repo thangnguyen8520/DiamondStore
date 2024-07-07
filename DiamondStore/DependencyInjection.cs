@@ -20,6 +20,7 @@ namespace DiamondStore
           
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IGoogleService, GoogleService>();
+            services.AddScoped<IFirebaseService, FirebaseService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();

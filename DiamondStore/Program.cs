@@ -1,6 +1,7 @@
 using DiamondBusinessObject.Models;
 using DiamondStore;
 using DiamondStoreRepository.Data;
+using DiamondStoreService.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -37,6 +38,7 @@ builder.Services.AddAuthentication(options =>
     options.SaveTokens = true;
 });
 
+builder.Services.Configure<FirebaseSettings>(builder.Configuration.GetSection("Firebase"));
 builder.Services.AddTransient<SeedData>();
 builder.Services.AddHttpContextAccessor();
 
