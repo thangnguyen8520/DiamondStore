@@ -28,6 +28,9 @@ namespace DiamondStore.Pages.Auth
 
         public void OnGet()
         {
+            HttpContext.Session.Remove("UserId");
+            HttpContext.Session.Remove("CurrentUser");
+            HttpContext.Session.Remove("Roles");
         }
 
         public async Task<IActionResult> OnPostAsync()
