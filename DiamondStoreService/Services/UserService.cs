@@ -71,14 +71,25 @@ namespace DiamondStoreService.Services
                 var image = await _unitOfWork.ImageRepository.GetByIdAsync(user.ImageId.Value);
                 if (image != null)
                 {
-                    image.ImageUrl = imageUrl; 
+                    image.ImageUrl = imageUrl;
                     _unitOfWork.ImageRepository.Update(image);
                 }
+                else
+                {
+                    return new ResponseModel { Success = false, ErrorMessage = "Image not found." };
+                }
+            }
+            else
+            {
+                var newImage = new Image { ImageUrl = imageUrl };
+                await _unitOfWork.ImageRepository.AddAsync(newImage);
+                await _unitOfWork.SaveChangeAsync();
+
+                user.ImageId = newImage.Id;
             }
 
-            user.Image.ImageUrl = imageUrl; 
             _unitOfWork.UserRepository.Update(user);
-            await _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync(); 
 
             return new ResponseModel { Success = true };
         }

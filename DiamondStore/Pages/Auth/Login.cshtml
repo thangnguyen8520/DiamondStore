@@ -1,14 +1,14 @@
 ﻿@page
-@model DiamondStore.Pages.RegisterModel
+@model LoginRegisterModel
 @{
-    ViewData["Title"] = "Sign Up";
+    ViewData["Title"] = "Sign In";
 }
 
 <section>
-    @if (TempData["RegistrationSuccess"] != null)
+    @if (TempData["ConfirmationSuccess"] != null)
     {
         <div class="alert alert-success" style="width: 30%; margin: 0 auto; text-align: center;">
-            @TempData["RegistrationSuccess"], Please check your <a href="https://mail.google.com/mail/">email</a> to confirm your account.
+            @TempData["ConfirmationSuccess"]
         </div>
     }
     else if (!ModelState.IsValid)
@@ -19,37 +19,45 @@
                 foreach (var error in modelStateEntry.Errors)
                 {
                     <p>@error.ErrorMessage</p>
+                    @if (TempData["ResendEmail"] != null)
+                    {
+                        <form method="post" asp-page-handler="ResendConfirmation">
+                            <input type="hidden" name="Email" value="@TempData["ResendEmail"]">
+                            <button type="submit" class="btn btn-link">Resend</button>
+                        </form>
+                    }
                 }
             }
         </div>
+
+        
     }
-    <div class="wrapper" style="margin: 10px auto;">
+    <div class="wrapper" style="margin: 10px auto">
         <div class="title-text">
-            <div class="title signup">Sign Up</div>
+            <div class="title login">Login</div>
         </div>
         <div class="form-container">
             <div class="form-inner">
-                <form method="post" asp-page-handler="Signup">
+                <form method="post" asp-page-handler="Login">
                     <div class="field">
-                        <input type="email" placeholder="Email Address" asp-for="SignupInput.Email" required>
+                        <input type="email" placeholder="Email Address" asp-for="LoginInput.Email" required>
                     </div>
                     <div class="field">
-                        <input type="password" placeholder="Password" asp-for="SignupInput.Password" required>
+                        <input type="password" placeholder="Password" asp-for="LoginInput.Password" required>
                     </div>
-                    <div class="field">
-                        <input type="password" placeholder="Confirm password" asp-for="SignupInput.ConfirmPassword" required>
-                    </div>
+                    <div class="pass-link"><a asp-page="./ForgotPassword">Forgot password?</a></div>
                     <div class="field btn">
                         <div class="btn-layer"></div>
-                        <input type="submit" value="Signup">
+                        <input type="submit" value="Login">
                     </div>
-                    <div class="signup-link">Already a member? <a href="./Login" id="">Sign In</a></div>
+                    <div class="signup-link">Not a member? <a href="./Register" id="">Sign Up now</a></div>
                     <a asp-page-handler="GoogleLogin" class="google-login-button">Login with Google</a>
                 </form>
             </div>
         </div>
     </div>
 </section>
+
 
 <style>
     .google-login-button {
@@ -79,3 +87,5 @@
             margin-right: 10px;
         }
 </style>
+
+

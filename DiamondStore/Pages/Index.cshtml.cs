@@ -16,7 +16,7 @@ namespace DiamondStore.Pages
         {
             if (HttpContext.Session.GetString("UserId") == null)
             {
-                return RedirectToPage("/Login");
+                return RedirectToPage("/Auth/Login");
             }
 
             return Page();
