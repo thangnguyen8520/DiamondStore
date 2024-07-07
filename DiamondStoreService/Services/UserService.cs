@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using DiamondBusinessObject.Models;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreService.Interfaces;
 using DiamondStoreService.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
@@ -15,13 +17,13 @@ namespace DiamondStoreService.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache cache)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _cache = cache;
+            _userManager = userManager;
         }
 
         public async Task<UserProfileViewDTO> GetUserByIdAsync(string userId)
@@ -64,21 +66,54 @@ namespace DiamondStoreService.Services
                 return new ResponseModel { Success = false, ErrorMessage = "User not found." };
             }
 
-            // Kiểm tra và cập nhật thông tin hình ảnh trong bảng Image (nếu có ImageId)
             if (user.ImageId.HasValue)
             {
                 var image = await _unitOfWork.ImageRepository.GetByIdAsync(user.ImageId.Value);
                 if (image != null)
                 {
-                    image.ImageUrl = imageUrl; // Cập nhật URL mới cho hình ảnh
+                    image.ImageUrl = imageUrl;
                     _unitOfWork.ImageRepository.Update(image);
                 }
+                else
+                {
+                    return new ResponseModel { Success = false, ErrorMessage = "Image not found." };
+                }
+            }
+            else
+            {
+                var newImage = new Image { ImageUrl = imageUrl };
+                await _unitOfWork.ImageRepository.AddAsync(newImage);
+                await _unitOfWork.SaveChangeAsync();
+
+                user.ImageId = newImage.Id;
             }
 
-            // Cập nhật AvatarUrl cho người dùng
-            user.Image.ImageUrl = imageUrl; // Cập nhật AvatarUrl trong User.Image
             _unitOfWork.UserRepository.Update(user);
-            await _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync(); 
+
+            return new ResponseModel { Success = true };
+        }
+
+        public async Task<ResponseModel> ChangePasswordAsync(string userId, ChangePasswordDTO changePasswordDto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return new ResponseModel { Success = false, ErrorMessage = "User not found." };
+            }
+
+            var passwordCheck = await _userManager.CheckPasswordAsync(user, changePasswordDto.CurrentPassword);
+            if (!passwordCheck)
+            {
+                return new ResponseModel { Success = false, ErrorMessage = "Current password is incorrect." };
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+                return new ResponseModel { Success = false, ErrorMessage = $"Failed to change password: {errors}" };
+            }
 
             return new ResponseModel { Success = true };
         }

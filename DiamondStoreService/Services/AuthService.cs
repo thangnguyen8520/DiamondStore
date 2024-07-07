@@ -200,6 +200,7 @@ namespace DiamondStoreService.Services
                     LastName = lastName,
                     UserName = email,
                     Email = email,
+                    EmailConfirmed = true,
                     ImageId = avatarImage.Id,
                     GenderEnum = GenderEnums.Male,
                     StatusEnum = UserStatusEnums.Active
@@ -250,23 +251,36 @@ namespace DiamondStoreService.Services
         #endregion
 
         #region Forgot Password
-        public async Task<bool> SendForgotPasswordEmailAsync(string email)
+        public async Task<ResponseModel> SendForgotPasswordEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+            if (user == null)
             {
-                // Không tiết lộ rằng người dùng không tồn tại hoặc email chưa xác nhận
-                return false;
+                return new ResponseModel { Success = false, ErrorMessage = "No user found with that email address." };
+            }
+
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return new ResponseModel { Success = false, ErrorMessage = "The email address is not confirmed." };
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var resetLink = GeneratePasswordResetLink(token, user.Email);
 
-            await _emailSender.SendEmailAsync(user.Email, "Reset your password",
-                $"Please reset your password by clicking this link: <a href='{resetLink}'>link</a>");
+            try
+            {
+                await _emailSender.SendEmailAsync(user.Email, "Reset your password",
+                    $"Please reset your password by clicking this link: <a href='{resetLink}'>link</a>");
+            }
+            catch (Exception ex)
+            {
+                // Log exception here if necessary
+                return new ResponseModel { Success = false, ErrorMessage = "An error occurred while sending the password reset email." };
+            }
 
-            return true;
+            return new ResponseModel { Success = true };
         }
+
 
         private string GeneratePasswordResetLink(string token, string email)
         {

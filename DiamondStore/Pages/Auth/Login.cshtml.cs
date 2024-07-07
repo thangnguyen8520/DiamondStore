@@ -14,7 +14,7 @@ using System.Security.Claims;
 using DiamondBusinessObject.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace DiamondStore.Pages
+namespace DiamondStore.Pages.Auth
 {
     public class LoginRegisterModel : PageModel
     {
@@ -81,7 +81,7 @@ namespace DiamondStore.Pages
         {
             var properties = new AuthenticationProperties
             {
-                RedirectUri = Url.Page("/Login", pageHandler: "GoogleCallback")
+                RedirectUri = Url.Page("/Auth/Login", pageHandler: "GoogleCallback")
             };
 
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
@@ -102,7 +102,7 @@ namespace DiamondStore.Pages
             else
             {
                 TempData["GoogleLoginError"] = result.ErrorMessage;
-                return RedirectToPage("/Login");
+                return RedirectToPage("/Auth/Login");
             }
         }
         #endregion

@@ -15,7 +15,7 @@ namespace DiamondStore
     {
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, IConfiguration configuration)
         {
-            // Add UnitOfWork
+            // Add UnitOfWork, Repositories and Services
             services.AddScoped<IUnitOfWork, UnitOfWork>();
           
             services.AddScoped<IEmailSender, EmailSender>();

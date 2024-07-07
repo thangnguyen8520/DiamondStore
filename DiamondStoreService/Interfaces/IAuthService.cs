@@ -16,7 +16,7 @@ namespace DiamondStoreService.Interfaces
         Task<bool> ConfirmEmailAsync(string token, string email);
         Task<bool> ResendConfirmationEmailAsync(string email);
         Task<LoginResult> HandleGoogleCallbackAndSaveAsync();
-        Task<bool> SendForgotPasswordEmailAsync(string email);
+        Task<ResponseModel> SendForgotPasswordEmailAsync(string email);
         Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
     }
 }

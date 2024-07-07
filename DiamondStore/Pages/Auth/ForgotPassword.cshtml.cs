@@ -1,3 +1,4 @@
+using Azure;
 using DiamondStoreService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -28,6 +29,9 @@ namespace DiamondStore.Pages.Auth
 
         public void OnGet()
         {
+            HttpContext.Session.Remove("UserId");
+            HttpContext.Session.Remove("CurrentUser");
+            HttpContext.Session.Remove("Roles");
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -38,13 +42,13 @@ namespace DiamondStore.Pages.Auth
             }
 
             var result = await _authService.SendForgotPasswordEmailAsync(Input.Email);
-            if (result)
+            if (result.Success)
             {
                 Message = "Password reset email sent. Please check your ";
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Failed to send password reset email.");
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Failed to send password reset email.");
             }
 
             return Page();
