@@ -47,10 +47,31 @@ namespace DiamondStoreRepository.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<TEntity?> GetByIdAsync(object id)
+        //public async Task<TEntity?> GetByIdAsync(object id)
+        //{
+        //    return await _dbSet.FindAsync(id);
+        //}
+
+        public async Task<TEntity?> GetByIdAsync(object id, string includeProperties = "")
         {
-            return await _dbSet.FindAsync(id);
+            IQueryable<TEntity> query = _dbSet;
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            var keyName = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties
+                .Select(x => x.Name).Single();
+
+            var parameter = Expression.Parameter(typeof(TEntity));
+            var property = Expression.Property(parameter, keyName);
+            var equal = Expression.Equal(property, Expression.Constant(id));
+            var lambda = Expression.Lambda<Func<TEntity, bool>>(equal, parameter);
+
+            return await query.FirstOrDefaultAsync(lambda);
         }
+
 
         public async Task AddAsync(TEntity entity)
         {

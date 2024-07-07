@@ -11,6 +11,9 @@ namespace DiamondStoreService.Models
     public class UserProfileViewDTO
     {
         [BindProperty]
+        public string UserId { get; set; }
+
+        [BindProperty]
         [Required]
         public string LastName { get; set; }
 
@@ -31,5 +34,8 @@ namespace DiamondStoreService.Models
         [BindProperty]
         [Required]
         public string Address { get; set; }
+
+        [BindProperty]
+        public string AvatarUrl { get; set; }
     }
 }
