@@ -1,0 +1,143 @@
+﻿@page
+@model DiamondStore.Pages.User.UserProfileModel
+@{
+    ViewData["Title"] = "Account Information";
+}
+
+<div class="container-fluid mt-4" style="margin-bottom: 15px">
+    <div class="row">
+        <!-- Left Sidebar with Navigation Buttons -->
+        <div class="tab-content pt-3 col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="e-navlist e-navlist--active-bg">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link px-2 active" href="/User/UserProfile" style="background-color: cadetblue; color: saddlebrown;">
+                                    <i class="fa-solid fa-user fa-fw mr-2"></i>
+                                    <span>User Profile</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2" href="#">
+                                    <i class="fa-solid fa-file-lines fa-fw mr-2"></i>
+                                    <span>Order History</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2" href="#">
+                                    <i class="fa-solid fa-retweet fa-fw mr-2"></i>
+                                    <span>Change Password</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2" href="#">
+                                    <i class="fa-solid fa-arrow-right-from-bracket fa-fw mr-2"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Content Area for Account Information -->
+        <div class="tab-content pt-3 col-md-8" style="margin-left: 90px">
+            <div class="card">
+                <div class="card-body">
+                    <div class="e-profile">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-auto mb-3">
+                                <div class="mx-auto" style="width: 140px;">
+                                    <div class="d-flex justify-content-center align-items-center rounded-circle"
+                                         style="height: 140px; background-color: rgb(233, 236, 239);">
+                                        <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9 d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                <div class="text-left text-sm-left mb-2 mb-sm-0">
+                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">
+                                        @string.Format("{0} {1}", Model.UserProfile.LastName, Model.UserProfile.FirstName)
+                                    </h4>
+                                    <div class="mt-2" style="margin-top: 15px">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fa fa-fw fa-camera"></i>
+                                            <span>Change Photo</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <span class="active nav-link">Personal Information</span>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-3">
+                            <div class="tab-pane active">
+                                <form method="post" class="form" novalidate>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="UserProfile.LastName">Last Name</label>
+                                                <input asp-for="UserProfile.LastName" class="form-control" type="text">
+                                                <span asp-validation-for="UserProfile.LastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="UserProfile.FirstName">First Name</label>
+                                                <input asp-for="UserProfile.FirstName" class="form-control" type="text">
+                                                <span asp-validation-for="UserProfile.FirstName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="UserProfile.Email">Email</label>
+                                                <input asp-for="UserProfile.Email" class="form-control" type="email" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="UserProfile.PhoneNumber">Phone Number</label>
+                                                <input asp-for="UserProfile.PhoneNumber" class="form-control" type="text">
+                                                <span asp-validation-for="UserProfile.PhoneNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label asp-for="UserProfile.Address">Address</label>
+                                                <input asp-for="UserProfile.Address" class="form-control" type="text">
+                                                <span asp-validation-for="UserProfile.Address" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 ml-md-auto">
+                                            <button class="btn btn-primary btn-block" type="submit">Save Changes</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        font-size: 15px;
+    }
+</style>
+
+

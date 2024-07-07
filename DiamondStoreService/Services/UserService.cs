@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreService.Interfaces;
+using DiamondStoreService.Models;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,21 @@ namespace DiamondStoreService.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cache = cache;
+        }
+
+        public async Task<UserProfileViewDTO> GetUserByIdAsync(string userId)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null) return null;
+
+            return new UserProfileViewDTO
+            {
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address
+            };
         }
     }
 }
