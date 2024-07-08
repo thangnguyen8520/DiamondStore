@@ -1,0 +1,267 @@
+﻿@page
+@model DiamondStore.Pages.User.OrderHistoryModel
+@{
+	ViewData["Title"] = "Account Information";
+}
+
+<div class="container-fluid mt-4" style="margin-bottom: 15px">
+    <div class="row">
+        <!-- Left Sidebar with Navigation Buttons -->
+        <div class="tab-content pt-3 col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="e-navlist e-navlist--active-bg">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link px-2 active" href="/User/UserProfile">
+                                    <i class="fa-solid fa-user fa-fw mr-2"></i>
+                                    <span>User Profile</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2" href="/User/OrderHistory" style="background-color: cadetblue; color: saddlebrown;">
+                                    <i class="fa-solid fa-file-lines fa-fw mr-2"></i>
+                                    <span>Order History</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2" href="/User/ChangePassword">
+                                    <i class="fa-solid fa-retweet fa-fw mr-2"></i>
+                                    <span>Change Password</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2" href="/Auth/Logout">
+                                    <i class="fa-solid fa-arrow-right-from-bracket fa-fw mr-2"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Content Area for Order List -->
+        <div class="tab-content pt-3 col-md-9">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="e-profile">
+                        <ul class="nav nav-tabs mb-3">
+                            <li class="nav-item">
+                                <span class="active nav-link">Order List</span>
+                            </li>
+                        </ul>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                    <tr class="text-center">
+                                        <th class="text-center" scope="col">Code order</th>
+                                        <th class="text-center" scope="col">Order date</th>
+                                        <th class="text-center" scope="col">Total amount</th>
+                                        <th class="text-center" scope="col">Status</th>
+                                        <th class="text-center" scope="col">Act</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.OrderHistory)
+                                    {
+                                        <tr>
+                                            <td>@order.PaymentId</td>
+                                            <td class="text-center">@order.CreateDate?.ToString("dd-MM-yyyy")</td>
+                                            <td class="text-center">@order.TotalAmount₫</td>
+                                            <td class="text-center">
+                                                @order.Status
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline-primary btn-sm"
+                                                        data-toggle="modal"
+                                                        data-target="#orderDetailsModal"
+                                                        data-id="@order.PaymentId">
+                                                    Chi tiết
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Order Details -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: none;">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title text-center" id="orderDetailsModalLabel">Chi tiết đơn hàng</h5>
+                <!-- Nút đóng modal -->
+                @* <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button> *@
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Left Side: Order Header, Customer Information, Product Details -->
+                    <div class="col-md-8">
+                        <!-- Order Header -->
+                        <div class="mb-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>Đơn hàng: <span id="order-code"></span></p>
+                                    <p>Ngày đặt: <span id="order-date"></span></p>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <p>Trạng thái: <span id="order-status"></span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Customer Information -->
+                            <div class="col-md-6">
+                                <div class="tab-content pt-3 mb-4 info w-100 bg-light">
+                                    <div class="border p-3">
+                                        <h6 class="text-primary">KHÁCH HÀNG</h6>
+                                        <p>Tên: <b><span id="order-full-name"></span></b></p>
+                                        <p>Số điện thoại: <span id="order-phone-number"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recipient Information -->
+                            <div class="col-md-6">
+                                <div class="tab-content pt-3 mb-4 info w-100 bg-light">
+                                    <div class="border p-3">
+                                        <h6 class="text-primary">NGƯỜI NHẬN</h6>
+                                        <p>Tên: <b><span id="recipient-name"></span></b></p>
+                                        <p>Số điện thoại: <span id="recipient-phone"></span></p>
+                                        <p>Địa chỉ: <span id="order-address"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Product Details -->
+                        <div class="table-responsive mb-4" style="margin-top: 15px">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Đơn giá</th>
+                                        <th>Tổng tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="order-diamonds">
+                                    <!-- Product rows will be appended here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Payment Summary -->
+                    <div class="col-md-4">
+                        <!-- Payment Method -->
+                        <div class="tab-content pt-3 border p-3 mt-4 w-100 bg-light">
+                            <h6 class="text-primary">PHƯƠNG THỨC THANH TOÁN</h6>
+                            <p>Tiền mặt: <span id="cash-amount"></span> ₫</p>
+                            <p>VnpayQR: <span id="vnpayqr-amount"></span> ₫</p>
+                        </div>
+
+                        <div class="tab-content pt-3 border p-3 w-100 bg-light">
+                            <h6 class="text-primary">THANH TOÁN</h6>
+                            <p>Tạm tính: <span id="subtotal"></span> ₫</p>
+                            <p>Khuyến mãi: <span id="discount"></span> ₫</p>
+                            <p>Phí vận chuyển: <span id="shipping"></span> ₫</p>
+                            <p>Thành tiền: <span id="order-total-amount"></span> ₫</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer: Đóng modal -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    <script>
+        $('#orderDetailsModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var orderId = button.data('id'); // Extract info from data-* attributes
+            var modal = $(this);
+
+            // Clear previous content
+            modal.find('#order-details-content').hide();
+            modal.find('#order-diamonds').empty();
+
+            // Make an AJAX request to fetch the order details
+            $.ajax({
+                url: '/User/OrderHistory?handler=OrderDetails',
+                type: 'GET',
+                data: { id: orderId },
+                success: function (data) {
+                    modal.find('#order-code').text(data.paymentId);
+                    modal.find('#order-date').text(new Date(data.createDate).toLocaleDateString("en-GB"));
+                    modal.find('#order-total-amount').text(data.totalAmount);
+                    modal.find('#order-status').text(data.status);
+                    modal.find('#order-full-name').text(data.fuName);
+                    modal.find('#order-email').text(data.email);
+                    modal.find('#order-phone-number').text(data.phoneNumber);
+                    modal.find('#recipient-name').text(data.fuName);
+                    modal.find('#recipient-phone').text(data.phoneNumber);
+                    // modal.find('#recipient-name').text(data.recipientName);
+                    // modal.find('#recipient-phone').text(data.recipientPhoneNumber);
+                    modal.find('#order-address').text(data.address);
+
+                    modal.find('#cash-amount').text(data.cashAmount); // Updated field
+                    modal.find('#vnpayqr-amount').text(data.vnpayqrAmount); // Updated field
+                    modal.find('#subtotal').text(data.subtotal);
+                    modal.find('#discount').text(data.discount);
+                    modal.find('#shipping').text(data.shippingFee);
+                    modal.find('#total').text(data.totalAmount);
+
+                    data.paymentDiamonds.forEach(function (diamond) {
+                        var row = `<tr>
+                                    <td>${diamond.diamondName}</td>
+                                    <td>${diamond.caratWeight}</td>
+                                    <td>${diamond.color}</td>
+                                    <td>${diamond.clarity}</td>
+                                </tr>`;
+                        modal.find('#order-diamonds').append(row);
+                    });
+
+                    modal.find('#order-details-content').show();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to load order details:', error);
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .form-control {
+        font-size: 15px;
+    }
+
+    .tab-content.info {
+        min-height: 200px; /* Đặt chiều cao tối thiểu */
+    }
+</style>
+

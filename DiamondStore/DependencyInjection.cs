@@ -27,6 +27,10 @@ namespace DiamondStore
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IPaymentDiamondRepository, PaymentDiamondRepository>();
+            services.AddScoped<IPaymentDiamondService, PaymentDiamondService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ProductDAO>();
