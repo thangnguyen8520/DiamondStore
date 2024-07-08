@@ -14,7 +14,7 @@ public partial class Payment
     [Key]
     public int PaymentId { get; set; }
 
-    public int? UserId { get; set; }
+    public string? UserId { get; set; }
 
     public int? PaymentMethodId { get; set; }
 
