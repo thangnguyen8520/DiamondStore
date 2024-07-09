@@ -16,8 +16,6 @@ public partial class Diamond
 
     public int? DiamondTypeId { get; set; }
 
-    public int? DiamondPriceId { get; set; }
-
     [StringLength(255)]
     public string DiamondName { get; set; }
 
@@ -39,10 +37,6 @@ public partial class Diamond
 
     [InverseProperty("Diamond")]
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
-
-    [ForeignKey("DiamondPriceId")]
-    [InverseProperty("Diamonds")]
-    public virtual DiamondPrice DiamondPrice { get; set; }
 
     [ForeignKey("DiamondTypeId")]
     [InverseProperty("Diamonds")]
