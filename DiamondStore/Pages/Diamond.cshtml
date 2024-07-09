@@ -1,0 +1,205 @@
+﻿@page
+@model DiamondStore.Pages.DiamondModel
+
+@{
+    Layout = "_Layout";
+    var sortOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "PriceLowToHigh", Text = "Price, Low To High" },
+        new SelectListItem { Value = "PriceHighToLow", Text = "Price, High To Low" },
+        new SelectListItem { Value = "AlphabeticalAZ", Text = "Alphabetically, A-Z" },
+        new SelectListItem { Value = "AlphabeticalZA", Text = "Alphabetically, Z-A" },
+        new SelectListItem { Value = "DateNewToOld", Text = "Date, New To Old" },
+        new SelectListItem { Value = "DateOldToNew", Text = "Date, Old To New" }
+    };
+}
+
+<style>
+    /* Custom CSS to remove "+" and "-" icons from the Diamond Type section */
+    .ziehharmonika h3::before {
+        content: none !important;
+    }
+</style>
+
+<section id="center" class="center_shop">
+    <div class="container">
+        <div class="row">
+            <div class="center_shop_t clearfix">
+                <div class="col-sm-6">
+                    <div class="center_shop_tl clearfix">
+                        <h4 class="mgt">Product</h4>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="center_shop_tr text-right clearfix">
+                        <h6 class="col_2">You are here: <a href="~/">Home</a> / Product</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="center_shop_1 clearfix">
+                <div class="col-sm-3">
+                    <div class="center_shop_1l clearfix">
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">DIAMOND TYPE</h5>
+                            <div class="ziehharmonika">
+                                <h3 data-prefix="★" class="@(Model.CategoryId == null ? "active" : "")">
+                                    <a href="?SortOption=@Model.SortOption">All</a>
+                                </h3>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <h3 data-prefix="★" class="@(Model.CategoryId == category.DiamondTypeId ? "active" : "")">
+                                        <a href="?CategoryId=@category.DiamondTypeId&SortOption=@Model.SortOption">@category.DiamondTypeName</a>
+                                    </h3>
+                                }
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">Diamond Color</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Diamond" asp-route-color="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                @foreach (var color in Model.Colors)
+                                {
+                                    <div><a asp-page="./Diamond" asp-route-color="@color.DiamondColorName" asp-route-sortOption="@Model.SortOption">@color.DiamondColorName</a></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">Diamond Clarity</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Diamond" asp-route-clarity="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                @foreach (var clarity in Model.Clarities)
+                                {
+                                    <div><a asp-page="./Diamond" asp-route-clarity="@clarity.DiamondClarityName" asp-route-sortOption="@Model.SortOption">@clarity.DiamondClarityName</a></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">Diamond Cut</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Diamond" asp-route-cut="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                @foreach (var cut in Model.Cuts)
+                                {
+                                    <div><a asp-page="./Diamond" asp-route-cut="@cut.DiamondCutName" asp-route-sortOption="@Model.SortOption">@cut.DiamondCutName</a></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">Filter by Price Range</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Diamond" asp-route-priceRange="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                <div><a asp-page="./Diamond" asp-route-priceRange="0-500000" asp-route-sortOption="@Model.SortOption">0 - 500,000</a></div>
+                                <div><a asp-page="./Diamond" asp-route-priceRange="500001-1000000" asp-route-sortOption="@Model.SortOption">500,001 - 1,000,000</a></div>
+                                <div><a asp-page="./Diamond" asp-route-priceRange="1000001-2000000" asp-route-sortOption="@Model.SortOption">1,000,001 - 2,000,000</a></div>
+                                <div><a asp-page="./Diamond" asp-route-priceRange="2000001-5000000" asp-route-sortOption="@Model.SortOption">2,000,001 - 5,000,000</a></div>
+                                <div><a asp-page="./Diamond" asp-route-priceRange="5000001-10000000" asp-route-sortOption="@Model.SortOption">5,000,001 - 10,000,000</a></div>
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">Filter by Diameter Range</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Diamond" asp-route-diameterRange="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                <div><a asp-page="./Diamond" asp-route-diameterRange="0.1-1" asp-route-sortOption="@Model.SortOption">0.1 - 1.0 mm</a></div>
+                                <div><a asp-page="./Diamond" asp-route-diameterRange="1.1-2" asp-route-sortOption="@Model.SortOption">1.1 - 2.0 mm</a></div>
+                                <div><a asp-page="./Diamond" asp-route-diameterRange="2.1-3" asp-route-sortOption="@Model.SortOption">2.1 - 3.0 mm</a></div>
+                                <div><a asp-page="./Diamond" asp-route-diameterRange="3.1-4" asp-route-sortOption="@Model.SortOption">3.1 - 4.0 mm</a></div>
+                                <div><a asp-page="./Diamond" asp-route-diameterRange="4.1-5" asp-route-sortOption="@Model.SortOption">4.1 - 5.0 mm</a></div>
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">Filter by Weight Range</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Diamond" asp-route-weightRange="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                <div><a asp-page="./Diamond" asp-route-weightRange="0.1-0.5" asp-route-sortOption="@Model.SortOption">0.1 - 0.5 carat</a></div>
+                                <div><a asp-page="./Diamond" asp-route-weightRange="0.6-1" asp-route-sortOption="@Model.SortOption">0.6 - 1.0 carat</a></div>
+                                <div><a asp-page="./Diamond" asp-route-weightRange="1.1-2" asp-route-sortOption="@Model.SortOption">1.1 - 2.0 carat</a></div>
+                                <div><a asp-page="./Diamond" asp-route-weightRange="2.1-3" asp-route-sortOption="@Model.SortOption">2.1 - 3.0 carat</a></div>
+                                <div><a asp-page="./Diamond" asp-route-weightRange="3.1-5" asp-route-sortOption="@Model.SortOption">3.1 - 5.0 carat</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="center_shop_1r clearfix">
+                        <div class="center_product_1r2 clearfix">
+                            <div class="col-sm-6">
+                                <div class="center_product_1r2l clearfix">
+                                    <p class="mgt">Showing @Model.Pagination.Items.Count of @Model.Pagination.TotalItemsCount results</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="center_product_1r2r text-right clearfix">
+                                    <h5 class="mgt">SORT BY</h5>
+                                    <select class="form-control" id="subject" name="subject" onchange="location.href='?CategoryId=@Model.CategoryId&SortOption=' + this.value">
+                                        @foreach (var option in sortOptions)
+                                        {
+                                            if (Model.SortOption == option.Value)
+                                            {
+                                                <option value="@option.Value" selected>@option.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@option.Value">@option.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collcet_1r clearfix">
+                            @foreach (var diamond in Model.Pagination.Items)
+                            {
+                                <div class="col-sm-4 space_left">
+                                    <div class="feature_2im clearfix">
+                                        <div class="feature_2im1 clearfix">
+                                            <a href="#"><img src="img/8.jpg" class="iw" alt="product"></a>
+                                        </div>
+                                        <div class="feature_2im2 clearfix">
+                                            <h6 class="mgt"><a class="bg_1" href="#">@diamond.DiamondName</a></h6>
+                                            <h6 class="pull-right mgt"><a class="bg_4" href="#">Sale</a></h6>
+                                        </div>
+                                        <div class="feature_2im4 clearfix">
+                                            <div class="col-sm-6 space_left">
+                                                <h6><a class="bg_3" href="#">Popular</a></h6>
+                                            </div>
+                                            <div class="col-sm-6 feature_2im4r space_right">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-rocket"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item_last text-center clearfix">
+                                        <h4><a href="#">@diamond.DiamondName</a></h4>
+                                        <h6>
+                                            <span class="span_1 col_1 bold">@diamond.DiamondPrice</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="product_1_last text-center clearfix">
+                            <div class="col-sm-12">
+                                <ul>
+                                    <li class="@(Model.PageIndex == 1 ? "disabled" : "")">
+                                        <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@(Model.PageIndex > 1 ? Model.PageIndex - 1 : 1)"><i class="fa fa-chevron-left"></i></a>
+                                    </li>
+                                    @for (int i = 1; i <= Model.Pagination.TotalPagesCount; i++)
+                                    {
+                                        <li class="@(Model.PageIndex == i ? "act" : "")">
+                                            <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@i">@i</a>
+                                        </li>
+                                    }
+                                    <li class="@(Model.PageIndex == Model.Pagination.TotalPagesCount ? "disabled" : "")">
+                                        <a href="?CategoryId=@Model.CategoryId&SortOption=@Model.SortOption&PageIndex=@(Model.PageIndex < Model.Pagination.TotalPagesCount ? Model.PageIndex + 1 : Model.Pagination.TotalPagesCount)"><i class="fa fa-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -39,6 +39,9 @@ public partial class Diamond
     [StringLength(255)]
     public string DiamondCertificate { get; set; }
 
+    public DateTime? CreateDate { get; set; }
+
+
     [InverseProperty("Diamond")]
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 

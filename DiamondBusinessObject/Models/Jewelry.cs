@@ -29,10 +29,14 @@ namespace DiamondBusinessObject.Models
 
         public int JewelrySizeId { get; set; }
 
+        public float LaborCost { get; set; }
+
         public float JewelryPrice { get; set; }
 
         [StringLength(255)]
         public string Status { get; set; }
+        public DateTime? CreateDate { get; set; }
+
 
 
         [ForeignKey("JewelrydTypeId")]
