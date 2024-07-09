@@ -23,8 +23,6 @@ public partial class DiamondStoreContext : IdentityDbContext<User>
 
     public virtual DbSet<Diamond> Diamonds { get; set; }
 
-    public virtual DbSet<DiamondPrice> DiamondPrices { get; set; }
-
     public virtual DbSet<DiamondType> DiamondTypes { get; set; }
 
     public virtual DbSet<Payment> Payments { get; set; }

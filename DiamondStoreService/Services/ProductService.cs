@@ -19,10 +19,10 @@ namespace DiamondStoreService.Services
             _productRepository = productRepository;
         }
 
-        public async Task<Pagination<Diamond>> GetDiamonds(int pageIndex, int pageSize, string sortOption, int? categoryId)
-        {
-            return await _productRepository.GetDiamonds(pageIndex, pageSize, sortOption, categoryId);
-        }
+        //public async Task<Pagination<Diamond>> GetDiamonds(int pageIndex, int pageSize, string sortOption, int? categoryId)
+        //{
+        //    return await _productRepository.GetDiamonds(pageIndex, pageSize, sortOption, categoryId);
+        //}
 
         public async Task<List<DiamondType>> GetAllDiamondTypes()
         {

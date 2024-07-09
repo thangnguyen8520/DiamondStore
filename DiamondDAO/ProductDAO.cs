@@ -21,7 +21,6 @@ namespace DiamondDAO
         {
             return await _context.Diamonds
                                  .Include(d => d.DiamondType)
-                                 .Include(d => d.DiamondPrice)
                                  .ToListAsync();
         }
 
