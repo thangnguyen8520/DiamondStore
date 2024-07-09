@@ -143,9 +143,9 @@ namespace DiamondStoreService.Services
                 {
                     PaymentDiamondId = pd.PaymentDiamondId,
                     DiamondName = pd.Diamond.DiamondName,
-                    CaratWeight = pd.Diamond.CaratWeight,
-                    Color = pd.Diamond.Color,
-                    Clarity = pd.Diamond.Clarity,
+                    CaratWeight = pd.Diamond.DiamondWeight,
+                    //Color = pd.Diamond.DiamondColorId,
+                    //Clarity = pd.Diamond.DiamondClarityId,
                 }).ToList()
             }).ToList();
 
@@ -177,9 +177,9 @@ namespace DiamondStoreService.Services
                 {
                     PaymentDiamondId = d.PaymentDiamondId,
                     DiamondName = d.Diamond.DiamondName,
-                    CaratWeight = d.Diamond.CaratWeight,
-                    Color = d.Diamond.Color,
-                    Clarity = d.Diamond.Clarity
+                    CaratWeight = d.Diamond.DiamondWeight,
+                    //Color = d.Diamond.DiamondColorId,
+                    //Clarity = d.Diamond.DiamondClarityId
                 }).ToList()
             };
 
