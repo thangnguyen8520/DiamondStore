@@ -24,5 +24,7 @@ namespace DiamondStoreRepository.Interfaces
         void Delete(TEntity entityToDelete);
         Task<int> CountAsync(Expression<Func<TEntity, bool>> filter = null);
         Task<Pagination<TEntity>> ToPagination(int pageIndex = 0, int pageSize = 10);
+        Task<Pagination<TEntity>> ToPaginationAsync(IQueryable<TEntity> query, int pageIndex = 0, int pageSize = 10);
+
     }
 }

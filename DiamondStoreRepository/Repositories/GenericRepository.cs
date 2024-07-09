@@ -138,5 +138,24 @@ namespace DiamondStoreRepository.Repositories
 
             return result;
         }
+
+        public async Task<Pagination<TEntity>> ToPaginationAsync(IQueryable<TEntity> query, int pageIndex = 0, int pageSize = 10)
+        {
+            var itemCount = await query.CountAsync();
+            var items = await query.Skip(pageIndex * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+            return new Pagination<TEntity>
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+        }
+
+
     }
 }

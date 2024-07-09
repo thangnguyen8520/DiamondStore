@@ -4,6 +4,7 @@ using DiamondBusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiamondDAO.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    partial class DiamondStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240709174645_updatedPaymentMethod")]
+    partial class updatedPaymentMethod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,9 +64,6 @@ namespace DiamondDAO.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiamondId"));
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("DiamondCertificate")
                         .HasMaxLength(255)
@@ -212,9 +212,6 @@ namespace DiamondDAO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JewelryId"));
 
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
@@ -237,9 +234,6 @@ namespace DiamondDAO.Migrations
 
                     b.Property<int>("JewelrydTypeId")
                         .HasColumnType("int");
-
-                    b.Property<float>("LaborCost")
-                        .HasColumnType("real");
 
                     b.Property<int>("MainDiamondId")
                         .HasColumnType("int");

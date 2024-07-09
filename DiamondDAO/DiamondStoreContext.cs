@@ -23,8 +23,18 @@ public partial class DiamondStoreContext : IdentityDbContext<User>
 
     public virtual DbSet<Diamond> Diamonds { get; set; }
 
-    public virtual DbSet<DiamondType> DiamondTypes { get; set; }
+    public virtual DbSet<DiamondClarity> DiamondClarities { get; set; }
+    public virtual DbSet<DiamondColor> DiamondColors { get; set; }
 
+    public virtual DbSet<DiamondCut> DiamondCuts { get; set; }
+
+    public virtual DbSet<DiamondType> DiamondTypes { get; set; }
+    public virtual DbSet<Jewelry> Jewelries { get; set; }
+    public virtual DbSet<JewelryMaterial> JewelryMaterials { get; set; }
+    public virtual DbSet<JewelrySize> JewelrySizes { get; set; }
+    public virtual DbSet<JewelryType> JewelryTypes { get; set; }
+    public virtual DbSet<MainDiamond> MainDiamonds { get; set; }
+    public virtual DbSet<SecondaryDiamond> SecondaryDiamonds { get; set; }
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<PaymentDiamond> PaymentDiamonds { get; set; }

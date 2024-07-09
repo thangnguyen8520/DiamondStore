@@ -31,9 +31,8 @@ namespace DiamondStore
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IPaymentDiamondRepository, PaymentDiamondRepository>();
             services.AddScoped<IPaymentDiamondService, PaymentDiamondService>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ProductDAO>();
+            services.AddScoped<IDiamondRepository, DiamondRepository>();
+            services.AddScoped<IDiamondService, DiamondService>();
 
 
             // Add DbContext
