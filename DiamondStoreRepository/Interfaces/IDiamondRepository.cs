@@ -15,5 +15,8 @@ namespace DiamondStoreRepository.Interfaces
         Task<List<DiamondClarity>> GetAllDiamondClarities(); 
         Task<List<DiamondColor>> GetAllDiamondColors();
         Task<List<DiamondCut>> GetAllDiamondCuts();
+        Task<Diamond> GetById(int id, string includeProperties = "");
+        Task<List<Diamond>> GetRelatedDiamonds(int? diamondTypeId, int excludeDiamondId);
+
     }
 }

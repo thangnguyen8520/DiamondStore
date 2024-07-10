@@ -1,0 +1,75 @@
+﻿@page "{id:int}"
+@model DiamondStore.Pages.DiamondDetailModel
+
+@{
+    Layout = "_Layout";
+}
+
+<section class="diamond-detail-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                @if (Model.Diamond.Image != null)
+                {
+                    <img src="@Model.Diamond.Image.ImageUrl" alt="Diamond Image" class="img-fluid" />
+                }
+                else
+                {
+                    <img src="default-image-url.jpg" alt="Default Diamond Image" class="img-fluid" />
+                }
+            </div>
+            <div class="col-md-6">
+                <h1>@Model.Diamond.DiamondName</h1>
+                <p class="price">@Model.Diamond.DiamondPrice.ToString("C")</p>
+                <dl class="row">
+                    <dt class="col-sm-3">Color</dt>
+                    <dd class="col-sm-9">@Model.Diamond.DiamondColor.DiamondColorName</dd>
+
+                    <dt class="col-sm-3">Clarity</dt>
+                    <dd class="col-sm-9">@Model.Diamond.DiamondClarity.DiamondClarityName</dd>
+
+                    <dt class="col-sm-3">Cut</dt>
+                    <dd class="col-sm-9">@Model.Diamond.DiamondCut.DiamondCutName</dd>
+
+                    <dt class="col-sm-3">Certificate</dt>
+                    <dd class="col-sm-9">@Model.Diamond.DiamondCertificate</dd>
+                </dl>
+
+                <div class="actions">
+                    <button class="btn btn-primary">Add to Cart</button>
+                    <button class="btn btn-success">Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-products mt-5">
+            <h2>Related Products</h2>
+            <div class="row">
+                @foreach (var relatedDiamond in Model.RelatedDiamonds)
+                {
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="@relatedDiamond.Image?.ImageUrl ?? " default-image-url.jpg"" class="card-img-top" alt="Related Diamond">
+                            <div class="card-body">
+                                <h5 class="card-title">@relatedDiamond.DiamondName</h5>
+                                <p class="card-text">@relatedDiamond.DiamondPrice.ToString("C")</p>
+                                <a href="/DiamondDetail/@relatedDiamond.DiamondId" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .diamond-detail-section .price {
+        font-size: 1.5rem;
+        color: red;
+    }
+
+    .related-products .card {
+        margin-bottom: 20px;
+    }
+</style>

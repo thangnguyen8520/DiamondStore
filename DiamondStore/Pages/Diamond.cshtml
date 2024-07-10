@@ -5,21 +5,15 @@
     Layout = "_Layout";
     var sortOptions = new List<SelectListItem>
     {
+        new SelectListItem { Value = "DateNewToOld", Text = "Date, New To Old" },
+        new SelectListItem { Value = "DateOldToNew", Text = "Date, Old To New" },
         new SelectListItem { Value = "PriceLowToHigh", Text = "Price, Low To High" },
         new SelectListItem { Value = "PriceHighToLow", Text = "Price, High To Low" },
         new SelectListItem { Value = "AlphabeticalAZ", Text = "Alphabetically, A-Z" },
-        new SelectListItem { Value = "AlphabeticalZA", Text = "Alphabetically, Z-A" },
-        new SelectListItem { Value = "DateNewToOld", Text = "Date, New To Old" },
-        new SelectListItem { Value = "DateOldToNew", Text = "Date, Old To New" }
+        new SelectListItem { Value = "AlphabeticalZA", Text = "Alphabetically, Z-A" }
+        
     };
 }
-
-<style>
-    /* Custom CSS to remove "+" and "-" icons from the Diamond Type section */
-    .ziehharmonika h3::before {
-        content: none !important;
-    }
-</style>
 
 <section id="center" class="center_shop">
     <div class="container">
@@ -27,12 +21,12 @@
             <div class="center_shop_t clearfix">
                 <div class="col-sm-6">
                     <div class="center_shop_tl clearfix">
-                        <h4 class="mgt">Product</h4>
+                        <h4 class="mgt">Diamond</h4>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="center_shop_tr text-right clearfix">
-                        <h6 class="col_2">You are here: <a href="~/">Home</a> / Product</h6>
+                        <h6 class="col_2">You are here: <a href="~/">Home</a> / Diamond</h6>
                     </div>
                 </div>
             </div>
@@ -40,7 +34,7 @@
                 <div class="col-sm-3">
                     <div class="center_shop_1l clearfix">
                         <div class="center_shop_1li clearfix">
-                            <h5 class="mgt">DIAMOND TYPE</h5>
+                            <h5 class="mgt">Diamond Type</h5>
                             <div class="ziehharmonika">
                                 <h3 data-prefix="★" class="@(Model.CategoryId == null ? "active" : "")">
                                     <a href="?SortOption=@Model.SortOption">All</a>
@@ -151,7 +145,7 @@
                                 <div class="col-sm-4 space_left">
                                     <div class="feature_2im clearfix">
                                         <div class="feature_2im1 clearfix">
-                                            <a href="#"><img src="img/8.jpg" class="iw" alt="product"></a>
+                                            <a asp-page="/DiamondDetail" asp-route-id="@diamond.DiamondId"><img src="img/8.jpg" class="iw" alt="product"></a>
                                         </div>
                                         <div class="feature_2im2 clearfix">
                                             <h6 class="mgt"><a class="bg_1" href="#">@diamond.DiamondName</a></h6>
@@ -171,7 +165,7 @@
                                         </div>
                                     </div>
                                     <div class="item_last text-center clearfix">
-                                        <h4><a href="#">@diamond.DiamondName</a></h4>
+                                        <h4><a asp-page="/DiamondDetail" asp-route-id="@diamond.DiamondId">@diamond.DiamondName</a></h4>
                                         <h6>
                                             <span class="span_1 col_1 bold">@diamond.DiamondPrice</span>
                                         </h6>
