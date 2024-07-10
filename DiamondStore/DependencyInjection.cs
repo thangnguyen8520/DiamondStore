@@ -33,6 +33,12 @@ namespace DiamondStore
             services.AddScoped<IPaymentDiamondService, PaymentDiamondService>();
             services.AddScoped<IDiamondRepository, DiamondRepository>();
             services.AddScoped<IDiamondService, DiamondService>();
+            services.AddScoped<IJewelryRepository, JewelryRepository>();
+            services.AddScoped<IJewelryTypeRepository, JewelryTypeRepository>();
+            services.AddScoped<IJewelryMaterialRepository, JewelryMaterialRepository>();
+            services.AddScoped<IJewelrySizeRepository, JewelrySizeRepository>();
+            services.AddScoped<IJewelryService, JewelryService>();
+
 
 
             // Add DbContext

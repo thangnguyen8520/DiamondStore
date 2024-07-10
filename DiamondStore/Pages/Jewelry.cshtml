@@ -1,0 +1,162 @@
+﻿@page
+@model DiamondStore.Pages.JewelryModel
+
+@{
+    Layout = "_Layout";
+    var sortOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "DateNewToOld", Text = "Date, New To Old" },
+        new SelectListItem { Value = "DateOldToNew", Text = "Date, Old To New" },
+        new SelectListItem { Value = "PriceLowToHigh", Text = "Price, Low To High" },
+        new SelectListItem { Value = "PriceHighToLow", Text = "Price, High To Low" },
+        new SelectListItem { Value = "AlphabeticalAZ", Text = "Alphabetically, A-Z" },
+        new SelectListItem { Value = "AlphabeticalZA", Text = "Alphabetically, Z-A" }
+    };
+}
+
+<section id="center" class="center_shop">
+    <div class="container">
+        <div class="row">
+            <div class="center_shop_t clearfix">
+                <div class="col-sm-6">
+                    <div class="center_shop_tl clearfix">
+                        <h4 class="mgt">Jewelry</h4>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="center_shop_tr text-right clearfix">
+                        <h6 class="col_2">You are here: <a href="~/">Home</a> / Jewelry</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="center_shop_1 clearfix">
+                <div class="col-sm-3">
+                    <div class="center_shop_1l clearfix">
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">TYPE</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Jewelry" asp-route-typeId="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                @foreach (var type in Model.Types)
+                                {
+                                    <div><a asp-page="./Jewelry" asp-route-typeId="@type.JewelryTypeId" asp-route-sortOption="@Model.SortOption">@type.JewelryTypeName</a></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">MATERIAL</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Jewelry" asp-route-material="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                @foreach (var material in Model.Materials)
+                                {
+                                    <div><a asp-page="./Jewelry" asp-route-material="@material.JewelryMaterialName" asp-route-sortOption="@Model.SortOption">@material.JewelryMaterialName</a></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="center_shop_1li clearfix">
+                            <h5 class="mgt">Filter by Price Range</h5>
+                            <div class="filter-options">
+                                <div><a asp-page="./Jewelry" asp-route-priceRange="" asp-route-sortOption="@Model.SortOption">All</a></div>
+                                <div><a asp-page="./Jewelry" asp-route-priceRange="0-500000" asp-route-sortOption="@Model.SortOption">0 - 500,000</a></div>
+                                <div><a asp-page="./Jewelry" asp-route-priceRange="500001-1000000" asp-route-sortOption="@Model.SortOption">500,001 - 1,000,000</a></div>
+                                <div><a asp-page="./Jewelry" asp-route-priceRange="1000001-2000000" asp-route-sortOption="@Model.SortOption">1,000,001 - 2,000,000</a></div>
+                                <div><a asp-page="./Jewelry" asp-route-priceRange="2000001-5000000" asp-route-sortOption="@Model.SortOption">2,000,001 - 5,000,000</a></div>
+                                <div><a asp-page="./Jewelry" asp-route-priceRange="5000001-10000000" asp-route-sortOption="@Model.SortOption">5,000,001 - 10,000,000</a></div>
+                                <div><a asp-page="./Jewelry" asp-route-priceRange="10000001-9999999999" asp-route-sortOption="@Model.SortOption">10,000,001+</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="center_shop_1r clearfix">
+                        <div class="center_product_1r2 clearfix">
+                            <div class="col-sm-6">
+                                <div class="center_product_1r2l clearfix">
+                                    <p class="mgt">Showing @Model.Pagination.Items.Count of @Model.Pagination.TotalItemsCount results</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="center_product_1r2r text-right clearfix">
+                                    <h5 class="mgt">SORT BY</h5>
+                                    <select class="form-control" id="subject" name="subject" onchange="location.href='?typeId=@Model.TypeId&material=@Model.Material&priceRange=@Model.PriceRange&SortOption=' + this.value">
+                                        @foreach (var option in sortOptions)
+                                        {
+                                            if (Model.SortOption == option.Value)
+                                            {
+                                                <option value="@option.Value" selected>@option.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@option.Value">@option.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collcet_1r clearfix">
+                            @foreach (var jewelry in Model.Pagination.Items)
+                            {
+                                <div class="col-sm-4 space_left">
+                                    <div class="feature_2im clearfix">
+                                        <div class="feature_2im1 clearfix">
+                                            <a href="#">
+                                                @if (jewelry.Image != null)
+                                                {
+                                                    <img src="@jewelry.Image.ImageUrl" class="iw" alt="product" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/default-product.png" class="iw" alt="product" />
+                                                }
+                                            </a>
+                                        </div>
+                                        <div class="feature_2im2 clearfix">
+                                            <h6 class="mgt"><a class="bg_1" href="#">@jewelry.JewelryName</a></h6>
+                                            <h6 class="pull-right mgt"><a class="bg_4" href="#">Sale</a></h6>
+                                        </div>
+                                        <div class="feature_2im4 clearfix">
+                                            <div class="col-sm-6 space_left">
+                                                <h6><a class="bg_3" href="#">Popular</a></h6>
+                                            </div>
+                                            <div class="col-sm-6 feature_2im4r space_right">
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-rocket"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item_last text-center clearfix">
+                                        <h4><a href="#">@jewelry.JewelryName</a></h4>
+                                        <h6>
+                                            <span class="span_1 col_1 bold">@jewelry.TotalPrice.ToString("C")</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="product_1_last text-center clearfix">
+                            <div class="col-sm-12">
+                                <ul>
+                                    <li class="@(Model.Pagination.PageIndex == 1 ? "disabled" : "")">
+                                        <a href="?typeId=@Model.TypeId&material=@Model.Material&priceRange=@Model.PriceRange&SortOption=@Model.SortOption&PageIndex=@(Model.Pagination.PageIndex > 1 ? Model.Pagination.PageIndex - 1 : 1)"><i class="fa fa-chevron-left"></i></a>
+                                    </li>
+                                    @for (int i = 1; i <= Model.Pagination.TotalPagesCount; i++)
+                                    {
+                                        <li class="@(Model.Pagination.PageIndex == i ? "act" : "")">
+                                            <a href="?typeId=@Model.TypeId&material=@Model.Material&priceRange=@Model.PriceRange&SortOption=@Model.SortOption&PageIndex=@i">@i</a>
+                                        </li>
+                                    }
+                                    <li class="@(Model.Pagination.PageIndex == Model.Pagination.TotalPagesCount ? "disabled" : "")">
+                                        <a href="?typeId=@Model.TypeId&material=@Model.Material&priceRange=@Model.PriceRange&SortOption=@Model.SortOption&PageIndex=@(Model.Pagination.PageIndex < Model.Pagination.TotalPagesCount ? Model.Pagination.PageIndex + 1 : Model.Pagination.TotalPagesCount)"><i class="fa fa-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
