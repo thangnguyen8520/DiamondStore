@@ -76,7 +76,7 @@ namespace DiamondStoreRepository.Repositories
                     query = query.OrderByDescending(d => d.DiamondName);
                     break;
                 default:
-                    query = query.OrderBy(d => d.DiamondId); // Default sort option
+                    query = query.OrderByDescending(d => d.CreateDate);
                     break;
             }
 
@@ -102,6 +102,27 @@ namespace DiamondStoreRepository.Repositories
         public async Task<List<DiamondCut>> GetAllDiamondCuts()
         {
             return await _context.DiamondCuts.ToListAsync();
+        }
+
+        public async Task<Diamond> GetById(int id, string includeProperties = "")
+        {
+            IQueryable<Diamond> query = _context.Diamonds;
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.FirstOrDefaultAsync(d => d.DiamondId == id);
+        }
+
+        public async Task<List<Diamond>> GetRelatedDiamonds(int? diamondTypeId, int excludeDiamondId)
+        {
+            return await _dbSet
+                .Where(d => d.DiamondTypeId == diamondTypeId && d.DiamondId != excludeDiamondId)
+                .Take(4)
+                .Include(d => d.Image)
+                .ToListAsync();
         }
     }
 }

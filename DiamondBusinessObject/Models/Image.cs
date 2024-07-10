@@ -16,5 +16,7 @@ namespace DiamondBusinessObject.Models
         public string ImageUrl { get; set; }
 
         public virtual ICollection<User> Users { get; set; } = new List<User>();
+        public virtual ICollection<Diamond> Diamonds { get; set; } = new List<Diamond>();
+        public virtual ICollection<Jewelry> Jewelries { get; set; } = new List<Jewelry>();
     }
 }

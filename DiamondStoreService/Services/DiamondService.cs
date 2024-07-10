@@ -40,5 +40,15 @@ namespace DiamondStoreService.Services
         {
             return await _diamondRepository.GetAllDiamondCuts();
         }
+
+        public async Task<Diamond> GetById(int id, string includeProperties = "")
+        {
+            return await _diamondRepository.GetById(id, includeProperties);
+        }
+
+        public async Task<List<Diamond>> GetRelatedDiamonds(int? diamondTypeId, int excludeDiamondId)
+        {
+            return await _diamondRepository.GetRelatedDiamonds(diamondTypeId, excludeDiamondId);
+        }
     }
 }

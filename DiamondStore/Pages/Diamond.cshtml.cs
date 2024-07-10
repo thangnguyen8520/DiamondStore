@@ -69,12 +69,12 @@ namespace DiamondStore.Pages
 
             SortOptions = new List<SelectListItem>
             {
+                new SelectListItem { Value = "DateNewToOld", Text = "Date, New To Old" },
+                new SelectListItem { Value = "DateOldToNew", Text = "Date, Old To New" },
                 new SelectListItem { Value = "PriceLowToHigh", Text = "Price, Low To High" },
                 new SelectListItem { Value = "PriceHighToLow", Text = "Price, High To Low" },
                 new SelectListItem { Value = "AlphabeticalAZ", Text = "Alphabetically, A-Z" },
-                new SelectListItem { Value = "AlphabeticalZA", Text = "Alphabetically, Z-A" },
-                new SelectListItem { Value = "DateNewToOld", Text = "Date, New To Old" },
-                new SelectListItem { Value = "DateOldToNew", Text = "Date, Old To New" }
+                new SelectListItem { Value = "AlphabeticalZA", Text = "Alphabetically, Z-A" }         
             };
 
             if (!string.IsNullOrEmpty(PriceRange))
