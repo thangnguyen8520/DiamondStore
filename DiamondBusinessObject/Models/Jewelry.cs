@@ -37,6 +37,8 @@ namespace DiamondBusinessObject.Models
         public string Status { get; set; }
         public DateTime? CreateDate { get; set; }
 
+        [NotMapped]
+        public float TotalPrice { get; set; }
 
 
         [ForeignKey("JewelrydTypeId")]
@@ -51,9 +53,7 @@ namespace DiamondBusinessObject.Models
         public virtual ICollection<SecondaryDiamond> SecondaryDiamonds { get; set; } = new List<SecondaryDiamond>();
 
         [InverseProperty("Jewelry")]
-        public virtual ICollection<MainDiamond>
-s
-        { get; set; } = new List<MainDiamond>();
+        public virtual ICollection<MainDiamond> MainDiamonds { get; set; } = new List<MainDiamond>();
 
         [ForeignKey("JewelrySizeId")]
         [InverseProperty("Jewelries")]
