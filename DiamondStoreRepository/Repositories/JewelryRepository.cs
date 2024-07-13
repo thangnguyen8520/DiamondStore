@@ -88,5 +88,33 @@ namespace DiamondStoreRepository.Repositories
                 PageSize = pageSize
             };
         }
+        public async Task<Jewelry> GetJewelryWithDetails(int jewelryId)
+        {
+            var jewelry = await _context.Jewelries
+                .Include(j => j.MainDiamonds)
+                    .ThenInclude(md => md.Diamond)
+                .Include(j => j.SecondaryDiamonds)
+                    .ThenInclude(sd => sd.Diamond)
+                .Include(j => j.JewelryMaterial)
+                .Include(j => j.Image)
+                .FirstOrDefaultAsync(j => j.JewelryId == jewelryId);
+
+            if (jewelry != null)
+            {
+                float mainDiamondPrice = jewelry.MainDiamonds.Sum(md => md.Diamond?.DiamondPrice ?? 0);
+                float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
+                jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
+            }
+
+            return jewelry;
+        }
+
+        public async Task<List<Jewelry>> GetRelatedJewelries(int typeId, int excludeId)
+        {
+            return await _context.Jewelries
+                .Where(j => j.JewelryTypeId == typeId && j.JewelryId != excludeId)
+                .ToListAsync();
+        }
+
     }
 }

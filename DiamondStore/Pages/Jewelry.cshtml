@@ -99,7 +99,7 @@
                                 <div class="col-sm-4 space_left">
                                     <div class="feature_2im clearfix">
                                         <div class="feature_2im1 clearfix">
-                                            <a href="#">
+                                            <a asp-page="/JewelryDetail" asp-route-id="@jewelry.JewelryId">
                                                 @if (jewelry.Image != null)
                                                 {
                                                     <img src="@jewelry.Image.ImageUrl" class="iw" alt="product" />
@@ -111,7 +111,7 @@
                                             </a>
                                         </div>
                                         <div class="feature_2im2 clearfix">
-                                            <h6 class="mgt"><a class="bg_1" href="#">@jewelry.JewelryName</a></h6>
+                                            <h6 class="mgt"><a asp-page="/JewelryDetail" asp-route-id="@jewelry.JewelryId" class="bg_1">@jewelry.JewelryName</a></h6>
                                             <h6 class="pull-right mgt"><a class="bg_4" href="#">Sale</a></h6>
                                         </div>
                                         <div class="feature_2im4 clearfix">
@@ -128,7 +128,7 @@
                                         </div>
                                     </div>
                                     <div class="item_last text-center clearfix">
-                                        <h4><a href="#">@jewelry.JewelryName</a></h4>
+                                        <h4><a asp-page="/JewelryDetail" asp-route-id="@jewelry.JewelryId">@jewelry.JewelryName</a></h4>
                                         <h6>
                                             <span class="span_1 col_1 bold">@jewelry.TotalPrice.ToString("C")</span>
                                         </h6>
