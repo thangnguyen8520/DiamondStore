@@ -1,4 +1,53 @@
-﻿@page
+﻿@page "{id:int}"
 @model DiamondStore.Pages.JewelryDetailModel
 @{
+    Layout = "_Layout";
 }
+
+<section id="product_detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="product-images">
+                    <div class="main-image">
+                        <img src="@Model.Jewelry.Image?.ImageUrl" alt="Product Image" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="product-details">
+                    <h2>@Model.Jewelry.JewelryName</h2>
+                    <h3 class="price">@Model.Jewelry.TotalPrice.ToString("C")</h3>
+                    <div class="product-options">
+                        <div class="option">
+                            <span><strong>Material:</strong></span>
+                            <span>@(Model.Jewelry.JewelryMaterial?.JewelryMaterialName ?? "N/A")</span>
+                        </div>
+                        <div class="option">
+                            <span><strong>Main Diamond:</strong></span>
+                            <span>@(Model.Jewelry.MainDiamonds.FirstOrDefault()?.Diamond?.DiamondName ?? "N/A")</span>
+                        </div>
+                        <div class="option">
+                            <span><strong>Secondary Diamond:</strong></span>
+                            <span>@(Model.Jewelry.SecondaryDiamonds.FirstOrDefault()?.Diamond?.DiamondName ?? "N/A")</span>
+                        </div>
+                    </div>
+                    <div class="product-size">
+                        <label for="size">Size:</label>
+                        <select id="size" class="form-control">
+                            @foreach (var size in Model.Sizes)
+                            {
+                                <option value="@size.JewelrySizeId">@size.JewelrySizeName</option>
+                            }
+                        </select>
+                        <a href="#" class="size-guide">Size Guide</a>
+                    </div>
+                    <div class="product-actions">
+                        <a href="#" class="btn btn-secondary">Add to Cart</a>
+                        <a href="#" class="btn btn-success">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

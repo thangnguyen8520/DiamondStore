@@ -3,6 +3,7 @@ using DiamondStoreRepository.Common;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,11 @@ namespace DiamondStoreService.Services
             return await _jewelryRepository.GetPaginated(pageIndex, pageSize, sortOption, typeId, material, sizeId, priceRange);
         }
 
+        public async Task<Jewelry> GetJewelryWithDetails(int jewelryId)
+        {
+            return await _jewelryRepository.GetJewelryWithDetails(jewelryId);
+        }
+
         public async Task<IList<JewelryType>> GetAllJewelryTypes()
         {
             return await _jewelryTypeRepository.GetAllJewelryTypes();
@@ -48,6 +54,11 @@ namespace DiamondStoreService.Services
         public async Task<IList<JewelrySize>> GetAllJewelrySizes()
         {
             return await _jewelrySizeRepository.GetAllJewelrySizes();
+        }
+
+        public async Task<List<Jewelry>> GetRelatedJewelries(int typeId, int excludeId)
+        {
+            return await _jewelryRepository.GetRelatedJewelries(typeId, excludeId);
         }
     }
 

@@ -14,5 +14,7 @@ namespace DiamondStoreService.Interfaces
         Task<IList<JewelryType>> GetAllJewelryTypes();
         Task<IList<JewelryMaterial>> GetAllJewelryMaterials();
         Task<IList<JewelrySize>> GetAllJewelrySizes();
+        Task<Jewelry> GetJewelryWithDetails(int jewelryId);
+        Task<List<Jewelry>> GetRelatedJewelries(int typeId, int excludeId);
     }
 }
