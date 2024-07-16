@@ -40,6 +40,8 @@ namespace DiamondBusinessObject.Models
         [NotMapped]
         public float TotalPrice { get; set; }
 
+        [InverseProperty("Jewelry")]
+        public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
         [ForeignKey("JewelrydTypeId")]
         [InverseProperty("Jewelries")]

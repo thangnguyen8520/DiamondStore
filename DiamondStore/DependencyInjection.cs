@@ -38,6 +38,8 @@ namespace DiamondStore
             services.AddScoped<IJewelryMaterialRepository, JewelryMaterialRepository>();
             services.AddScoped<IJewelrySizeRepository, JewelrySizeRepository>();
             services.AddScoped<IJewelryService, JewelryService>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartService, CartService>();
 
 
 
