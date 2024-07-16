@@ -1,8 +1,14 @@
 ﻿@page "{id:int}"
 @model DiamondStore.Pages.DiamondDetailModel
-
 @{
     Layout = "_Layout";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
 }
 
 <section class="diamond-detail-section">
@@ -36,8 +42,10 @@
                 </dl>
 
                 <div class="actions">
-                    <button class="btn btn-primary">Add to Cart</button>
-                    <button class="btn btn-success">Buy Now</button>
+                    <form method="post" asp-page-handler="AddToCart">
+                        <button class="btn btn-primary" type="submit">Add to Cart</button>
+                        <button class="btn btn-success">Buy Now</button>
+                    </form>
                 </div>
             </div>
         </div>

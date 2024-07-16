@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiamondDAO.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    [Migration("20240709174645_updatedPaymentMethod")]
-    partial class updatedPaymentMethod
+    [Migration("20240716191303_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,20 +39,27 @@ namespace DiamondDAO.Migrations
                     b.Property<int?>("DiamondId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("JewelryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JewelrySizeId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CartId");
 
                     b.HasIndex("DiamondId");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("JewelryId");
+
+                    b.HasIndex("JewelrySizeId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cart");
                 });
@@ -64,6 +71,9 @@ namespace DiamondDAO.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiamondId"));
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DiamondCertificate")
                         .HasMaxLength(255)
@@ -212,6 +222,9 @@ namespace DiamondDAO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JewelryId"));
 
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
@@ -226,14 +239,14 @@ namespace DiamondDAO.Migrations
                     b.Property<float>("JewelryPrice")
                         .HasColumnType("real");
 
-                    b.Property<int>("JewelrySizeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("JewelryTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("JewelrydTypeId")
                         .HasColumnType("int");
+
+                    b.Property<float>("LaborCost")
+                        .HasColumnType("real");
 
                     b.Property<int>("MainDiamondId")
                         .HasColumnType("int");
@@ -251,8 +264,6 @@ namespace DiamondDAO.Migrations
                     b.HasIndex("ImageId");
 
                     b.HasIndex("JewelryMaterialId");
-
-                    b.HasIndex("JewelrySizeId");
 
                     b.HasIndex("JewelrydTypeId");
 
@@ -766,11 +777,23 @@ namespace DiamondDAO.Migrations
                         .WithMany("Carts")
                         .HasForeignKey("DiamondId");
 
+                    b.HasOne("DiamondBusinessObject.Models.Jewelry", "Jewelry")
+                        .WithMany("Carts")
+                        .HasForeignKey("JewelryId");
+
+                    b.HasOne("DiamondBusinessObject.Models.JewelrySize", "JewelrySize")
+                        .WithMany("Carts")
+                        .HasForeignKey("JewelrySizeId");
+
                     b.HasOne("DiamondBusinessObject.Models.User", "User")
                         .WithMany("Carts")
-                        .HasForeignKey("Id");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Diamond");
+
+                    b.Navigation("Jewelry");
+
+                    b.Navigation("JewelrySize");
 
                     b.Navigation("User");
                 });
@@ -800,7 +823,7 @@ namespace DiamondDAO.Migrations
                         .HasForeignKey("DiamondTypeId");
 
                     b.HasOne("DiamondBusinessObject.Models.Image", "Image")
-                        .WithMany()
+                        .WithMany("Diamonds")
                         .HasForeignKey("ImageId");
 
                     b.Navigation("DiamondClarity");
@@ -817,18 +840,12 @@ namespace DiamondDAO.Migrations
             modelBuilder.Entity("DiamondBusinessObject.Models.Jewelry", b =>
                 {
                     b.HasOne("DiamondBusinessObject.Models.Image", "Image")
-                        .WithMany()
+                        .WithMany("Jewelries")
                         .HasForeignKey("ImageId");
 
                     b.HasOne("DiamondBusinessObject.Models.JewelryMaterial", "JewelryMaterial")
                         .WithMany("Jewelries")
                         .HasForeignKey("JewelryMaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DiamondBusinessObject.Models.JewelrySize", "JewelrySize")
-                        .WithMany("Jewelries")
-                        .HasForeignKey("JewelrySizeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -842,8 +859,6 @@ namespace DiamondDAO.Migrations
 
                     b.Navigation("JewelryMaterial");
 
-                    b.Navigation("JewelrySize");
-
                     b.Navigation("JewelryType");
                 });
 
@@ -856,7 +871,7 @@ namespace DiamondDAO.Migrations
                         .IsRequired();
 
                     b.HasOne("DiamondBusinessObject.Models.Jewelry", "Jewelry")
-                        .WithMany("s")
+                        .WithMany("MainDiamonds")
                         .HasForeignKey("JewelryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1034,14 +1049,20 @@ namespace DiamondDAO.Migrations
 
             modelBuilder.Entity("DiamondBusinessObject.Models.Image", b =>
                 {
+                    b.Navigation("Diamonds");
+
+                    b.Navigation("Jewelries");
+
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DiamondBusinessObject.Models.Jewelry", b =>
                 {
-                    b.Navigation("SecondaryDiamonds");
+                    b.Navigation("Carts");
 
-                    b.Navigation("s");
+                    b.Navigation("MainDiamonds");
+
+                    b.Navigation("SecondaryDiamonds");
                 });
 
             modelBuilder.Entity("DiamondBusinessObject.Models.JewelryMaterial", b =>
@@ -1051,7 +1072,7 @@ namespace DiamondDAO.Migrations
 
             modelBuilder.Entity("DiamondBusinessObject.Models.JewelrySize", b =>
                 {
-                    b.Navigation("Jewelries");
+                    b.Navigation("Carts");
                 });
 
             modelBuilder.Entity("DiamondBusinessObject.Models.JewelryType", b =>

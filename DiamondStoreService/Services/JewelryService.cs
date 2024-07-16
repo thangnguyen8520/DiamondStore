@@ -60,6 +60,12 @@ namespace DiamondStoreService.Services
         {
             return await _jewelryRepository.GetRelatedJewelries(typeId, excludeId);
         }
+
+        public async Task<bool> SizeExists(int sizeId)
+        {
+            return await _jewelrySizeRepository.SizeExists(sizeId);
+        }
+
     }
 
 }

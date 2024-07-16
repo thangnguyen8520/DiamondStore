@@ -1,5 +1,6 @@
 ﻿using DiamondBusinessObject.Models;
 using DiamondStoreRepository.Interfaces;
+using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,15 +10,22 @@ namespace DiamondStoreService.Services
     public class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IJewelryRepository _jewelryRepository;
 
-        public CartService(ICartRepository cartRepository)
+        public CartService(ICartRepository cartRepository, IJewelryRepository jewelryRepository)
         {
             _cartRepository = cartRepository;
+            _jewelryRepository = jewelryRepository;
+        }
+
+        public async Task AddToCart(Cart cart)
+        {
+            await _cartRepository.AddToCart(cart);
         }
 
         public async Task<List<Cart>> GetCartItems(string userId)
         {
-            return await _cartRepository.GetCartItems(userId);
+            return await _cartRepository.GetCartItemsByUserId(userId);
         }
 
         public async Task<Cart> GetCartItem(int cartId)

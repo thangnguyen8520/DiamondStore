@@ -4,6 +4,13 @@
     Layout = "_Layout";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <section id="product_detail">
     <div class="container">
         <div class="row">
@@ -32,21 +39,45 @@
                             <span>@(Model.Jewelry.SecondaryDiamonds.FirstOrDefault()?.Diamond?.DiamondName ?? "N/A")</span>
                         </div>
                     </div>
-                    <div class="product-size">
-                        <label for="size">Size:</label>
-                        <select id="size" class="form-control">
-                            @foreach (var size in Model.Sizes)
-                            {
-                                <option value="@size.JewelrySizeId">@size.JewelrySizeName</option>
-                            }
-                        </select>
-                        <a href="#" class="size-guide">Size Guide</a>
-                    </div>
+  
                     <div class="product-actions">
-                        <a href="#" class="btn btn-secondary">Add to Cart</a>
-                        <a href="#" class="btn btn-success">Buy Now</a>
+                        <form method="post" asp-page-handler="AddToCart">
+                            <input type="hidden" name="id" value="@Model.Jewelry.JewelryId" />
+                            <div class="product-size">
+                                <label for="sizeId">Size:</label>
+                                <select id="sizeId" class="form-control" name="sizeId">
+                                    <option value="0">Select Size</option>
+                                    @foreach (var size in Model.Sizes)
+                                    {
+                                        <option value="@size.JewelrySizeId">@size.JewelrySizeName</option>
+                                    }
+                                </select>
+                                <a href="#" class="size-guide">Size Guide</a>
+                            </div>
+                            <button class="btn btn-secondary" type="submit">Add to Cart</button>
+                            <button class="btn btn-success" type="submit">Buy Now</button>
+                        </form>
+
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="related-products mt-5">
+            <h2>Related Products</h2>
+            <div class="row">
+                @foreach (var relatedJewelry in Model.RelatedJewelry)
+                {
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="@relatedJewelry.Image?.ImageUrl ?? " default-image-url.jpg"" class="card-img-top" alt="Related Jewelry">
+                            <div class="card-body">
+                                <h5 class="card-title">@relatedJewelry.JewelryName</h5>
+                                <p class="card-text">@relatedJewelry.JewelryPrice.ToString("C")</p>
+                                <a href="/JewelryDetail/@relatedJewelry.JewelryId" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
