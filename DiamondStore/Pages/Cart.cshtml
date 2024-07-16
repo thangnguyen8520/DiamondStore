@@ -44,7 +44,7 @@
                         <div class="cart_3l1 clearfix">
                             <div class="col-sm-3 space_left">
                                 <div class="cart_3l1i clearfix">
-                                    <a href="#">
+                                    <a href="@(item.Diamond != null ? Url.Page("/DiamondDetail", new { id = item.Diamond.DiamondId }) : Url.Page("/JewelryDetail", new { id = item.Jewelry.JewelryId }))">
                                         <img src="@(item.Diamond?.Image?.ImageUrl ?? item.Jewelry?.Image?.ImageUrl)" alt="Product Image" class="iw">
                                     </a>
                                 </div>
@@ -52,7 +52,7 @@
                             <div class="col-sm-9">
                                 <div class="cart_3l1i1 clearfix">
                                     <h5 class="mgt">
-                                        <a href="#">
+                                        <a href="@(item.Diamond != null ? Url.Page("/DiamondDetail", new { id = item.Diamond.DiamondId }) : Url.Page("/JewelryDetail", new { id = item.Jewelry.JewelryId }))">
                                             @(item.Diamond?.DiamondName ?? item.Jewelry?.JewelryName ?? "N/A")
                                         </a>
                                     </h5>
