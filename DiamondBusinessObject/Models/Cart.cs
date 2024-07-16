@@ -14,9 +14,11 @@ public partial class Cart
     [Key]
     public int CartId { get; set; }
 
-    public int? UserId { get; set; }
+    public string UserId { get; set; }
 
     public int? DiamondId { get; set; }
+
+    public int? JewelryId { get; set; }
 
     public int? Quantity { get; set; }
 
@@ -27,7 +29,11 @@ public partial class Cart
     [InverseProperty("Carts")]
     public virtual Diamond Diamond { get; set; }
 
-    [ForeignKey("Id")]
+    [ForeignKey("JewelryId")]
+    [InverseProperty("Carts")]
+    public virtual Jewelry Jewelry { get; set; }
+
+    [ForeignKey("UserId")]
     [InverseProperty("Carts")]
     public virtual User User { get; set; }
 }
