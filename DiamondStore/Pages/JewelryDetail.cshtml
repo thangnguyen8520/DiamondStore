@@ -49,5 +49,23 @@
                 </div>
             </div>
         </div>
+        <div class="related-products mt-5">
+            <h2>Related Products</h2>
+            <div class="row">
+                @foreach (var relatedJewelry in Model.RelatedJewelry)
+                {
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="@relatedJewelry.Image?.ImageUrl ?? " default-image-url.jpg"" class="card-img-top" alt="Related Diamond">
+                            <div class="card-body">
+                                <h5 class="card-title">@relatedJewelry.JewelryName</h5>
+                                <p class="card-text">@relatedJewelry.JewelryPrice.ToString("C")</p>
+                                <a href="/JewelryDetail/@relatedJewelry.JewelryId" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </section>

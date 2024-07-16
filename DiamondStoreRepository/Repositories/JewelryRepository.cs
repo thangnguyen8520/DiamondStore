@@ -113,6 +113,8 @@ namespace DiamondStoreRepository.Repositories
         {
             return await _context.Jewelries
                 .Where(j => j.JewelryTypeId == typeId && j.JewelryId != excludeId)
+                .Take(4)
+                .Include(d => d.Image)
                 .ToListAsync();
         }
 

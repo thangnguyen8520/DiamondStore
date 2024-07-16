@@ -1,5 +1,6 @@
 using DiamondBusinessObject.Models;
 using DiamondStoreService.Interfaces;
+using DiamondStoreService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace DiamondStore.Pages
 
         public Jewelry Jewelry { get; set; }
         public IList<JewelrySize> Sizes { get; set; }
+        public List<Jewelry> RelatedJewelry { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -28,6 +30,8 @@ namespace DiamondStore.Pages
             {
                 return NotFound();
             }
+
+            RelatedJewelry = await _jewelryService.GetRelatedJewelries(Jewelry.JewelryId, id);
 
             return Page();
         }
