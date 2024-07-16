@@ -18,6 +18,6 @@ namespace DiamondBusinessObject.Models
         public string JewelrySizeName { get; set; }
 
         [InverseProperty("JewelrySize")]
-        public virtual ICollection<Jewelry> Jewelries { get; set; } = new List<Jewelry>();
+        public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
     }
 }

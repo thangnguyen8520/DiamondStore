@@ -1,6 +1,5 @@
 using DiamondBusinessObject.Models;
 using DiamondStoreService.Interfaces;
-using DiamondStoreService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -11,10 +10,12 @@ namespace DiamondStore.Pages
     public class JewelryDetailModel : PageModel
     {
         private readonly IJewelryService _jewelryService;
+        private readonly ICartService _cartService;
 
-        public JewelryDetailModel(IJewelryService jewelryService)
+        public JewelryDetailModel(IJewelryService jewelryService, ICartService cartService)
         {
             _jewelryService = jewelryService;
+            _cartService = cartService;
         }
 
         public Jewelry Jewelry { get; set; }
@@ -35,5 +36,37 @@ namespace DiamondStore.Pages
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPostAddToCartAsync(int id, int sizeId)
+        {
+            string userId = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToPage("Auth/Login");
+            }
+
+            if (sizeId == 0)
+            {
+                ModelState.AddModelError(string.Empty, "Please select a size.");
+                Jewelry = await _jewelryService.GetJewelryWithDetails(id);
+                Sizes = await _jewelryService.GetAllJewelrySizes();
+                RelatedJewelry = await _jewelryService.GetRelatedJewelries(Jewelry.JewelryId, id);
+                return Page();
+            }
+
+            var cartItem = new Cart
+            {
+                UserId = userId,
+                JewelryId = id,
+                JewelrySizeId = sizeId,
+                Quantity = 1
+            };
+
+            await _cartService.AddToCart(cartItem);
+
+            TempData["SuccessMessage"] = "Jewelry added to cart successfully!";
+            return RedirectToPage(new { id });
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 using DiamondBusinessObject.Models;
 using DiamondStoreRepository.Interfaces;
+using DiamondStoreService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -10,10 +11,12 @@ namespace DiamondStore.Pages
     public class DiamondDetailModel : PageModel
     {
         private readonly IDiamondRepository _diamondRepository;
+        private readonly ICartService _cartService;
 
-        public DiamondDetailModel(IDiamondRepository diamondRepository)
+        public DiamondDetailModel(IDiamondRepository diamondRepository, ICartService cartService)
         {
             _diamondRepository = diamondRepository;
+            _cartService = cartService;
         }
 
         public Diamond Diamond { get; set; }
@@ -32,5 +35,26 @@ namespace DiamondStore.Pages
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPostAddToCartAsync(int id)
+        {
+            string userId = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToPage("/Login");
+            }
+
+            var cartItem = new Cart
+            {
+                UserId = userId,
+                DiamondId = id,
+                Quantity = 1
+            };
+            await _cartService.AddToCart(cartItem);
+
+            TempData["SuccessMessage"] = "Diamond added to cart successfully!";
+            return RedirectToPage(new { id });
+        }
     }
+
 }

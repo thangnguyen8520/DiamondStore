@@ -23,7 +23,6 @@
         </div>
     </div>
 </section>
-
 <section id="cart_page" class="clearfix cart">
     <div class="container">
         <div class="row">
@@ -54,21 +53,28 @@
                                 <div class="cart_3l1i1 clearfix">
                                     <h5 class="mgt">
                                         <a href="#">
-                                            @(item.Diamond?.DiamondName ?? item.Jewelry?.JewelryName)
+                                            @(item.Diamond?.DiamondName ?? item.Jewelry?.JewelryName ?? "N/A")
                                         </a>
                                     </h5>
-                                    <h4>@(item.Diamond != null ? ((decimal)item.Diamond.DiamondPrice).ToString("C") : ((decimal)item.Jewelry.TotalPrice).ToString("C"))</h4>
+                                    <h4>
+                                        @(item.Diamond != null ? ((decimal)item.Diamond.DiamondPrice).ToString("C") :
+                                            (item.Jewelry != null ? ((decimal)item.Jewelry.TotalPrice).ToString("C") : "N/A"))
+                                    </h4>
                                     <h5>Quantity</h5>
                                 </div>
                                 <div class="cart_3l1i2 clearfix">
                                     <form method="post">
                                         <div class="input-group number-spinner">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" data-dir="dwn" formaction="/Cart?handler=Update" formmethod="post" name="cartId" value="@item.CartId" onclick="this.form.submit()"><span class="glyphicon glyphicon-minus"></span></button>
+                                                <button class="btn btn-default" data-dir="dwn" formaction="/Cart?handler=Update" formmethod="post" name="cartId" value="@item.CartId" onclick="this.form.submit()">
+                                                    <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
                                             </span>
                                             <input type="text" class="form-control text-center" name="quantity" value="@item.Quantity">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" data-dir="up" formaction="/Cart?handler=Update" formmethod="post" name="cartId" value="@item.CartId" onclick="this.form.submit()"><span class="glyphicon glyphicon-plus"></span></button>
+                                                <button class="btn btn-default" data-dir="up" formaction="/Cart?handler=Update" formmethod="post" name="cartId" value="@item.CartId" onclick="this.form.submit()">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
                                             </span>
                                         </div>
                                         <button class="button_1 mgt" formaction="/Cart?handler=Remove" formmethod="post" name="cartId" value="@item.CartId">REMOVE</button>
@@ -82,7 +88,8 @@
                     <div class="cart_3r clearfix">
                         <h5 class="mgt head_1">SUBTOTAL</h5>
                         <h3 class="text-center">
-                            @Model.CartItems.Sum(i => (i.Diamond != null ? (decimal)i.Diamond.DiamondPrice : (decimal)i.Jewelry.TotalPrice) * i.Quantity.GetValueOrDefault()).ToString("C")
+                            @Model.CartItems.Sum(i => (i.Diamond != null ? (decimal)i.Diamond.DiamondPrice :
+                                     (i.Jewelry != null ? (decimal)i.Jewelry.TotalPrice : 0)) * i.Quantity.GetValueOrDefault()).ToString("C")
                         </h3>
                         <hr>
                         <h6>Additional comments</h6>
@@ -118,6 +125,8 @@
         </div>
     </div>
 </section>
+
+
 
 @section Scripts {
     <script>

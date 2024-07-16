@@ -22,5 +22,10 @@ namespace DiamondStoreRepository.Repositories
         {
             return await _context.JewelrySizes.ToListAsync();
         }
+
+        public async Task<bool> SizeExists(int sizeId)
+        {
+            return await _context.JewelrySizes.AnyAsync(s => s.JewelrySizeId == sizeId);
+        }
     }
 }

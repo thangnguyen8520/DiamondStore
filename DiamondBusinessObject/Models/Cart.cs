@@ -22,6 +22,8 @@ public partial class Cart
 
     public int? Quantity { get; set; }
 
+    public int? JewelrySizeId { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? CreateDate { get; set; }
 
@@ -36,4 +38,9 @@ public partial class Cart
     [ForeignKey("UserId")]
     [InverseProperty("Carts")]
     public virtual User User { get; set; }
+
+
+    [ForeignKey("JewelrySizeId")]
+    [InverseProperty("Carts")]
+    public virtual JewelrySize JewelrySize { get; set; }
 }

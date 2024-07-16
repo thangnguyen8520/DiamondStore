@@ -10,6 +10,6 @@ namespace DiamondStoreRepository.Interfaces
     public interface IJewelrySizeRepository : IGenericRepository<JewelrySize>
     {
         Task<IList<JewelrySize>> GetAllJewelrySizes();
-
+        Task<bool> SizeExists(int sizeId);
     }
 }

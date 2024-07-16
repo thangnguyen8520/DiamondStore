@@ -27,8 +27,6 @@ namespace DiamondBusinessObject.Models
 
         public int? SecondaryDiamondId { get; set; }
 
-        public int JewelrySizeId { get; set; }
-
         public float LaborCost { get; set; }
 
         public float JewelryPrice { get; set; }
@@ -56,10 +54,6 @@ namespace DiamondBusinessObject.Models
 
         [InverseProperty("Jewelry")]
         public virtual ICollection<MainDiamond> MainDiamonds { get; set; } = new List<MainDiamond>();
-
-        [ForeignKey("JewelrySizeId")]
-        [InverseProperty("Jewelries")]
-        public virtual JewelrySize JewelrySize { get; set; }
 
         [ForeignKey("ImageId")]
         public virtual Image Image { get; set; }
