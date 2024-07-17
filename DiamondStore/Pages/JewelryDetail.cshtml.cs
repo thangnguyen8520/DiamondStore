@@ -54,15 +54,25 @@ namespace DiamondStore.Pages
                 return Page();
             }
 
-            var cartItem = new Cart
+            var existingCartItem = await _cartService.GetCartItemByDetails(userId, id, null, sizeId);
+            if (existingCartItem != null)
             {
-                UserId = userId,
-                JewelryId = id,
-                JewelrySizeId = sizeId,
-                Quantity = 1
-            };
-
-            await _cartService.AddToCart(cartItem);
+                existingCartItem.Quantity += 1;
+                existingCartItem.CreateDate = DateTime.Now;
+                await _cartService.UpdateCartItem(existingCartItem);
+            }
+            else
+            {
+                var cartItem = new Cart
+                {
+                    UserId = userId,
+                    JewelryId = id,
+                    JewelrySizeId = sizeId,
+                    Quantity = 1,
+                    CreateDate = DateTime.Now
+                };
+                await _cartService.AddToCart(cartItem);
+            }
 
             TempData["SuccessMessage"] = "Jewelry added to cart successfully!";
             return RedirectToPage(new { id });

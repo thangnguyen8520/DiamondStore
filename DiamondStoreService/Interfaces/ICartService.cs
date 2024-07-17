@@ -11,5 +11,6 @@ namespace DiamondStoreService.Interfaces
         Task<Cart> GetCartItem(int cartId);
         Task DeleteCartItem(int cartId);
         Task UpdateCartItem(Cart cart);
+        Task<Cart> GetCartItemByDetails(string userId, int? jewelryId, int? diamondId, int? jewelrySizeId);
     }
 }

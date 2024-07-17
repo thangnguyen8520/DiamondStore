@@ -2,6 +2,7 @@
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -41,6 +42,11 @@ namespace DiamondStoreService.Services
         public async Task UpdateCartItem(Cart cart)
         {
             await _cartRepository.UpdateCartItem(cart);
+        }
+
+        public async Task<Cart> GetCartItemByDetails(string userId, int? jewelryId, int? diamondId, int? jewelrySizeId)
+        {
+            return await _cartRepository.GetCartItemByDetails(userId, jewelryId, diamondId, jewelrySizeId);
         }
     }
 }

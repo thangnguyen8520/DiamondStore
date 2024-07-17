@@ -44,17 +44,30 @@ namespace DiamondStore.Pages
                 return RedirectToPage("/Login");
             }
 
-            var cartItem = new Cart
+            var existingCartItem = await _cartService.GetCartItemByDetails(userId, null, id, null);
+            if (existingCartItem != null)
             {
-                UserId = userId,
-                DiamondId = id,
-                Quantity = 1
-            };
-            await _cartService.AddToCart(cartItem);
+                existingCartItem.Quantity += 1;
+                existingCartItem.CreateDate = DateTime.Now;
+                await _cartService.UpdateCartItem(existingCartItem);
+            }
+            else
+            {
+                var cartItem = new Cart
+                {
+                    UserId = userId,
+                    DiamondId = id,
+                    Quantity = 1,
+                    CreateDate = DateTime.Now
+                };
+                await _cartService.AddToCart(cartItem);
+            }
 
             TempData["SuccessMessage"] = "Diamond added to cart successfully!";
             return RedirectToPage(new { id });
         }
+
+
     }
 
 }
