@@ -45,10 +45,18 @@ namespace DiamondStore.Pages
             var cartItem = await _cartService.GetCartItem(cartId);
             if (cartItem != null)
             {
-                cartItem.Quantity = quantity;
-                await _cartService.UpdateCartItem(cartItem);
+                if (quantity == 1)
+                {
+                    await _cartService.DeleteCartItem(cartId);
+                }
+                else
+                {
+                    cartItem.Quantity = quantity;
+                    await _cartService.UpdateCartItem(cartItem);
+                }
             }
             return RedirectToPage();
         }
+
     }
 }

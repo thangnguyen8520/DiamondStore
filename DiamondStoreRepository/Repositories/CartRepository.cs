@@ -82,5 +82,14 @@ namespace DiamondStoreRepository.Repositories
 
             return cartItems;
         }
+
+        public async Task<Cart> GetCartItemByDetails(string userId, int? jewelryId, int? diamondId, int? jewelrySizeId)
+        {
+            return await _context.Carts
+                .FirstOrDefaultAsync(c => c.UserId == userId &&
+                                          c.JewelryId == jewelryId &&
+                                          c.DiamondId == diamondId &&
+                                          c.JewelrySizeId == jewelrySizeId);
+        }
     }
 }
