@@ -3,7 +3,6 @@ using DiamondStoreService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DiamondStore.Pages
@@ -11,26 +10,27 @@ namespace DiamondStore.Pages
     public class CartModel : PageModel
     {
         private readonly ICartService _cartService;
+        private readonly IPromotionService _promotionService;
 
-        public CartModel(ICartService cartService)
+        public CartModel(ICartService cartService, IPromotionService promotionService)
         {
             _cartService = cartService;
+            _promotionService = promotionService;
         }
 
-        public List<Cart> CartItems { get; set; }
+        public List<Cart> CartItems { get; set; } = new List<Cart>();
+        public List<UserPromotion> UserPromotions { get; set; } = new List<UserPromotion>();
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // Get the logged-in user's ID
-            //string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             string userId = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userId))
             {
-                // If user is not logged in, redirect to login page
                 return RedirectToPage("/Auth/Login");
             }
 
             CartItems = await _cartService.GetCartItems(userId);
+            UserPromotions = await _promotionService.GetUserPromotions(userId);
             return Page();
         }
 
@@ -45,7 +45,7 @@ namespace DiamondStore.Pages
             var cartItem = await _cartService.GetCartItem(cartId);
             if (cartItem != null)
             {
-                if (quantity == 1)
+                if (quantity <= 0)
                 {
                     await _cartService.DeleteCartItem(cartId);
                 }
@@ -57,6 +57,5 @@ namespace DiamondStore.Pages
             }
             return RedirectToPage();
         }
-
     }
 }

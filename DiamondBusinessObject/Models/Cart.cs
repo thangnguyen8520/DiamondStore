@@ -43,4 +43,8 @@ public partial class Cart
     [ForeignKey("JewelrySizeId")]
     [InverseProperty("Carts")]
     public virtual JewelrySize JewelrySize { get; set; }
+
+    [InverseProperty("Cart")]
+    public virtual ICollection<CartPromotion> CartPromotions { get; set; } = new List<CartPromotion>();
+
 }

@@ -20,7 +20,9 @@ public partial class Promotion
     [StringLength(255)]
     public string Description { get; set; }
 
-    public double? DiscountRate { get; set; }
+    public int PromotionCondition { get; set; }
+
+    public double DiscountRate { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? StartDate { get; set; }
@@ -28,8 +30,14 @@ public partial class Promotion
     [Column(TypeName = "datetime")]
     public DateTime? EndDate { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     [InverseProperty("Promotion")]
     public virtual ICollection<PaymentPromotion> PaymentPromotions { get; set; } = new List<PaymentPromotion>();
+
+    [InverseProperty("Promotion")]
+    public virtual ICollection<CartPromotion> CartPromotions { get; set; } = new List<CartPromotion>();
+
+    [InverseProperty("Promotion")]
+    public virtual ICollection<UserPromotion> UserPromotions { get; set; } = new List<UserPromotion>();
 }

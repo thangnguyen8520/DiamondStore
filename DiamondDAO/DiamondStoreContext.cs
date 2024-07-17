@@ -21,6 +21,8 @@ public partial class DiamondStoreContext : IdentityDbContext<User>
 
     public virtual DbSet<Cart> Carts { get; set; }
 
+    public virtual DbSet<CartPromotion> CartPromotions { get; set; }
+
     public virtual DbSet<Diamond> Diamonds { get; set; }
 
     public virtual DbSet<DiamondClarity> DiamondClarities { get; set; }
@@ -46,6 +48,7 @@ public partial class DiamondStoreContext : IdentityDbContext<User>
     public virtual DbSet<Promotion> Promotions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<UserPromotion> UserPromotions { get; set; }
 
     public virtual DbSet<Warranty> Warranties { get; set; }
 

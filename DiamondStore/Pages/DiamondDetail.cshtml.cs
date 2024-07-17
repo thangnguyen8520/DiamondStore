@@ -41,7 +41,7 @@ namespace DiamondStore.Pages
             string userId = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userId))
             {
-                return RedirectToPage("/Login");
+                return RedirectToPage("Auth/Login");
             }
 
             var existingCartItem = await _cartService.GetCartItemByDetails(userId, null, id, null);

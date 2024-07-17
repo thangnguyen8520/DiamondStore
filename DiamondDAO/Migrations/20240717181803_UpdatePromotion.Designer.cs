@@ -4,6 +4,7 @@ using DiamondBusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiamondDAO.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    partial class DiamondStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240717181803_UpdatePromotion")]
+    partial class UpdatePromotion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,29 +62,6 @@ namespace DiamondDAO.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Cart");
-                });
-
-            modelBuilder.Entity("DiamondBusinessObject.Models.CartPromotion", b =>
-                {
-                    b.Property<int>("CartPromotionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartPromotionId"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PromotionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartPromotionId");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("PromotionId");
-
-                    b.ToTable("CartPromotion");
                 });
 
             modelBuilder.Entity("DiamondBusinessObject.Models.Diamond", b =>
@@ -848,25 +828,6 @@ namespace DiamondDAO.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DiamondBusinessObject.Models.CartPromotion", b =>
-                {
-                    b.HasOne("DiamondBusinessObject.Models.Cart", "Cart")
-                        .WithMany("CartPromotions")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DiamondBusinessObject.Models.Promotion", "Promotion")
-                        .WithMany("CartPromotions")
-                        .HasForeignKey("PromotionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Promotion");
-                });
-
             modelBuilder.Entity("DiamondBusinessObject.Models.Diamond", b =>
                 {
                     b.HasOne("DiamondBusinessObject.Models.DiamondClarity", "DiamondClarity")
@@ -1102,11 +1063,6 @@ namespace DiamondDAO.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DiamondBusinessObject.Models.Cart", b =>
-                {
-                    b.Navigation("CartPromotions");
-                });
-
             modelBuilder.Entity("DiamondBusinessObject.Models.Diamond", b =>
                 {
                     b.Navigation("Carts");
@@ -1187,8 +1143,6 @@ namespace DiamondDAO.Migrations
 
             modelBuilder.Entity("DiamondBusinessObject.Models.Promotion", b =>
                 {
-                    b.Navigation("CartPromotions");
-
                     b.Navigation("PaymentPromotions");
 
                     b.Navigation("UserPromotions");

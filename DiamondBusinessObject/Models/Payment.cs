@@ -51,7 +51,7 @@ public partial class Payment
     [InverseProperty("Payment")]
     public virtual ICollection<PaymentPromotion> PaymentPromotions { get; set; } = new List<PaymentPromotion>();
 
-    [ForeignKey("Id")]
+    [ForeignKey("UserId")]
     [InverseProperty("Payments")]
     public virtual User User { get; set; }
 }

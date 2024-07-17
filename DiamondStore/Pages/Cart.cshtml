@@ -92,8 +92,19 @@
                                      (i.Jewelry != null ? (decimal)i.Jewelry.TotalPrice : 0)) * i.Quantity.GetValueOrDefault()).ToString("C")
                         </h3>
                         <hr>
-                        <h6>Additional comments</h6>
-                        <textarea class="form-control"></textarea>
+                        <h6>Available Promotions</h6>
+                        <div class="promotion-list">
+                            @foreach (var promotion in Model.UserPromotions)
+                            {
+                                <div class="promotion-item">
+                                    <p><strong>Promotion Type:</strong> @promotion.Promotion.PromotionType</p>
+                                    <p><strong>Description:</strong> @promotion.Promotion.Description</p>
+                                    <p><strong>Discount Rate:</strong> @promotion.Promotion.DiscountRate%</p>
+                                    <p><strong>Expires On:</strong> @promotion.ExpiredDate.ToShortDateString()</p>
+                                </div>
+                                <hr>
+                            }
+                        </div>
                         <h5 class="text-center">
                             <a class="button" href="checkout.html">PROCEED TO CHECKOUT</a>
                         </h5>
@@ -126,8 +137,6 @@
     </div>
 </section>
 
-
-
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -152,10 +161,23 @@
                 if (oldValue > 1) {
                     newVal = parseInt(oldValue) - 1;
                 } else {
-                    newVal = 1;
+                    newVal = 0;
                 }
             }
             btn.closest('.number-spinner').find('input').val(newVal);
         });
     </script>
 }
+
+<style>
+    .promotion-list {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    .promotion-item {
+        margin-bottom: 10px;
+    }
+</style>

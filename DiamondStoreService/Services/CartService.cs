@@ -37,11 +37,18 @@ namespace DiamondStoreService.Services
         public async Task DeleteCartItem(int cartId)
         {
             await _cartRepository.DeleteCartItem(cartId);
+            Console.WriteLine("Cart item deleted: " + cartId);
         }
 
         public async Task UpdateCartItem(Cart cart)
         {
-            await _cartRepository.UpdateCartItem(cart);
+            var existingCartItem = await _cartRepository.GetCartItem(cart.CartId);
+            if (existingCartItem != null)
+            {
+                existingCartItem.Quantity = cart.Quantity;
+                await _cartRepository.UpdateCartItem(existingCartItem);
+                Console.WriteLine("Cart item updated: " + existingCartItem.CartId);
+            }
         }
 
         public async Task<Cart> GetCartItemByDetails(string userId, int? jewelryId, int? diamondId, int? jewelrySizeId)
