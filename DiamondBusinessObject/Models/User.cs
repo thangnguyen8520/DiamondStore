@@ -38,6 +38,9 @@ public partial class User : IdentityUser
     [InverseProperty("User")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
+    [InverseProperty("User")]
+    public virtual ICollection<UserPromotion> UserPromotions { get; set; } = new List<UserPromotion>();
+
     [NotMapped]
     public GenderEnums GenderEnum
     {

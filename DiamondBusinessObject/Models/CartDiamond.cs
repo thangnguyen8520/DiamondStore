@@ -8,20 +8,24 @@ using System.Threading.Tasks;
 
 namespace DiamondBusinessObject.Models
 {
-    [Table("MainDiamond")]
-    public partial class MainDiamond
+    [Table("CartDiamond")]
+    public partial class CartDiamond
     {
         [Key]
-        public int MainDiamondId { get; set; }
+        public int CartDiamondId { get; set; }
+
+        public int CartId { get; set; }
 
         public int DiamondId { get; set; }
+        public int Quantity { get; set; }
 
-        public int JewelryId { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime AddDate { get; set; }
 
         [ForeignKey("DiamondId")]
         public virtual Diamond Diamond { get; set; }
 
-        [ForeignKey("JewelryId")]
-        public virtual Jewelry Jewelry { get; set; }
+        [ForeignKey("CartId")]
+        public virtual Cart Cart { get; set; }
     }
 }

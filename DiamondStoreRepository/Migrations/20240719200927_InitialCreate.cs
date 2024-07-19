@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DiamondDAO.Migrations
+namespace DiamondStoreRepository.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -136,10 +136,11 @@ namespace DiamondDAO.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PromotionType = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    DiscountRate = table.Column<double>(type: "float", nullable: true),
+                    PromotionCondition = table.Column<int>(type: "int", nullable: false),
+                    DiscountRate = table.Column<double>(type: "float", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Status = table.Column<bool>(type: "bit", nullable: true)
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,46 +251,6 @@ namespace DiamondDAO.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Jewelry",
-                columns: table => new
-                {
-                    JewelryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    JewelryName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ImageId = table.Column<int>(type: "int", nullable: true),
-                    JewelryMaterialId = table.Column<int>(type: "int", nullable: false),
-                    JewelryTypeId = table.Column<int>(type: "int", nullable: false),
-                    MainDiamondId = table.Column<int>(type: "int", nullable: false),
-                    SecondaryDiamondId = table.Column<int>(type: "int", nullable: true),
-                    LaborCost = table.Column<float>(type: "real", nullable: false),
-                    JewelryPrice = table.Column<float>(type: "real", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    JewelrydTypeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jewelry", x => x.JewelryId);
-                    table.ForeignKey(
-                        name: "FK_Jewelry_Image_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Image",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Jewelry_JewelryMaterial_JewelryMaterialId",
-                        column: x => x.JewelryMaterialId,
-                        principalTable: "JewelryMaterial",
-                        principalColumn: "JewelryMaterialId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Jewelry_JewelryType_JewelrydTypeId",
-                        column: x => x.JewelrydTypeId,
-                        principalTable: "JewelryType",
-                        principalColumn: "JewelryTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RoleClaim",
                 columns: table => new
                 {
@@ -307,6 +268,50 @@ namespace DiamondDAO.Migrations
                         column: x => x.RoleId,
                         principalTable: "Role",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Jewelry",
+                columns: table => new
+                {
+                    JewelryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    JewelryName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    ImageId = table.Column<int>(type: "int", nullable: true),
+                    JewelryMaterialId = table.Column<int>(type: "int", nullable: false),
+                    JewelryTypeId = table.Column<int>(type: "int", nullable: false),
+                    MainDiamondId = table.Column<int>(type: "int", nullable: false),
+                    LaborCost = table.Column<float>(type: "real", nullable: false),
+                    JewelryPrice = table.Column<float>(type: "real", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Jewelry", x => x.JewelryId);
+                    table.ForeignKey(
+                        name: "FK_Jewelry_Diamond_MainDiamondId",
+                        column: x => x.MainDiamondId,
+                        principalTable: "Diamond",
+                        principalColumn: "DiamondId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Jewelry_Image_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Image",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Jewelry_JewelryMaterial_JewelryMaterialId",
+                        column: x => x.JewelryMaterialId,
+                        principalTable: "JewelryMaterial",
+                        principalColumn: "JewelryMaterialId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Jewelry_JewelryType_JewelryTypeId",
+                        column: x => x.JewelryTypeId,
+                        principalTable: "JewelryType",
+                        principalColumn: "JewelryTypeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -331,12 +336,31 @@ namespace DiamondDAO.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    CartId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.CartId);
+                    table.ForeignKey(
+                        name: "FK_Cart_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payment",
                 columns: table => new
                 {
                     PaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PaymentMethodId = table.Column<int>(type: "int", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
@@ -345,8 +369,7 @@ namespace DiamondDAO.Migrations
                     CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     ProductName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     TotalAmount = table.Column<double>(type: "float", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Status = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -357,8 +380,8 @@ namespace DiamondDAO.Migrations
                         principalTable: "PaymentMethod",
                         principalColumn: "PaymentMethodId");
                     table.ForeignKey(
-                        name: "FK_Payment_User_Id",
-                        column: x => x.Id,
+                        name: "FK_Payment_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id");
                 });
@@ -398,6 +421,34 @@ namespace DiamondDAO.Migrations
                     table.PrimaryKey("PK_UserLogin", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_UserLogin_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserPromotion",
+                columns: table => new
+                {
+                    UserPromotionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PromotionId = table.Column<int>(type: "int", nullable: false),
+                    PromotionQuantity = table.Column<int>(type: "int", nullable: false),
+                    ExpiredDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserPromotion", x => x.UserPromotionId);
+                    table.ForeignKey(
+                        name: "FK_UserPromotion_Promotion_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotion",
+                        principalColumn: "PromotionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserPromotion_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -449,77 +500,13 @@ namespace DiamondDAO.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cart",
-                columns: table => new
-                {
-                    CartId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    DiamondId = table.Column<int>(type: "int", nullable: true),
-                    JewelryId = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    JewelrySizeId = table.Column<int>(type: "int", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cart", x => x.CartId);
-                    table.ForeignKey(
-                        name: "FK_Cart_Diamond_DiamondId",
-                        column: x => x.DiamondId,
-                        principalTable: "Diamond",
-                        principalColumn: "DiamondId");
-                    table.ForeignKey(
-                        name: "FK_Cart_JewelrySize_JewelrySizeId",
-                        column: x => x.JewelrySizeId,
-                        principalTable: "JewelrySize",
-                        principalColumn: "JewelrySizeId");
-                    table.ForeignKey(
-                        name: "FK_Cart_Jewelry_JewelryId",
-                        column: x => x.JewelryId,
-                        principalTable: "Jewelry",
-                        principalColumn: "JewelryId");
-                    table.ForeignKey(
-                        name: "FK_Cart_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MainDiamond",
-                columns: table => new
-                {
-                    MainDiamondId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DiamondId = table.Column<int>(type: "int", nullable: false),
-                    JewelryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MainDiamond", x => x.MainDiamondId);
-                    table.ForeignKey(
-                        name: "FK_MainDiamond_Diamond_DiamondId",
-                        column: x => x.DiamondId,
-                        principalTable: "Diamond",
-                        principalColumn: "DiamondId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MainDiamond_Jewelry_JewelryId",
-                        column: x => x.JewelryId,
-                        principalTable: "Jewelry",
-                        principalColumn: "JewelryId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SecondaryDiamond",
                 columns: table => new
                 {
                     SecondaryDiamondId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DiamondId = table.Column<int>(type: "int", nullable: false),
-                    JewelryId = table.Column<int>(type: "int", nullable: false)
+                    DiamondId = table.Column<int>(type: "int", nullable: true),
+                    JewelryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -528,13 +515,100 @@ namespace DiamondDAO.Migrations
                         name: "FK_SecondaryDiamond_Diamond_DiamondId",
                         column: x => x.DiamondId,
                         principalTable: "Diamond",
-                        principalColumn: "DiamondId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DiamondId");
                     table.ForeignKey(
                         name: "FK_SecondaryDiamond_Jewelry_JewelryId",
                         column: x => x.JewelryId,
                         principalTable: "Jewelry",
+                        principalColumn: "JewelryId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartDiamond",
+                columns: table => new
+                {
+                    CartDiamondId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    DiamondId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    AddDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartDiamond", x => x.CartDiamondId);
+                    table.ForeignKey(
+                        name: "FK_CartDiamond_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "CartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartDiamond_Diamond_DiamondId",
+                        column: x => x.DiamondId,
+                        principalTable: "Diamond",
+                        principalColumn: "DiamondId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartJewelry",
+                columns: table => new
+                {
+                    CartJewelryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    JewelryId = table.Column<int>(type: "int", nullable: false),
+                    JewelrySizeId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    AddDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartJewelry", x => x.CartJewelryId);
+                    table.ForeignKey(
+                        name: "FK_CartJewelry_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "CartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartJewelry_JewelrySize_JewelrySizeId",
+                        column: x => x.JewelrySizeId,
+                        principalTable: "JewelrySize",
+                        principalColumn: "JewelrySizeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartJewelry_Jewelry_JewelryId",
+                        column: x => x.JewelryId,
+                        principalTable: "Jewelry",
                         principalColumn: "JewelryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartPromotion",
+                columns: table => new
+                {
+                    CartPromotionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    PromotionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartPromotion", x => x.CartPromotionId);
+                    table.ForeignKey(
+                        name: "FK_CartPromotion_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "CartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartPromotion_Promotion_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotion",
+                        principalColumn: "PromotionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -587,24 +661,44 @@ namespace DiamondDAO.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_DiamondId",
-                table: "Cart",
-                column: "DiamondId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cart_JewelryId",
-                table: "Cart",
-                column: "JewelryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cart_JewelrySizeId",
-                table: "Cart",
-                column: "JewelrySizeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cart_UserId",
                 table: "Cart",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartDiamond_CartId",
+                table: "CartDiamond",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartDiamond_DiamondId",
+                table: "CartDiamond",
+                column: "DiamondId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartJewelry_CartId",
+                table: "CartJewelry",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartJewelry_JewelryId",
+                table: "CartJewelry",
+                column: "JewelryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartJewelry_JewelrySizeId",
+                table: "CartJewelry",
+                column: "JewelrySizeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartPromotion_CartId",
+                table: "CartPromotion",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartPromotion_PromotionId",
+                table: "CartPromotion",
+                column: "PromotionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Diamond_DiamondClarityId",
@@ -637,34 +731,29 @@ namespace DiamondDAO.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jewelry_JewelrydTypeId",
-                table: "Jewelry",
-                column: "JewelrydTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Jewelry_JewelryMaterialId",
                 table: "Jewelry",
                 column: "JewelryMaterialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MainDiamond_DiamondId",
-                table: "MainDiamond",
-                column: "DiamondId");
+                name: "IX_Jewelry_JewelryTypeId",
+                table: "Jewelry",
+                column: "JewelryTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MainDiamond_JewelryId",
-                table: "MainDiamond",
-                column: "JewelryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Payment_Id",
-                table: "Payment",
-                column: "Id");
+                name: "IX_Jewelry_MainDiamondId",
+                table: "Jewelry",
+                column: "MainDiamondId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_PaymentMethodId",
                 table: "Payment",
                 column: "PaymentMethodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_UserId",
+                table: "Payment",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PaymentDiamond_DiamondId",
@@ -736,6 +825,16 @@ namespace DiamondDAO.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserPromotion_PromotionId",
+                table: "UserPromotion",
+                column: "PromotionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPromotion_UserId",
+                table: "UserPromotion",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
@@ -750,10 +849,13 @@ namespace DiamondDAO.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Cart");
+                name: "CartDiamond");
 
             migrationBuilder.DropTable(
-                name: "MainDiamond");
+                name: "CartJewelry");
+
+            migrationBuilder.DropTable(
+                name: "CartPromotion");
 
             migrationBuilder.DropTable(
                 name: "PaymentDiamond");
@@ -774,6 +876,9 @@ namespace DiamondDAO.Migrations
                 name: "UserLogin");
 
             migrationBuilder.DropTable(
+                name: "UserPromotion");
+
+            migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
@@ -786,25 +891,28 @@ namespace DiamondDAO.Migrations
                 name: "JewelrySize");
 
             migrationBuilder.DropTable(
-                name: "Payment");
+                name: "Cart");
 
             migrationBuilder.DropTable(
-                name: "Promotion");
+                name: "Payment");
 
             migrationBuilder.DropTable(
                 name: "Jewelry");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Promotion");
 
             migrationBuilder.DropTable(
-                name: "Diamond");
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethod");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Diamond");
 
             migrationBuilder.DropTable(
                 name: "JewelryMaterial");

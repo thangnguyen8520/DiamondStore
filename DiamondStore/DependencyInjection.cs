@@ -1,5 +1,4 @@
 ﻿using DiamondBusinessObject.Models;
-using DiamondDAO;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
@@ -40,6 +39,8 @@ namespace DiamondStore
             services.AddScoped<IJewelryService, JewelryService>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IPromotionRepository, PromotionRepository>();
+            services.AddScoped<IPromotionService, PromotionService>();
 
 
 

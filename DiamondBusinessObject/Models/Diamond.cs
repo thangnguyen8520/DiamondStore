@@ -42,9 +42,6 @@ public partial class Diamond
     public DateTime? CreateDate { get; set; }
 
 
-    [InverseProperty("Diamond")]
-    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
-
     [ForeignKey("DiamondTypeId")]
     [InverseProperty("Diamonds")]
     public virtual DiamondType DiamondType { get; set; }
@@ -68,11 +65,14 @@ public partial class Diamond
     public virtual ICollection<Warranty> Warranties { get; set; } = new List<Warranty>();
 
     [InverseProperty("Diamond")]
-    public virtual ICollection<MainDiamond> MainDiamonds { get; set; } = new List<MainDiamond>();
-
-    [InverseProperty("Diamond")]
     public virtual ICollection<SecondaryDiamond> SecondaryDiamonds { get; set; } = new List<SecondaryDiamond>();
 
     [ForeignKey("ImageId")]
     public virtual Image Image { get; set; }
+
+    [InverseProperty("Diamond")]
+    public virtual ICollection<CartDiamond> CartDiamonds { get; set; } = new List<CartDiamond>();
+
+    [InverseProperty("Diamond")]
+    public virtual ICollection<Jewelry> Jewelries { get; set; } = new List<Jewelry>();
 }

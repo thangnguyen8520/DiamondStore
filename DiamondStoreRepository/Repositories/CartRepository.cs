@@ -2,6 +2,7 @@
 using DiamondStoreRepository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiamondStoreRepository.Repositories
@@ -17,6 +18,27 @@ namespace DiamondStoreRepository.Repositories
 
         public async Task AddToCart(Cart cart)
         {
+            if (cart.CreateDate == default(DateTime))
+            {
+                cart.CreateDate = DateTime.Now;
+            }
+
+            foreach (var cartDiamond in cart.CartDiamonds)
+            {
+                if (cartDiamond.AddDate == default(DateTime))
+                {
+                    cartDiamond.AddDate = DateTime.Now;
+                }
+            }
+
+            foreach (var cartJewelry in cart.CartJewelries)
+            {
+                if (cartJewelry.AddDate == default(DateTime))
+                {
+                    cartJewelry.AddDate = DateTime.Now;
+                }
+            }
+
             await _context.Carts.AddAsync(cart);
             await _context.SaveChangesAsync();
         }
@@ -24,8 +46,8 @@ namespace DiamondStoreRepository.Repositories
         public async Task<List<Cart>> GetCartItems(string userId)
         {
             return await _context.Carts
-                .Include(c => c.Diamond)
-                .Include(c => c.Jewelry)
+                .Include(c => c.CartDiamonds).ThenInclude(cd => cd.Diamond)
+                .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
         }
@@ -33,9 +55,17 @@ namespace DiamondStoreRepository.Repositories
         public async Task<Cart> GetCartItem(int cartId)
         {
             return await _context.Carts
-                .Include(c => c.Diamond)
-                .Include(c => c.Jewelry)
+                .Include(c => c.CartDiamonds).ThenInclude(cd => cd.Diamond)
+                .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
                 .FirstOrDefaultAsync(c => c.CartId == cartId);
+        }
+
+        public async Task<Cart> GetCartByUserId(string userId)
+        {
+            return await _context.Carts
+                .Include(c => c.CartDiamonds)
+                .Include(c => c.CartJewelries)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
         }
 
         public async Task DeleteCartItem(int cartId)
@@ -54,42 +84,62 @@ namespace DiamondStoreRepository.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Cart>> GetCartItemsByUserId(string userId)
-        {
-            var cartItems = await _context.Carts
-                .Where(c => c.UserId == userId)
-                .Include(c => c.Jewelry)
-                    .ThenInclude(j => j.MainDiamonds)
-                        .ThenInclude(md => md.Diamond)
-                .Include(c => c.Jewelry)
-                    .ThenInclude(j => j.SecondaryDiamonds)
-                        .ThenInclude(sd => sd.Diamond)
-                .Include(c => c.Jewelry)
-                    .ThenInclude(j => j.Image)
-                .Include(c => c.Diamond)
-                    .ThenInclude(d => d.Image)
-                .ToListAsync();
-
-            foreach (var cartItem in cartItems)
-            {
-                if (cartItem.JewelryId.HasValue)
-                {
-                    float mainDiamondPrice = cartItem.Jewelry.MainDiamonds.Sum(md => md.Diamond?.DiamondPrice ?? 0);
-                    float secondaryDiamondPrice = cartItem.Jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
-                    cartItem.Jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + cartItem.Jewelry.JewelryPrice + cartItem.Jewelry.LaborCost);
-                }
-            }
-
-            return cartItems;
-        }
-
-        public async Task<Cart> GetCartItemByDetails(string userId, int? jewelryId, int? diamondId, int? jewelrySizeId)
+        public async Task<Cart> GetCartJewelryByDetails(string userId, int? jewelryId, int? jewelrySizeId)
         {
             return await _context.Carts
+                .Include(c => c.CartJewelries)
                 .FirstOrDefaultAsync(c => c.UserId == userId &&
-                                          c.JewelryId == jewelryId &&
-                                          c.DiamondId == diamondId &&
-                                          c.JewelrySizeId == jewelrySizeId);
+                                          jewelryId != null && c.CartJewelries.Any(cj => cj.JewelryId == jewelryId && cj.JewelrySizeId == jewelrySizeId));
+        }
+
+        public async Task<Cart> GetCartDiamondByDetails(string userId, int? diamondId)
+        {
+            return await _context.Carts
+                .Include(c => c.CartDiamonds)
+                .FirstOrDefaultAsync(c => c.UserId == userId &&
+                                          diamondId != null && c.CartDiamonds.Any(cd => cd.DiamondId == diamondId));
+        }
+
+        public async Task<CartDiamond> GetCartDiamondById(int cartDiamondId)
+        {
+            return await _context.CartDiamonds.FindAsync(cartDiamondId);
+        }
+
+        public async Task<CartJewelry> GetCartJewelryById(int cartJewelryId)
+        {
+            return await _context.CartJewelries.FindAsync(cartJewelryId);
+        }
+
+        public async Task UpdateCartDiamond(CartDiamond cartDiamond)
+        {
+            _context.CartDiamonds.Update(cartDiamond);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCartJewelry(CartJewelry cartJewelry)
+        {
+            _context.CartJewelries.Update(cartJewelry);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteCartDiamond(int cartDiamondId)
+        {
+            var cartDiamond = await _context.CartDiamonds.FindAsync(cartDiamondId);
+            if (cartDiamond != null)
+            {
+                _context.CartDiamonds.Remove(cartDiamond);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteCartJewelry(int cartJewelryId)
+        {
+            var cartJewelry = await _context.CartJewelries.FindAsync(cartJewelryId);
+            if (cartJewelry != null)
+            {
+                _context.CartJewelries.Remove(cartJewelry);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
