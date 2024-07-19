@@ -16,35 +16,42 @@ public partial class Cart
 
     public string UserId { get; set; }
 
-    public int? DiamondId { get; set; }
+    [NotMapped]
+    public float TotalPrice
+    {
+        get
+        {
+            float price = 0;
+            foreach (var cartDiamond in CartDiamonds)
+            {
+                price += cartDiamond.Diamond.DiamondPrice * cartDiamond.Quantity;
+            }
+            foreach (var cartJewelry in CartJewelries)
+            {
+                price += cartJewelry.Jewelry.TotalPrice * cartJewelry.Quantity;
+            }
+            return price;
+        }
+    }
 
-    public int? JewelryId { get; set; }
-
-    public int? Quantity { get; set; }
-
-    public int? JewelrySizeId { get; set; }
+    [NotMapped]
+    public float DisplayTotalPrice { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreateDate { get; set; }
-
-    [ForeignKey("DiamondId")]
-    [InverseProperty("Carts")]
-    public virtual Diamond Diamond { get; set; }
-
-    [ForeignKey("JewelryId")]
-    [InverseProperty("Carts")]
-    public virtual Jewelry Jewelry { get; set; }
 
     [ForeignKey("UserId")]
     [InverseProperty("Carts")]
     public virtual User User { get; set; }
 
+    [InverseProperty("Cart")]
+    public virtual ICollection<CartDiamond> CartDiamonds { get; set; } = new List<CartDiamond>();
 
-    [ForeignKey("JewelrySizeId")]
-    [InverseProperty("Carts")]
-    public virtual JewelrySize JewelrySize { get; set; }
+    [InverseProperty("Cart")]
+    public virtual ICollection<CartJewelry> CartJewelries { get; set; } = new List<CartJewelry>();
 
     [InverseProperty("Cart")]
     public virtual ICollection<CartPromotion> CartPromotions { get; set; } = new List<CartPromotion>();
+
 
 }

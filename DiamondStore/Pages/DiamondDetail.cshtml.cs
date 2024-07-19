@@ -44,30 +44,47 @@ namespace DiamondStore.Pages
                 return RedirectToPage("Auth/Login");
             }
 
-            var existingCartItem = await _cartService.GetCartItemByDetails(userId, null, id, null);
-            if (existingCartItem != null)
+            try
             {
-                existingCartItem.Quantity += 1;
-                existingCartItem.CreateDate = DateTime.Now;
-                await _cartService.UpdateCartItem(existingCartItem);
-            }
-            else
-            {
-                var cartItem = new Cart
+                // Check if the user already has an existing cart
+                var existingCart = await _cartService.GetCartByUserId(userId);
+
+                if (existingCart != null)
                 {
-                    UserId = userId,
-                    DiamondId = id,
-                    Quantity = 1,
-                    CreateDate = DateTime.Now
-                };
-                await _cartService.AddToCart(cartItem);
+                    var existingCartItem = existingCart.CartDiamonds.FirstOrDefault(cd => cd.DiamondId == id);
+                    if (existingCartItem != null)
+                    {
+                        existingCartItem.Quantity += 1;
+                        existingCartItem.AddDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        existingCart.CartDiamonds.Add(new CartDiamond { DiamondId = id, Quantity = 1, AddDate = DateTime.Now });
+                    }
+                    existingCart.CreateDate = DateTime.Now;
+                    await _cartService.UpdateCartItem(existingCart);
+                }
+                else
+                {
+                    var cartItem = new Cart
+                    {
+                        UserId = userId,
+                        CreateDate = DateTime.Now
+                    };
+                    cartItem.CartDiamonds.Add(new CartDiamond { DiamondId = id, Quantity = 1, AddDate = DateTime.Now });
+                    await _cartService.AddToCart(cartItem);
+                }
+
+                TempData["SuccessMessage"] = "Diamond added to cart successfully!";
+                return RedirectToPage(new { id });
             }
-
-            TempData["SuccessMessage"] = "Diamond added to cart successfully!";
-            return RedirectToPage(new { id });
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine(ex.Message);
+                TempData["ErrorMessage"] = "An error occurred while adding the diamond to the cart.";
+                return RedirectToPage(new { id });
+            }
         }
-
-
     }
-
 }

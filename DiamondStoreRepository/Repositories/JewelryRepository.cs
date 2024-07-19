@@ -20,7 +20,7 @@ namespace DiamondStoreRepository.Repositories
         public async Task<Pagination<Jewelry>> GetPaginated(int pageIndex, int pageSize, string sortOption, int? typeId, string material, int? sizeId, string priceRange)
         {
             var query = _context.Jewelries
-                                .Include(j => j.MainDiamonds).ThenInclude(md => md.Diamond)
+                                .Include(j => j.Diamond)
                                 .Include(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
                                 .AsQueryable();
 
@@ -39,7 +39,7 @@ namespace DiamondStoreRepository.Repositories
             // Calculate TotalPrice for each item
             foreach (var item in items)
             {
-                float mainDiamondPrice = item.MainDiamonds.Sum(md => md.Diamond?.DiamondPrice ?? 0);
+                float mainDiamondPrice = item.Diamond?.DiamondPrice ?? 0;
                 float secondaryDiamondPrice = item.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
                 item.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + item.JewelryPrice + item.LaborCost);
             }
@@ -88,11 +88,11 @@ namespace DiamondStoreRepository.Repositories
                 PageSize = pageSize
             };
         }
+
         public async Task<Jewelry> GetJewelryWithDetails(int jewelryId)
         {
             var jewelry = await _context.Jewelries
-                .Include(j => j.MainDiamonds)
-                    .ThenInclude(md => md.Diamond)
+                .Include(j => j.Diamond)
                 .Include(j => j.SecondaryDiamonds)
                     .ThenInclude(sd => sd.Diamond)
                 .Include(j => j.JewelryMaterial)
@@ -101,7 +101,7 @@ namespace DiamondStoreRepository.Repositories
 
             if (jewelry != null)
             {
-                float mainDiamondPrice = jewelry.MainDiamonds.Sum(md => md.Diamond?.DiamondPrice ?? 0);
+                float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
                 float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
                 jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
             }
@@ -117,6 +117,5 @@ namespace DiamondStoreRepository.Repositories
                 .Include(d => d.Image)
                 .ToListAsync();
         }
-
     }
 }

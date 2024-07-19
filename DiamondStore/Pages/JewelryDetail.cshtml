@@ -32,14 +32,14 @@
                         </div>
                         <div class="option">
                             <span><strong>Main Diamond:</strong></span>
-                            <span>@(Model.Jewelry.MainDiamonds.FirstOrDefault()?.Diamond?.DiamondName ?? "N/A")</span>
+                            <span>@(Model.Jewelry.Diamond?.DiamondName ?? "N/A")</span>
                         </div>
                         <div class="option">
-                            <span><strong>Secondary Diamond:</strong></span>
-                            <span>@(Model.Jewelry.SecondaryDiamonds.FirstOrDefault()?.Diamond?.DiamondName ?? "N/A")</span>
+                            <span><strong>Secondary Diamonds:</strong></span>
+                            <span>@Model.Jewelry.SecondaryDiamondsNames</span>
                         </div>
                     </div>
-  
+
                     <div class="product-actions">
                         <form method="post" asp-page-handler="AddToCart">
                             <input type="hidden" name="id" value="@Model.Jewelry.JewelryId" />
@@ -57,7 +57,6 @@
                             <button class="btn btn-secondary" type="submit">Add to Cart</button>
                             <button class="btn btn-success" type="submit">Buy Now</button>
                         </form>
-
                     </div>
                 </div>
             </div>

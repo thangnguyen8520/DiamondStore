@@ -14,9 +14,9 @@ namespace DiamondBusinessObject.Models
         [Key]
         public int SecondaryDiamondId { get; set; }
 
-        public int DiamondId { get; set; }
+        public int? DiamondId { get; set; }
 
-        public int JewelryId { get; set; }
+        public int? JewelryId { get; set; }
 
         [ForeignKey("DiamondId")]
         public virtual Diamond Diamond { get; set; }

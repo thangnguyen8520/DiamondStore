@@ -25,8 +25,6 @@ namespace DiamondBusinessObject.Models
 
         public int MainDiamondId { get; set; }
 
-        public int? SecondaryDiamondId { get; set; }
-
         public float LaborCost { get; set; }
 
         public float JewelryPrice { get; set; }
@@ -38,10 +36,8 @@ namespace DiamondBusinessObject.Models
         [NotMapped]
         public float TotalPrice { get; set; }
 
-        [InverseProperty("Jewelry")]
-        public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
-        [ForeignKey("JewelrydTypeId")]
+        [ForeignKey("JewelryTypeId")]
         [InverseProperty("Jewelries")]
         public virtual JewelryType JewelryType { get; set; }
 
@@ -49,13 +45,20 @@ namespace DiamondBusinessObject.Models
         [InverseProperty("Jewelries")]
         public virtual JewelryMaterial JewelryMaterial { get; set; }
 
+        [ForeignKey("MainDiamondId")]
+        [InverseProperty("Jewelries")]
+        public virtual Diamond Diamond { get; set; }
+
         [InverseProperty("Jewelry")]
         public virtual ICollection<SecondaryDiamond> SecondaryDiamonds { get; set; } = new List<SecondaryDiamond>();
 
-        [InverseProperty("Jewelry")]
-        public virtual ICollection<MainDiamond> MainDiamonds { get; set; } = new List<MainDiamond>();
+        [NotMapped]
+        public string SecondaryDiamondsNames => string.Join(", ", SecondaryDiamonds.Select(sd => sd.Diamond?.DiamondName ?? "N/A"));
 
         [ForeignKey("ImageId")]
         public virtual Image Image { get; set; }
+
+        [InverseProperty("Jewelry")]
+        public virtual ICollection<CartJewelry> CartJewelries { get; set; } = new List<CartJewelry>();
     }
 }

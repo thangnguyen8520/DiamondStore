@@ -54,29 +54,49 @@ namespace DiamondStore.Pages
                 return Page();
             }
 
-            var existingCartItem = await _cartService.GetCartItemByDetails(userId, id, null, sizeId);
-            if (existingCartItem != null)
+            try
             {
-                existingCartItem.Quantity += 1;
-                existingCartItem.CreateDate = DateTime.Now;
-                await _cartService.UpdateCartItem(existingCartItem);
-            }
-            else
-            {
-                var cartItem = new Cart
-                {
-                    UserId = userId,
-                    JewelryId = id,
-                    JewelrySizeId = sizeId,
-                    Quantity = 1,
-                    CreateDate = DateTime.Now
-                };
-                await _cartService.AddToCart(cartItem);
-            }
+                // Check if the user already has an existing cart
+                var existingCart = await _cartService.GetCartByUserId(userId);
 
-            TempData["SuccessMessage"] = "Jewelry added to cart successfully!";
-            return RedirectToPage(new { id });
+                if (existingCart != null)
+                {
+                    var existingCartItem = existingCart.CartJewelries.FirstOrDefault(cj => cj.JewelryId == id && cj.JewelrySizeId == sizeId);
+                    if (existingCartItem != null)
+                    {
+                        existingCartItem.Quantity += 1;
+                        existingCartItem.AddDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        existingCart.CartJewelries.Add(new CartJewelry { JewelryId = id, JewelrySizeId = sizeId, Quantity = 1, AddDate = DateTime.Now });
+                    }
+                    existingCart.CreateDate = DateTime.Now;
+                    await _cartService.UpdateCartItem(existingCart);
+                }
+                else
+                {
+                    var cartItem = new Cart
+                    {
+                        UserId = userId,
+                        CreateDate = DateTime.Now
+                    };
+                    cartItem.CartJewelries.Add(new CartJewelry { JewelryId = id, JewelrySizeId = sizeId, Quantity = 1, AddDate = DateTime.Now });
+                    await _cartService.AddToCart(cartItem);
+                }
+
+                TempData["SuccessMessage"] = "Jewelry added to cart successfully!";
+                return RedirectToPage(new { id });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine(ex.Message);
+                TempData["ErrorMessage"] = "An error occurred while adding the jewelry to the cart.";
+                return RedirectToPage(new { id });
+            }
         }
+
 
     }
 }

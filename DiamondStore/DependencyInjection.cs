@@ -1,5 +1,4 @@
 ﻿using DiamondBusinessObject.Models;
-using DiamondDAO;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;

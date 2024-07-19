@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,10 @@ public partial class DiamondStoreContext : IdentityDbContext<User>
 
     public virtual DbSet<Cart> Carts { get; set; }
 
+    public virtual DbSet<CartDiamond> CartDiamonds { get; set; }
+
+    public virtual DbSet<CartJewelry> CartJewelries { get; set; }
+
     public virtual DbSet<CartPromotion> CartPromotions { get; set; }
 
     public virtual DbSet<Diamond> Diamonds { get; set; }
@@ -35,7 +40,6 @@ public partial class DiamondStoreContext : IdentityDbContext<User>
     public virtual DbSet<JewelryMaterial> JewelryMaterials { get; set; }
     public virtual DbSet<JewelrySize> JewelrySizes { get; set; }
     public virtual DbSet<JewelryType> JewelryTypes { get; set; }
-    public virtual DbSet<MainDiamond> MainDiamonds { get; set; }
     public virtual DbSet<SecondaryDiamond> SecondaryDiamonds { get; set; }
     public virtual DbSet<Payment> Payments { get; set; }
 
