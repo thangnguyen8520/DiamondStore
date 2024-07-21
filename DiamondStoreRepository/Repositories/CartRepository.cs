@@ -45,19 +45,54 @@ namespace DiamondStoreRepository.Repositories
 
         public async Task<List<Cart>> GetCartItems(string userId)
         {
-            return await _context.Carts
+            var carts = await _context.Carts
                 .Include(c => c.CartDiamonds).ThenInclude(cd => cd.Diamond)
                 .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
+                .ThenInclude(j => j.Diamond)
+                .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
+                .ThenInclude(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
+                .Include(c => c.CartPromotions).ThenInclude(cp => cp.Promotion)
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
+
+            foreach (var cart in carts)
+            {
+                foreach (var cartJewelry in cart.CartJewelries)
+                {
+                    var jewelry = cartJewelry.Jewelry;
+                    float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
+                    float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
+                    jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
+                }
+            }
+
+            return carts;
         }
+
 
         public async Task<Cart> GetCartItem(int cartId)
         {
-            return await _context.Carts
+            var cart = await _context.Carts
                 .Include(c => c.CartDiamonds).ThenInclude(cd => cd.Diamond)
                 .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
+                .ThenInclude(j => j.Diamond)
+                .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
+                .ThenInclude(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
+                .Include(c => c.CartPromotions).ThenInclude(cp => cp.Promotion)
                 .FirstOrDefaultAsync(c => c.CartId == cartId);
+
+            if (cart != null)
+            {
+                foreach (var cartJewelry in cart.CartJewelries)
+                {
+                    var jewelry = cartJewelry.Jewelry;
+                    float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
+                    float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
+                    jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
+                }
+            }
+
+            return cart;
         }
 
         public async Task<Cart> GetCartByUserId(string userId)
@@ -65,6 +100,7 @@ namespace DiamondStoreRepository.Repositories
             return await _context.Carts
                 .Include(c => c.CartDiamonds)
                 .Include(c => c.CartJewelries)
+                .Include(c => c.CartPromotions).ThenInclude(cp => cp.Promotion)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
         }
 
@@ -84,20 +120,28 @@ namespace DiamondStoreRepository.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Cart> GetCartJewelryByDetails(string userId, int? jewelryId, int? jewelrySizeId)
+        public async Task AddCartPromotion(CartPromotion cartPromotion)
         {
-            return await _context.Carts
-                .Include(c => c.CartJewelries)
-                .FirstOrDefaultAsync(c => c.UserId == userId &&
-                                          jewelryId != null && c.CartJewelries.Any(cj => cj.JewelryId == jewelryId && cj.JewelrySizeId == jewelrySizeId));
+            await _context.CartPromotions.AddAsync(cartPromotion);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<Cart> GetCartDiamondByDetails(string userId, int? diamondId)
+        public async Task RemoveCartPromotion(int cartPromotionId)
         {
-            return await _context.Carts
-                .Include(c => c.CartDiamonds)
-                .FirstOrDefaultAsync(c => c.UserId == userId &&
-                                          diamondId != null && c.CartDiamonds.Any(cd => cd.DiamondId == diamondId));
+            var cartPromotion = await _context.CartPromotions.FindAsync(cartPromotionId);
+            if (cartPromotion != null)
+            {
+                _context.CartPromotions.Remove(cartPromotion);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<List<CartPromotion>> GetCartPromotions(string userId)
+        {
+            return await _context.CartPromotions
+                .Include(cp => cp.Promotion)
+                .Where(cp => cp.Cart.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task<CartDiamond> GetCartDiamondById(int cartDiamondId)

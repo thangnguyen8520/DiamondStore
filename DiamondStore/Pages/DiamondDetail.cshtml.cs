@@ -10,12 +10,12 @@ namespace DiamondStore.Pages
 {
     public class DiamondDetailModel : PageModel
     {
-        private readonly IDiamondRepository _diamondRepository;
+        private readonly IDiamondService _diamondService;
         private readonly ICartService _cartService;
 
-        public DiamondDetailModel(IDiamondRepository diamondRepository, ICartService cartService)
+        public DiamondDetailModel(IDiamondService diamondService, ICartService cartService)
         {
-            _diamondRepository = diamondRepository;
+            _diamondService = diamondService;
             _cartService = cartService;
         }
 
@@ -24,14 +24,14 @@ namespace DiamondStore.Pages
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Diamond = await _diamondRepository.GetById(id, "DiamondColor,DiamondClarity,DiamondCut,Image");
+            Diamond = await _diamondService.GetById(id, "DiamondColor,DiamondClarity,DiamondCut,Image");
 
             if (Diamond == null)
             {
                 return NotFound();
             }
 
-            RelatedDiamonds = await _diamondRepository.GetRelatedDiamonds(Diamond.DiamondTypeId, id);
+            RelatedDiamonds = await _diamondService.GetRelatedDiamonds(Diamond.DiamondTypeId, id);
 
             return Page();
         }

@@ -32,7 +32,7 @@ namespace DiamondStore.Pages
                 return NotFound();
             }
 
-            RelatedJewelry = await _jewelryService.GetRelatedJewelries(Jewelry.JewelryId, id);
+            RelatedJewelry = await _jewelryService.GetRelatedJewelries(Jewelry.JewelryTypeId, id);
 
             return Page();
         }
@@ -50,7 +50,7 @@ namespace DiamondStore.Pages
                 ModelState.AddModelError(string.Empty, "Please select a size.");
                 Jewelry = await _jewelryService.GetJewelryWithDetails(id);
                 Sizes = await _jewelryService.GetAllJewelrySizes();
-                RelatedJewelry = await _jewelryService.GetRelatedJewelries(Jewelry.JewelryId, id);
+                RelatedJewelry = await _jewelryService.GetRelatedJewelries(Jewelry.JewelryTypeId, id);
                 return Page();
             }
 

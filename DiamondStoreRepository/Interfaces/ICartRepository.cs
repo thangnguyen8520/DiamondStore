@@ -13,8 +13,9 @@ namespace DiamondStoreRepository.Interfaces
         Task<Cart> GetCartByUserId(string userId);
         Task DeleteCartItem(int cartId);
         Task UpdateCartItem(Cart cart);
-        Task<Cart> GetCartJewelryByDetails(string userId, int? jewelryId, int? jewelrySizeId);
-        Task<Cart> GetCartDiamondByDetails(string userId, int? diamondId);
+        Task AddCartPromotion(CartPromotion cartPromotion);
+        Task RemoveCartPromotion(int cartPromotionId);
+        Task<List<CartPromotion>> GetCartPromotions(string userId);
         Task<CartDiamond> GetCartDiamondById(int cartDiamondId);
         Task<CartJewelry> GetCartJewelryById(int cartJewelryId);
         Task UpdateCartDiamond(CartDiamond cartDiamond);

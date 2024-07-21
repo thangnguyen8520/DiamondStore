@@ -24,6 +24,7 @@ namespace DiamondStore.Pages
 
         public List<Cart> CartItems { get; set; } = new List<Cart>();
         public List<UserPromotion> UserPromotions { get; set; } = new List<UserPromotion>();
+        public List<CartPromotion> CartPromotions { get; set; } = new List<CartPromotion>();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -35,18 +36,56 @@ namespace DiamondStore.Pages
 
             CartItems = await _cartService.GetCartItems(userId);
             UserPromotions = await _promotionService.GetUserPromotions(userId);
+            CartPromotions = await _cartService.GetCartPromotions(userId);
 
-            foreach (var cartItem in CartItems)
-            {
-                foreach (var cartJewelry in cartItem.CartJewelries)
-                {
-                    float mainDiamondPrice = cartJewelry.Jewelry.Diamond?.DiamondPrice ?? 0;
-                    float secondaryDiamondPrice = cartJewelry.Jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
-                    cartJewelry.Jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + cartJewelry.Jewelry.JewelryPrice + cartJewelry.Jewelry.LaborCost);
-                }
-            }
+            // Apply promotions to calculate the total price
+            ApplyPromotions();
 
             return Page();
+        }
+
+        private void ApplyPromotions()
+        {
+            foreach (var cartItem in CartItems)
+            {
+                float discount = 0;
+                foreach (var promotion in CartPromotions)
+                {
+                    var appliedPromotion = UserPromotions.FirstOrDefault(up => up.PromotionId == promotion.PromotionId);
+                    if (appliedPromotion != null)
+                    {
+                        discount += (float)(cartItem.TotalPrice * appliedPromotion.Promotion.DiscountRate / 100.0);
+                    }
+                }
+                cartItem.DisplayTotalPrice = cartItem.TotalPrice - discount;
+            }
+        }
+
+        public async Task<IActionResult> OnPostApplyPromotionsAsync(List<int> selectedPromotions)
+        {
+            string userId = HttpContext.Session.GetString("UserId");
+            var cart = await _cartService.GetCartByUserId(userId);
+
+            if (cart == null)
+            {
+                return RedirectToPage();
+            }
+
+            var currentPromotions = await _cartService.GetCartPromotions(userId);
+            var promotionsToAdd = selectedPromotions.Except(currentPromotions.Select(cp => cp.PromotionId)).ToList();
+            var promotionsToRemove = currentPromotions.Where(cp => !selectedPromotions.Contains(cp.PromotionId)).ToList();
+
+            foreach (var promotionId in promotionsToAdd)
+            {
+                await _cartService.AddCartPromotion(new CartPromotion { CartId = cart.CartId, PromotionId = promotionId });
+            }
+
+            foreach (var cartPromotion in promotionsToRemove)
+            {
+                await _cartService.RemoveCartPromotion(cartPromotion.CartPromotionId);
+            }
+
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostRemoveAsync(int cartId, int itemId, string itemType)
@@ -105,10 +144,6 @@ namespace DiamondStore.Pages
 
             return RedirectToPage();
         }
-
-        public async Task<IActionResult> OnPostApplyPromotionsAsync(List<int> selectedPromotions)
-        {
-            return RedirectToPage();
-        }
     }
+
 }

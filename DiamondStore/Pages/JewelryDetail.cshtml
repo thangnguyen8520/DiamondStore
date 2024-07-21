@@ -71,7 +71,7 @@
                             <img src="@relatedJewelry.Image?.ImageUrl ?? " default-image-url.jpg"" class="card-img-top" alt="Related Jewelry">
                             <div class="card-body">
                                 <h5 class="card-title">@relatedJewelry.JewelryName</h5>
-                                <p class="card-text">@relatedJewelry.JewelryPrice.ToString("C")</p>
+                                <p class="card-text">@relatedJewelry.TotalPrice.ToString("C")</p>
                                 <a href="/JewelryDetail/@relatedJewelry.JewelryId" class="btn btn-primary">View Details</a>
                             </div>
                         </div>

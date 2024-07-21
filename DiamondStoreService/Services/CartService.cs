@@ -2,6 +2,8 @@
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreService.Interfaces;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiamondStoreService.Services
@@ -32,12 +34,6 @@ namespace DiamondStoreService.Services
             return await _cartRepository.GetCartItem(cartId);
         }
 
-        public async Task<Cart> GetCartByUserId(string userId)
-        {
-            return await _cartRepository.GetCartByUserId(userId);
-        }
-
-
         public async Task DeleteCartItem(int cartId)
         {
             await _cartRepository.DeleteCartItem(cartId);
@@ -49,14 +45,34 @@ namespace DiamondStoreService.Services
             await _cartRepository.UpdateCartItem(cart);
         }
 
-        public async Task<Cart> GetCartJewelryByDetails(string userId, int? jewelryId, int? jewelrySizeId)
+        public async Task<Cart> GetCartByUserId(string userId)
         {
-            return await _cartRepository.GetCartJewelryByDetails(userId, jewelryId, jewelrySizeId);
+            return await _cartRepository.GetCartByUserId(userId);
         }
 
-        public async Task<Cart> GetCartDiamondByDetails(string userId, int? diamondId)
+        public async Task AddCartPromotion(CartPromotion cartPromotion)
         {
-            return await _cartRepository.GetCartDiamondByDetails(userId, diamondId);
+            await _cartRepository.AddCartPromotion(cartPromotion);
+        }
+
+        public async Task RemoveCartPromotion(int cartPromotionId)
+        {
+            await _cartRepository.RemoveCartPromotion(cartPromotionId);
+        }
+
+        public async Task<List<CartPromotion>> GetCartPromotions(string userId)
+        {
+            return await _cartRepository.GetCartPromotions(userId);
+        }
+
+        public async Task DeleteCartDiamond(int cartDiamondId)
+        {
+            await _cartRepository.DeleteCartDiamond(cartDiamondId);
+        }
+
+        public async Task DeleteCartJewelry(int cartJewelryId)
+        {
+            await _cartRepository.DeleteCartJewelry(cartJewelryId);
         }
 
         public async Task UpdateCartDiamondQuantity(int cartDiamondId, int quantity)
@@ -87,17 +103,6 @@ namespace DiamondStoreService.Services
             {
                 _logger.LogWarning($"CartJewelryId: {cartJewelryId} not found.");
             }
-        }
-
-
-        public async Task DeleteCartDiamond(int cartDiamondId)
-        {
-            await _cartRepository.DeleteCartDiamond(cartDiamondId);
-        }
-
-        public async Task DeleteCartJewelry(int cartJewelryId)
-        {
-            await _cartRepository.DeleteCartJewelry(cartJewelryId);
         }
     }
 }

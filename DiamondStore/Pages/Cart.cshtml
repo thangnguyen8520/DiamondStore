@@ -145,8 +145,8 @@
                         </h3>
                         <hr>
                         <h6>Available Promotions</h6>
-                        <div class="promotion-list">
-                            <form method="post" asp-page-handler="ApplyPromotions">
+                        <form method="post" asp-page-handler="ApplyPromotions">
+                            <div class="promotion-list">
                                 @foreach (var promotion in Model.UserPromotions)
                                 {
                                     <div class="promotion-item">
@@ -155,9 +155,9 @@
                                     </div>
                                     <hr>
                                 }
-                                <button type="submit" class="button">Apply Promotions</button>
-                            </form>
-                        </div>
+                            </div>
+                            <button type="submit" class="button" style="margin-top: 10px;">Apply Promotions</button>
+                        </form>
                         <h5 class="text-center">
                             <a class="button" href="checkout.html">PROCEED TO CHECKOUT</a>
                         </h5>
