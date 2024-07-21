@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DiamondStoreRepository.Repositories
 {
@@ -111,11 +112,23 @@ namespace DiamondStoreRepository.Repositories
 
         public async Task<List<Jewelry>> GetRelatedJewelries(int typeId, int excludeId)
         {
-            return await _context.Jewelries
+            var query = _context.Jewelries
+                .Include(j => j.Diamond)
+                 .Include(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
                 .Where(j => j.JewelryTypeId == typeId && j.JewelryId != excludeId)
                 .Take(4)
                 .Include(d => d.Image)
-                .ToListAsync();
+                .AsQueryable();
+
+            var items = await query.ToListAsync();
+            foreach (var item in items)
+            {
+                float mainDiamondPrice = item.Diamond?.DiamondPrice ?? 0;
+                float secondaryDiamondPrice = item.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
+                item.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + item.JewelryPrice + item.LaborCost);
+            }
+
+            return items;
         }
     }
 }
