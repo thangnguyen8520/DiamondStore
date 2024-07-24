@@ -18,6 +18,8 @@
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">Image</th>
+                            <th class="px-4 py-3">ID</th>
+
                             <th class="px-4 py-3">Full Name</th>
                             <th class="px-4 py-3">User Name</th>
                             <th class="px-4 py-3">Email</th>
@@ -36,6 +38,8 @@
                                         <img class="w-8 h-8 rounded-full" src="@user.ImageUrl" alt="User Image" />
                                     }
                                 </td>
+                                <td class="px-4 py-3">@user.Id</td>
+
                                 <td class="px-4 py-3">@user.FullName</td>
                                 <td class="px-4 py-3">@user.UserName</td>
                                 <td class="px-4 py-3">@user.Email</td>
@@ -43,9 +47,7 @@
                                 <td class="px-4 py-3">@user.Status</td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center space-x-4 text-sm">
-                                        <a href="@Url.Page("UserDetail", new { id = user.Id })" class="text-blue-600">Details</a>
-                                        <a href="@Url.Page("UserEdit", new { id = user.Id })" class="text-yellow-600">Edit</a>
-                                        <a href="javascript:void(0)" class="text-red-600" onclick="deleteUser('@user.Id')">Delete</a>
+                                        <button type="button" class="text-blue-600" data-toggle="modal" data-target="#detailsModal" data-id="@user.Id">Details</button>
                                     </div>
                                 </td>
                             </tr>
@@ -57,19 +59,63 @@
     </div>
 </main>
 
+<!-- Modal for User Details -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="detailsModalLabel">User Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content">
+                    <!-- User details will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
-    <script type="text/javascript">
-        function deleteUser(userId) {
-            if (confirm("Are you sure you want to delete this user?")) {
-                $.post('@Url.Page("UserDelete")', { id: userId }, function (data) {
-                    if (data.success) {
-                        alert("User deleted successfully.");
-                        location.reload();
-                    } else {
-                        alert("Failed to delete user.");
-                    }
-                });
-            }
-        }
+    <script>
+        $('#detailsModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var userId = button.data('id'); // Extract info from data-* attributes
+            var modal = $(this);
+
+            // Clear previous content
+            modal.find('#modal-content').empty();
+
+            // Make an AJAX request to fetch the user details
+            $.ajax({
+                url: '@Url.Page("Users", "Details")',
+                type: 'GET',
+                data: { id: userId },
+                success: function (data) {
+                    var userDetailsHtml = `
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold">User Details</h3>
+                                    <div class="mt-4">
+                                        <div><label class="font-semibold">Full Name:</label> <span>${data.fullName}</span></div>
+                                        <div><label class="font-semibold">Address:</label> <span>${data.address}</span></div>
+                                        <div><label class="font-semibold">Gender:</label> <span>${data.gender}</span></div>
+                                        <div><label class="font-semibold">Status:</label> <span>${data.status}</span></div>
+                                        <div><label class="font-semibold">Last Login:</label> <span>${data.lastLogin}</span></div>
+                                        <div><label class="font-semibold">User Name:</label> <span>${data.userName}</span></div>
+                                        <div><label class="font-semibold">Email:</label> <span>${data.email}</span></div>
+                                    </div>
+                                </div>`;
+                    modal.find('#modal-content').html(userDetailsHtml);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to load user details:', error);
+                }
+            });
+        });
     </script>
 }

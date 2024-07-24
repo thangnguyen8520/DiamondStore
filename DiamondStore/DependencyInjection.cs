@@ -43,7 +43,8 @@ namespace DiamondStore
             services.AddHttpClient<IPaymentService, PaymentService>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentService, PaymentService>();
-
+            services.AddScoped<IPaymentAdminRepository, PaymentAdminRepository>();
+            services.AddScoped<IPaymentAdminService, PaymentAdminService>();
 
 
             // Add DbContext
