@@ -54,16 +54,17 @@ namespace DiamondStoreRepository.Repositories
         {
             var carts = await _context.Carts
                 .Include(c => c.CartDiamonds)
-                .ThenInclude(cd => cd.Diamond) // Ensure Diamond is loaded
+                    .ThenInclude(cd => cd.Diamond) // Ensure Diamond is loaded
                 .Include(c => c.CartJewelries)
-                .ThenInclude(cj => cj.Jewelry) // Ensure Jewelry is loaded
-                .ThenInclude(j => j.Diamond) // Ensure related Diamond is loaded
+                    .ThenInclude(cj => cj.Jewelry) // Ensure Jewelry is loaded
+                    .ThenInclude(j => j.Diamond) // Ensure related Diamond is loaded
                 .Include(c => c.CartJewelries)
-                .ThenInclude(cj => cj.Jewelry)
-                .ThenInclude(j => j.SecondaryDiamonds)
-                .ThenInclude(sd => sd.Diamond) // Ensure SecondaryDiamonds are loaded
+                    .ThenInclude(cj => cj.Jewelry)
+                    .ThenInclude(j => j.SecondaryDiamonds)
+                    .ThenInclude(sd => sd.Diamond) // Ensure SecondaryDiamonds are loaded
                 .Include(c => c.CartPromotions)
-                .ThenInclude(cp => cp.Promotion) // Ensure Promotions are loaded
+                    .ThenInclude(cp => cp.UserPromotion) // Ensure Promotions are loaded
+                    .ThenInclude(up => up.Promotion) // Ensure UserPromotion is loaded
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
 
@@ -86,7 +87,8 @@ namespace DiamondStoreRepository.Repositories
                 .ThenInclude(j => j.Diamond)
                 .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
                 .ThenInclude(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
-                .Include(c => c.CartPromotions).ThenInclude(cp => cp.Promotion)
+                .Include(c => c.CartPromotions).ThenInclude(cp => cp.UserPromotion)
+                .ThenInclude(up => up.Promotion)
                 .FirstOrDefaultAsync(c => c.CartId == cartId);
 
             if (cart != null)
@@ -105,7 +107,7 @@ namespace DiamondStoreRepository.Repositories
             return await _context.Carts
                 .Include(c => c.CartDiamonds)
                 .Include(c => c.CartJewelries)
-                .Include(c => c.CartPromotions).ThenInclude(cp => cp.Promotion)
+                .Include(c => c.CartPromotions).ThenInclude(cp => cp.UserPromotion).ThenInclude(up => up.Promotion)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
         }
 
@@ -144,7 +146,8 @@ namespace DiamondStoreRepository.Repositories
         public async Task<List<CartPromotion>> GetCartPromotions(string userId)
         {
             return await _context.CartPromotions
-                .Include(cp => cp.Promotion)
+                .Include(cp => cp.UserPromotion)
+                .ThenInclude(up => up.Promotion)
                 .Where(cp => cp.Cart.UserId == userId)
                 .ToListAsync();
         }
@@ -174,8 +177,6 @@ namespace DiamondStoreRepository.Repositories
             _context.CartJewelries.Update(cartJewelry);
             await _context.SaveChangesAsync();
         }
-
-
 
         public async Task DeleteCartDiamond(int cartDiamondId)
         {

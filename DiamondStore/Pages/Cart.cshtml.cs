@@ -48,16 +48,16 @@ namespace DiamondStore.Pages
         {
             foreach (var cartItem in CartItems)
             {
-                float discount = 0;
+                float totalDiscount = 0;
                 foreach (var promotion in CartPromotions)
                 {
-                    var appliedPromotion = UserPromotions.FirstOrDefault(up => up.PromotionId == promotion.PromotionId);
+                    var appliedPromotion = UserPromotions.FirstOrDefault(up => up.UserPromotionId == promotion.UserPromotionId);
                     if (appliedPromotion != null)
                     {
-                        discount += (float)(cartItem.TotalPrice * appliedPromotion.Promotion.DiscountRate / 100.0);
+                        totalDiscount += (float)(cartItem.TotalPrice * appliedPromotion.Promotion.DiscountRate / 100.0);
                     }
                 }
-                cartItem.DisplayTotalPrice = cartItem.TotalPrice - discount;
+                cartItem.DisplayTotalPrice = cartItem.TotalPrice - totalDiscount;
             }
         }
 
@@ -72,18 +72,25 @@ namespace DiamondStore.Pages
             }
 
             var currentPromotions = await _cartService.GetCartPromotions(userId);
-            var promotionsToAdd = selectedPromotions.Except(currentPromotions.Select(cp => cp.PromotionId)).ToList();
-            var promotionsToRemove = currentPromotions.Where(cp => !selectedPromotions.Contains(cp.PromotionId)).ToList();
+            var promotionsToAdd = selectedPromotions.Except(currentPromotions.Select(cp => cp.UserPromotionId)).ToList();
+            var promotionsToRemove = currentPromotions.Where(cp => !selectedPromotions.Contains(cp.UserPromotionId)).ToList();
 
             foreach (var promotionId in promotionsToAdd)
             {
-                await _cartService.AddCartPromotion(new CartPromotion { CartId = cart.CartId, PromotionId = promotionId });
+                await _cartService.AddCartPromotion(new CartPromotion { CartId = cart.CartId, UserPromotionId = promotionId });
             }
 
             foreach (var cartPromotion in promotionsToRemove)
             {
                 await _cartService.RemoveCartPromotion(cartPromotion.CartPromotionId);
             }
+
+            CartPromotions = await _cartService.GetCartPromotions(userId);
+            CartItems = await _cartService.GetCartItems(userId);
+            UserPromotions = await _promotionService.GetUserPromotions(userId);
+
+            // Recalculate the total price with promotions
+            ApplyPromotions();
 
             return RedirectToPage();
         }
@@ -142,7 +149,7 @@ namespace DiamondStore.Pages
                             }
 
                             _logger.LogInformation($"Updating diamond quantity. ItemId: {itemId}, Quantity: {quantity}");
-                            cartDiamond.Quantity = quantity;  // Update the quantity
+                            cartDiamond.Quantity = quantity;
                             await _cartService.UpdateCartDiamondQuantity(itemId, quantity);
                         }
                         else
@@ -169,7 +176,7 @@ namespace DiamondStore.Pages
                             }
 
                             _logger.LogInformation($"Updating jewelry quantity. ItemId: {itemId}, Quantity: {quantity}");
-                            cartJewelry.Quantity = quantity;  // Update the quantity
+                            cartJewelry.Quantity = quantity;
                             await _cartService.UpdateCartJewelryQuantity(itemId, quantity);
                         }
                         else
@@ -188,6 +195,5 @@ namespace DiamondStore.Pages
 
             return RedirectToPage();
         }
-
     }
 }

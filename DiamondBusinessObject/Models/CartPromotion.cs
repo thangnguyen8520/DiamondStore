@@ -15,12 +15,12 @@ namespace DiamondBusinessObject.Models
         public int CartPromotionId {  get; set; }
         public int CartId { get; set; }
 
-        public int PromotionId { get; set; }
+        public int UserPromotionId { get; set; }
 
         [ForeignKey("CartId")]
         public virtual Cart Cart { get; set; }
 
-        [ForeignKey("PromotionId")]
-        public virtual Promotion Promotion { get; set; }
+        [ForeignKey("UserPromotionId")]
+        public virtual UserPromotion UserPromotion { get; set; }
     }
 }

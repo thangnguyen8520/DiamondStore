@@ -121,14 +121,12 @@ namespace DiamondStoreService.Services
             }
         }
 
-
-
         public async Task<CartDiamond> GetCartDiamondById(int cartDiamondId)
         {
             return await _cartRepository.GetCartDiamondById(cartDiamondId);
         }
 
-        public async Task<CartJewelry> GetCartJewelryById(int cartJewelryId) 
+        public async Task<CartJewelry> GetCartJewelryById(int cartJewelryId)
         {
             return await _cartRepository.GetCartJewelryById(cartJewelryId);
         }
