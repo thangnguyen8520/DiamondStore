@@ -47,8 +47,6 @@ public partial class DiamondStoreContext : IdentityDbContext<User>
 
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
-    public virtual DbSet<PaymentPromotion> PaymentPromotions { get; set; }
-
     public virtual DbSet<Promotion> Promotions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }

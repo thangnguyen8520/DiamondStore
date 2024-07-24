@@ -36,6 +36,8 @@ public partial class Diamond
 
     public int DiamondCutId { get; set; }
 
+    public int DiamondInventory { get; set; }
+
     [StringLength(255)]
     public string DiamondCertificate { get; set; }
 
