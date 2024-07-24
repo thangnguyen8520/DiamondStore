@@ -28,5 +28,8 @@ namespace DiamondBusinessObject.Models
 
         [ForeignKey("PromotionId")]
         public virtual Promotion Promotion { get; set; }
+
+        [InverseProperty("UserPromotion")]
+        public virtual ICollection<CartPromotion> CartPromotions { get; set; } = new List<CartPromotion>();
     }
 }

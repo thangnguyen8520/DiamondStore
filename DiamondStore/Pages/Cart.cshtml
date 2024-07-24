@@ -141,7 +141,7 @@
                     <div class="cart_3r clearfix">
                         <h5 class="mgt head_1">SUBTOTAL</h5>
                         <h3 class="text-center">
-                            @Model.CartItems.Sum(i => (decimal)i.CartJewelries.Sum(cj => cj.Jewelry.TotalPrice * cj.Quantity) + (decimal)i.CartDiamonds.Sum(cd => cd.Diamond.DiamondPrice * cd.Quantity)).ToString("C")
+                            @Model.CartItems.Sum(i => (decimal)i.DisplayTotalPrice).ToString("C")
                         </h3>
                         <hr>
                         <h6>Available Promotions</h6>
@@ -149,8 +149,9 @@
                             <div class="promotion-list">
                                 @foreach (var promotion in Model.UserPromotions)
                                 {
+                                    var isChecked = Model.CartPromotions.Any(cp => cp.UserPromotionId == promotion.UserPromotionId) ? "checked" : "";
                                     <div class="promotion-item">
-                                        <input type="checkbox" name="selectedPromotions" value="@promotion.PromotionId" />
+                                        <input type="checkbox" name="selectedPromotions" value="@promotion.UserPromotionId" @isChecked />
                                         <label>@promotion.Promotion.PromotionType - @promotion.Promotion.Description (@promotion.Promotion.DiscountRate%)</label>
                                     </div>
                                     <hr>
@@ -159,7 +160,7 @@
                             <button type="submit" class="button" style="margin-top: 10px;">Apply Promotions</button>
                         </form>
                         <h5 class="text-center">
-                            <a class="button" href="checkout.html">PROCEED TO CHECKOUT</a>
+                            <a class="button" href="checkout">PROCEED TO CHECKOUT</a>
                         </h5>
                         <br>
                         <h5>GET SHIPPING ESTIMATES</h5>
