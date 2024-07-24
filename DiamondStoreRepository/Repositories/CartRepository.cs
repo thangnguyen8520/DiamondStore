@@ -7,13 +7,20 @@ using System.Threading.Tasks;
 
 namespace DiamondStoreRepository.Repositories
 {
-    public class CartRepository : ICartRepository
+    public class CartRepository : GenericRepository<Cart>, ICartRepository
     {
         private readonly DiamondStoreContext _context;
 
-        public CartRepository(DiamondStoreContext context)
+        public CartRepository(DiamondStoreContext context) : base(context)
         {
             _context = context;
+        }
+
+        private float CalculateTotalPrice(Jewelry jewelry)
+        {
+            float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
+            float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
+            return 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
         }
 
         public async Task AddToCart(Cart cart)
@@ -59,16 +66,12 @@ namespace DiamondStoreRepository.Repositories
             {
                 foreach (var cartJewelry in cart.CartJewelries)
                 {
-                    var jewelry = cartJewelry.Jewelry;
-                    float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
-                    float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
-                    jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
+                    cartJewelry.Jewelry.TotalPrice = CalculateTotalPrice(cartJewelry.Jewelry);
                 }
             }
 
             return carts;
         }
-
 
         public async Task<Cart> GetCartItem(int cartId)
         {
@@ -85,10 +88,7 @@ namespace DiamondStoreRepository.Repositories
             {
                 foreach (var cartJewelry in cart.CartJewelries)
                 {
-                    var jewelry = cartJewelry.Jewelry;
-                    float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
-                    float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
-                    jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
+                    cartJewelry.Jewelry.TotalPrice = CalculateTotalPrice(cartJewelry.Jewelry);
                 }
             }
 

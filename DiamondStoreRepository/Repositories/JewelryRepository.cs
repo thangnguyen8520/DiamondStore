@@ -18,6 +18,13 @@ namespace DiamondStoreRepository.Repositories
             _context = context;
         }
 
+        private float CalculateTotalPrice(Jewelry jewelry)
+        {
+            float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
+            float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
+            return 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
+        }
+
         public async Task<Pagination<Jewelry>> GetPaginated(int pageIndex, int pageSize, string sortOption, int? typeId, string material, int? sizeId, string priceRange)
         {
             var query = _context.Jewelries
@@ -40,9 +47,7 @@ namespace DiamondStoreRepository.Repositories
             // Calculate TotalPrice for each item
             foreach (var item in items)
             {
-                float mainDiamondPrice = item.Diamond?.DiamondPrice ?? 0;
-                float secondaryDiamondPrice = item.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
-                item.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + item.JewelryPrice + item.LaborCost);
+                item.TotalPrice = CalculateTotalPrice(item);
             }
 
             if (!string.IsNullOrEmpty(priceRange))
@@ -53,30 +58,16 @@ namespace DiamondStoreRepository.Repositories
                 items = items.Where(j => j.TotalPrice >= minPrice && j.TotalPrice <= maxPrice).ToList();
             }
 
-            switch (sortOption)
+            items = sortOption switch
             {
-                case "PriceLowToHigh":
-                    items = items.OrderBy(j => j.TotalPrice).ToList();
-                    break;
-                case "PriceHighToLow":
-                    items = items.OrderByDescending(j => j.TotalPrice).ToList();
-                    break;
-                case "AlphabeticalAZ":
-                    items = items.OrderBy(j => j.JewelryName).ToList();
-                    break;
-                case "AlphabeticalZA":
-                    items = items.OrderByDescending(j => j.JewelryName).ToList();
-                    break;
-                case "DateNewToOld":
-                    items = items.OrderByDescending(j => j.CreateDate).ToList();
-                    break;
-                case "DateOldToNew":
-                    items = items.OrderBy(j => j.CreateDate).ToList();
-                    break;
-                default:
-                    items = items.OrderByDescending(j => j.CreateDate).ToList();
-                    break;
-            }
+                "PriceLowToHigh" => items.OrderBy(j => j.TotalPrice).ToList(),
+                "PriceHighToLow" => items.OrderByDescending(j => j.TotalPrice).ToList(),
+                "AlphabeticalAZ" => items.OrderBy(j => j.JewelryName).ToList(),
+                "AlphabeticalZA" => items.OrderByDescending(j => j.JewelryName).ToList(),
+                "DateNewToOld" => items.OrderByDescending(j => j.CreateDate).ToList(),
+                "DateOldToNew" => items.OrderBy(j => j.CreateDate).ToList(),
+                _ => items.OrderByDescending(j => j.CreateDate).ToList(),
+            };
 
             var totalItems = items.Count;
             items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
@@ -94,17 +85,14 @@ namespace DiamondStoreRepository.Repositories
         {
             var jewelry = await _context.Jewelries
                 .Include(j => j.Diamond)
-                .Include(j => j.SecondaryDiamonds)
-                    .ThenInclude(sd => sd.Diamond)
+                .Include(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
                 .Include(j => j.JewelryMaterial)
                 .Include(j => j.Image)
                 .FirstOrDefaultAsync(j => j.JewelryId == jewelryId);
 
             if (jewelry != null)
             {
-                float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
-                float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
-                jewelry.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + jewelry.JewelryPrice + jewelry.LaborCost);
+                jewelry.TotalPrice = CalculateTotalPrice(jewelry);
             }
 
             return jewelry;
@@ -114,7 +102,7 @@ namespace DiamondStoreRepository.Repositories
         {
             var query = _context.Jewelries
                 .Include(j => j.Diamond)
-                 .Include(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
+                .Include(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
                 .Where(j => j.JewelryTypeId == typeId && j.JewelryId != excludeId)
                 .Take(4)
                 .Include(d => d.Image)
@@ -123,9 +111,7 @@ namespace DiamondStoreRepository.Repositories
             var items = await query.ToListAsync();
             foreach (var item in items)
             {
-                float mainDiamondPrice = item.Diamond?.DiamondPrice ?? 0;
-                float secondaryDiamondPrice = item.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
-                item.TotalPrice = 1.3f * (mainDiamondPrice + secondaryDiamondPrice + item.JewelryPrice + item.LaborCost);
+                item.TotalPrice = CalculateTotalPrice(item);
             }
 
             return items;
