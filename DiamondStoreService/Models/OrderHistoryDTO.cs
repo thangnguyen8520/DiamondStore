@@ -17,14 +17,25 @@
         public string Discount { get; set; }
         public string ShippingFee { get; set; }
         public List<PaymentDiamondDTO> PaymentDiamonds { get; set; }
+        public List<PaymentJewelryDTO> PaymentJewelries { get; set; } = new List<PaymentJewelryDTO>();
+
     }
 
     public class PaymentDiamondDTO
     {
-        public int PaymentDiamondId { get; set; }
-        public string DiamondName { get; set; }
-        public double? CaratWeight { get; set; }
-        public string Color { get; set; }
-        public string Clarity { get; set; }
+        public string Type { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public float Total { get; set; }
+    }
+
+    public class PaymentJewelryDTO
+    {
+        public string Type { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public float Total { get; set; }
     }
 }

@@ -152,13 +152,17 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Diamond Name</th>
+                                        <th>Type</th>
+                                        <th>Product Name</th>
                                         <th>Quanity</th>
                                         <th>Price</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody id="order-diamonds">
+                                    <!-- Product rows will be appended here -->
+                                </tbody>
+                                <tbody id="order-jewelries">
                                     <!-- Product rows will be appended here -->
                                 </tbody>
                             </table>
@@ -226,6 +230,7 @@
             // Clear previous content
             modal.find('#order-details-content').hide();
             modal.find('#order-diamonds').empty();
+            modal.find('#order-jewelries').empty();
 
             // Make an AJAX request to fetch the order details
             $.ajax({
@@ -242,8 +247,6 @@
                     modal.find('#order-phone-number').text(data.phoneNumber);
                     modal.find('#recipient-name').text(data.fuName);
                     modal.find('#recipient-phone').text(data.phoneNumber);
-                    // modal.find('#recipient-name').text(data.recipientName);
-                    // modal.find('#recipient-phone').text(data.recipientPhoneNumber);
                     modal.find('#order-address').text(data.address);
 
                     modal.find('#cash-amount').text(data.cash); // Updated field
@@ -255,11 +258,23 @@
 
                     data.paymentDiamonds.forEach(function (diamond) {
                         var row = `<tr>
-                                    <td>${diamond.diamondName}</td>
-                                    <td>${diamond.caratWeight}</td>
-                                    <td>${diamond.color}</td>
-                                    <td>${diamond.clarity}</td>
-                                </tr>`;
+                                            <td>Diamond</td>
+                                            <td>${diamond.productName}</td>
+                                            <td>${diamond.quantity}</td>
+                                            <td>${diamond.price}</td>
+                                            <td>${diamond.total}</td>
+                                        </tr>`;
+                        modal.find('#order-diamonds').append(row);
+                    });
+
+                    data.paymentJewelries.forEach(function (jewelry) {
+                        var row = `<tr>
+                                            <td>Jewelry</td>
+                                            <td>${jewelry.productName}</td>
+                                            <td>${jewelry.quantity}</td>
+                                            <td>${jewelry.price}</td>
+                                            <td>${jewelry.total}</td>
+                                        </tr>`;
                         modal.find('#order-diamonds').append(row);
                     });
 
@@ -272,6 +287,7 @@
         });
     </script>
 }
+
 
 <style>
     .form-control {
