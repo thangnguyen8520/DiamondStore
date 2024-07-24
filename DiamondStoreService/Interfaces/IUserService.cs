@@ -13,8 +13,8 @@ namespace DiamondStoreService.Interfaces
         Task<ResponseModel> UpdateUserProfileAsync(string userId, UserProfileViewDTO updatedProfile);
         Task<ResponseModel> UpdateUserAvatarAsync(string userId, string imageUrl);
         Task<ResponseModel> ChangePasswordAsync(string userId, ChangePasswordDTO changePasswordDto);
-        //Task<List<OrderHistoryDTO>> GetOrderHistoryAsync(string userId);
-        //Task<OrderHistoryDTO> GetOrderDetailsAsync(int orderId);
+        Task<List<OrderHistoryDTO>> GetOrderHistoryAsync(string userId);
+        Task<OrderHistoryDTO> GetOrderDetailsAsync(int orderId);
 
         Task<IEnumerable<UserDTO>> GetAllActiveUsersAsync();
         Task<UserDTO> GetUserInAdminByIdAsync(string userId);
