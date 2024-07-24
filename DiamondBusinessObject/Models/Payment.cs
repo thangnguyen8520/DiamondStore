@@ -14,6 +14,8 @@ public partial class Payment
     [Key]
     public int PaymentId { get; set; }
 
+    public int? CartId { get; set; }
+
     public string? UserId { get; set; }
 
     public int? PaymentMethodId { get; set; }
@@ -51,4 +53,8 @@ public partial class Payment
     [ForeignKey("UserId")]
     [InverseProperty("Payments")]
     public virtual User User { get; set; }
+
+    [ForeignKey("CartId")]
+    [InverseProperty("Payments")]
+    public virtual Cart Cart { get; set; }
 }
