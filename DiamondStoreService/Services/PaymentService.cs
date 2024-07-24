@@ -24,7 +24,6 @@ namespace DiamondStoreService.Services
         private readonly PayOSPaymentService _payOSPaymentService;
         private readonly IUnitOfWork _unitOfWork;
 
-
         public PaymentService(IUnitOfWork unitOfWork, IPaymentRepository paymentRepository, ICartRepository cartRepository, IMapper mapper, IConfiguration configuration)
         {
             _paymentRepository = paymentRepository;
@@ -60,7 +59,7 @@ namespace DiamondStoreService.Services
                     UserId = userId,
                     Status = true
                 };
-                _cartRepository.Add(activeCart); 
+                _cartRepository.Add(activeCart);
                 await _cartRepository.SaveChangesAsync();
             }
 
@@ -95,7 +94,8 @@ namespace DiamondStoreService.Services
                 ProductName = "Cart Items",
                 TotalAmount = totalAmount,
                 Status = "Pending",
-                PaymentMethodId = paymentDetails.PaymentMethodId
+                PaymentMethodId = paymentDetails.PaymentMethodId,
+                CartId = activeCart.CartId // Set the CartId field
             };
 
             await _paymentRepository.AddAsync(payment);
@@ -173,7 +173,6 @@ namespace DiamondStoreService.Services
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
 
         public async Task<IEnumerable<PaymentDTO>> GetAllPaymentsAsync()
         {

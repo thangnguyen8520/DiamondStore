@@ -49,6 +49,9 @@ public partial class Cart
     public virtual ICollection<CartDiamond> CartDiamonds { get; set; } = new List<CartDiamond>();
 
     [InverseProperty("Cart")]
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+    [InverseProperty("Cart")]
     public virtual ICollection<CartJewelry> CartJewelries { get; set; } = new List<CartJewelry>();
 
     [InverseProperty("Cart")]
