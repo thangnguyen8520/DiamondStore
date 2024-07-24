@@ -45,7 +45,18 @@ namespace DiamondStore.Pages.Auth
                     HttpContext.Session.SetString("Email", result.Email);
                     HttpContext.Session.SetString("Roles", string.Join(",", result.Roles));
 
-                    return RedirectToPage("/Index");
+                    var userId = HttpContext.Session.GetString("UserId");
+                    var role = HttpContext.Session.GetString("Roles");
+
+                    if ((role.Equals("Admin") || role.Equals("Staff")))
+                    {
+                        return Redirect("/Admin/Dashboard");
+                    }
+
+                    if (string.IsNullOrEmpty(userId) || role.Equals("Customer"))
+                    {
+                        return RedirectToPage("/Index");
+                    }
                 }
 
                 if (result.ErrorMessage == "Email not confirmed.")
@@ -96,6 +107,15 @@ namespace DiamondStore.Pages.Auth
                 HttpContext.Session.SetString("UserId", result.UserId);
                 HttpContext.Session.SetString("Email", result.Email);
                 HttpContext.Session.SetString("Roles", string.Join(",", result.Roles));
+
+                var userId = HttpContext.Session.GetString("UserId");
+                var role = HttpContext.Session.GetString("Roles");
+
+                if ((role.Equals("Admin") || role.Equals("Staff")))
+                {
+                    return Redirect("/Admin/Dashboard");
+                }
+
 
                 return RedirectToPage("/Index");
             }

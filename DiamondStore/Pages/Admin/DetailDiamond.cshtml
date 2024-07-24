@@ -1,0 +1,38 @@
+﻿@page "{id:int}"
+@model DiamondStore.Pages.Admin.DetailDiamondModel
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Diamond Details";
+}
+
+<main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 mx-auto">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Diamond Details
+        </h2>
+        <div class="mb-4">
+            <label class="block text-sm">Diamond Name</label>
+            <p>@Model.Diamond.DiamondName</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Price</label>
+            <p>@Model.Diamond.DiamondPrice.ToString("N0") ₫</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Weight</label>
+            <p>@Model.Diamond.DiamondWeight</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Color</label>
+            <p>@Model.Diamond.DiamondColorName</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Clarity</label>
+            <p>@Model.Diamond.DiamondClarityName</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Cut</label>
+            <p>@Model.Diamond.DiamondCutName</p>
+        </div>
+    </div>
+</main>

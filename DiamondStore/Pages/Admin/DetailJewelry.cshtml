@@ -1,0 +1,50 @@
+﻿@page "{id:int}"
+@model DiamondStore.Pages.Admin.DetailJewelryModel
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Jewelry Details";
+}
+
+<main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 mx-auto">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Jewelry Details
+        </h2>
+        <div class="mb-4">
+            <label class="block text-sm">Jewelry Name</label>
+            <p>@Model.Jewelry.JewelryName</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Jewelry Price</label>
+            <p>@Model.Jewelry.JewelryPrice.ToString("N0") ₫</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Labor Cost</label>
+            <p>@Model.Jewelry.LaborCost.ToString("N0") ₫</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Total Price</label>
+            <p>@Model.Jewelry.TotalPrice.ToString("N0") ₫</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Material</label>
+            <p>@Model.Jewelry.JewelryMaterialName</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Type</label>
+            <p>@Model.Jewelry.JewelryTypeName</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Main Diamond</label>
+            <p>@Model.Jewelry.MainDiamondName</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Secondary Diamonds</label>
+            <p>@string.Join(", ", Model.Jewelry.SecondaryDiamondsNames)</p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm">Status</label>
+            <p>@Model.Jewelry.Status</p>
+        </div>
+    </div>
+</main>

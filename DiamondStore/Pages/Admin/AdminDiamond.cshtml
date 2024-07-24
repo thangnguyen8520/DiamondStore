@@ -10,6 +10,7 @@
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Diamonds List
         </h2>
+        <a href="/Admin/AddDiamond" class="btn btn-primary mb-4">Create New Diamond</a>
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
                 <table class="w-full whitespace-no-wrap">
@@ -27,7 +28,9 @@
                         @foreach (var diamond in Model.Diamonds)
                         {
                             <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3">@diamond.DiamondName</td>
+                                <td class="px-4 py-3">
+                                    <a href="/Admin/DetailDiamond?id=@diamond.DiamondId" class="text-blue-500 hover:text-blue-700">@diamond.DiamondName</a>
+                                </td>
                                 <td class="px-4 py-3">@diamond.DiamondPrice.ToString("N0") ₫</td>
                                 <td class="px-4 py-3">@diamond.DiamondWeight</td>
                                 <td class="px-4 py-3">@diamond.DiamondColorName</td>

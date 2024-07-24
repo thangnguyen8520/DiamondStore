@@ -25,6 +25,37 @@ namespace DiamondStoreRepository.Repositories
                                  .ToListAsync();
         }
 
+        public async Task<Diamond> GetDiamondByIdAsync(int id)
+        {
+            return await _context.Diamonds
+                                 .Include(d => d.DiamondColor)
+                                 .Include(d => d.DiamondClarity)
+                                 .Include(d => d.DiamondCut)
+                                 .Include(d => d.DiamondType)
+                                 .FirstOrDefaultAsync(d => d.DiamondId == id);
+        }
+
+        public async Task AddDiamondAsync(Diamond diamond)
+        {
+            await _context.Diamonds.AddAsync(diamond);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateDiamondAsync(Diamond diamond)
+        {
+            _context.Diamonds.Update(diamond);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteDiamondAsync(int id)
+        {
+            var diamond = await _context.Diamonds.FindAsync(id);
+            if (diamond != null)
+            {
+                _context.Diamonds.Remove(diamond);
+                await _context.SaveChangesAsync();
+            }
+        }
 
         public async Task<Pagination<Diamond>> GetDiamonds(int pageIndex, int pageSize, string sortOption, int? categoryId, string color, string clarity, string cut, double? minPrice, double? maxPrice, double? minDiameter, double? maxDiameter, double? minWeight, double? maxWeight)
         {

@@ -2,23 +2,22 @@ using DiamondStoreService.Interfaces;
 using DiamondStoreService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DiamondStore.Pages.Admin
 {
-    public class AdminDiamondModel : PageModel
+    public class DetailDiamondModel : PageModel
     {
         private readonly IDiamondService _diamondService;
 
-        public AdminDiamondModel(IDiamondService diamondService)
+        public DetailDiamondModel(IDiamondService diamondService)
         {
             _diamondService = diamondService;
         }
 
-        public IList<DiamondDTO> Diamonds { get; private set; }
+        public DiamondDTO Diamond { get; private set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             var userId = HttpContext.Session.GetString("UserId");
             var role = HttpContext.Session.GetString("Roles");
@@ -27,9 +26,9 @@ namespace DiamondStore.Pages.Admin
             {
                 return Redirect("/Auth/Login");
             }
-            Diamonds = (await _diamondService.GetAllDiamondsAsync()).ToList();
-
+            Diamond = await _diamondService.GetDiamondByIdAsync(id);
             return Page();
+
 
         }
     }
