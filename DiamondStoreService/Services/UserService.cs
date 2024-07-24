@@ -120,42 +120,56 @@ namespace DiamondStoreService.Services
 
         public async Task<List<OrderHistoryDTO>> GetOrderHistoryAsync(string userId)
         {
-            // Lấy dữ liệu từ repository với các sản phẩm kim cương
+            // Fetch the payments with necessary related data
             var payments = await _unitOfWork.PaymentAdminRepository.GetAsync(
                 filter: p => p.UserId == userId,
                 orderBy: q => q.OrderByDescending(p => p.CreateDate),
-                includeProperties: "PaymentDiamonds.Diamond"
+                includeProperties: "Cart.CartDiamonds.Diamond,Cart.CartJewelries.Jewelry"
             );
 
+            // Map payments to OrderHistoryDTO
             var orderHistory = payments.Select(payment => new OrderHistoryDTO
             {
                 PaymentId = payment.PaymentId,
-                ProductName = payment.ProductName,
-                TotalAmount = (decimal)payment.TotalAmount,
-                Status = payment.Status,
+                ProductName = payment.ProductName ?? "Unknown",
+                TotalAmount = (decimal)(payment.TotalAmount ?? 0),
+                Status = payment.Status ?? "Unknown",
                 CreateDate = payment.CreateDate,
-                FuName = payment.FullName,
-                Email = payment.Email,
-                PhoneNumber = payment.PhoneNumber,
-                Address = payment. // Chuyển đổi từ Payment sang OrderHistoryDTO
-             Address,
-                PaymentDiamonds = payment.PaymentDiamonds.Select(pd => new PaymentDiamondDTO
+                FuName = payment.FullName ?? "N/A",
+                Email = payment.Email ?? "N/A",
+                PhoneNumber = payment.PhoneNumber ?? "N/A",
+                Address = payment.Address ?? "N/A",
+                Cash = 0,
+                BankTransfer = (decimal)(payment.TotalAmount ?? 0),
+                Subtotal = (decimal)(payment.TotalAmount ?? 0),
+                Discount = "0",
+                ShippingFee = "Free",
+                PaymentDiamonds = payment.Cart?.CartDiamonds.Select(d => new PaymentDiamondDTO
                 {
-                    PaymentDiamondId = pd.PaymentDiamondId,
-                    DiamondName = pd.Diamond.DiamondName,
-                    CaratWeight = pd.Diamond.DiamondWeight,
-                    //Color = pd.Diamond.DiamondColorId,
-                    //Clarity = pd.Diamond.DiamondClarityId,
-                }).ToList()
+                    Type = "Diamond",
+                    ProductName = d.Diamond?.DiamondName ?? "Unknown",
+                    Quantity = d.Quantity,
+                    Price = d.Diamond?.DiamondPrice ?? 0,
+                    Total = (d.Diamond?.DiamondPrice ?? 0) * d.Quantity
+                }).ToList() ?? new List<PaymentDiamondDTO>(),
+                PaymentJewelries = payment.Cart?.CartJewelries.Select(j => new PaymentJewelryDTO
+                {
+                    Type = "Jewelry",
+                    ProductName = j.Jewelry?.JewelryName ?? "Unknown",
+                    Quantity = j.Quantity,
+                    Price = j.Jewelry?.TotalPrice ?? 0,
+                    Total = (j.Jewelry?.TotalPrice ?? 0) * j.Quantity
+                }).ToList() ?? new List<PaymentJewelryDTO>()
             }).ToList();
 
             return orderHistory;
         }
 
+
         public async Task<OrderHistoryDTO> GetOrderDetailsAsync(int orderId)
         {
             var payment = await _unitOfWork.PaymentAdminRepository
-                                            .GetByIdAsync(orderId, "PaymentDiamonds.Diamond");
+                                            .GetByIdAsync(orderId, "Cart.CartDiamonds.Diamond,Cart.CartJewelries.Jewelry");
 
             if (payment == null)
             {
@@ -165,31 +179,41 @@ namespace DiamondStoreService.Services
             var orderHistoryDTO = new OrderHistoryDTO
             {
                 PaymentId = payment.PaymentId,
-                ProductName = payment.ProductName,
-                TotalAmount = (decimal)payment.TotalAmount,
-                Status = payment.Status,
+                ProductName = payment.ProductName ?? "Unknown",
+                TotalAmount = (decimal)(payment.TotalAmount ?? 0),
+                Status = payment.Status ?? "Unknown",
                 CreateDate = payment.CreateDate,
-                FuName = payment.FullName,
-                Email = payment.Email,
-                PhoneNumber = payment.PhoneNumber,
-                Address = payment.Address,
+                FuName = payment.FullName ?? "N/A",
+                Email = payment.Email ?? "N/A",
+                PhoneNumber = payment.PhoneNumber ?? "N/A",
+                Address = payment.Address ?? "N/A",
                 Cash = 0,
-                BankTransfer = (decimal)payment.TotalAmount,
-                Subtotal = (decimal)payment.TotalAmount,
+                BankTransfer = (decimal)(payment.TotalAmount ?? 0),
+                Subtotal = (decimal)(payment.TotalAmount ?? 0),
                 Discount = "0",
                 ShippingFee = "Free",
-                PaymentDiamonds = payment.PaymentDiamonds.Select(d => new PaymentDiamondDTO
+                PaymentDiamonds = payment.Cart?.CartDiamonds.Select(d => new PaymentDiamondDTO
                 {
-                    PaymentDiamondId = d.PaymentDiamondId,
-                    DiamondName = d.Diamond.DiamondName,
-                    CaratWeight = d.Diamond.DiamondWeight,
-                    //Color = d.Diamond.DiamondColorId,
-                    //Clarity = d.Diamond.DiamondClarityId
-                }).ToList()
+                    Type = "Diamond",
+                    ProductName = d.Diamond?.DiamondName ?? "Unknown",
+                    Quantity = d.Quantity,
+                    Price = d.Diamond?.DiamondPrice ?? 0,
+                    Total = (d.Diamond?.DiamondPrice ?? 0) * d.Quantity
+                }).ToList() ?? new List<PaymentDiamondDTO>(),
+                PaymentJewelries = payment.Cart?.CartJewelries.Select(j => new PaymentJewelryDTO
+                {
+                    Type = "Jewelry",
+                    ProductName = j.Jewelry?.JewelryName ?? "Unknown",
+                    Quantity = j.Quantity,
+                    Price = j.Jewelry?.TotalPrice ?? 0,
+                    Total = (j.Jewelry?.TotalPrice ?? 0) * j.Quantity
+                }).ToList() ?? new List<PaymentJewelryDTO>()
             };
 
             return orderHistoryDTO;
         }
+
+
 
 
         public async Task<IEnumerable<UserDTO>> GetAllActiveUsersAsync()
