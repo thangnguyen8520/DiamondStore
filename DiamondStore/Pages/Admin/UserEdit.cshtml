@@ -1,0 +1,33 @@
+﻿@page "{id}"
+@model UserEditModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h2>Edit User</h2>
+
+<form method="post">
+    <div>
+        <label>Full Name:</label>
+        <input type="text" name="FullName" value="@Model.User.FullName" />
+    </div>
+    <div>
+        <label>Email:</label>
+        <input type="email" name="Email" value="@Model.User.Email" />
+    </div>
+@*     <div>
+        <label>Gender:</label>
+        <select name="Gender">
+            <option value="Male" @(Model.User.Gender == "Male" ? "selected" : "")>Male</option>
+            <option value="Female" @(Model.User.Gender == "Female" ? "selected" : "")>Female</option>
+        </select>
+    </div> *@
+    <div>
+        <label>Username:</label>
+        <input type="text" name="UserName" value="@Model.User.UserName" />
+    </div>
+    <div>
+        <button type="submit">Save</button>
+        <a asp-page="./Users">Cancel</a>
+    </div>
+</form>
