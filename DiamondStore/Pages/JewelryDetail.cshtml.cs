@@ -24,6 +24,12 @@ namespace DiamondStore.Pages
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            var userId = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Redirect("/Auth/Login");
+            }
+
             Jewelry = await _jewelryService.GetJewelryWithDetails(id);
             Sizes = await _jewelryService.GetAllJewelrySizes();
 

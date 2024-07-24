@@ -16,9 +16,19 @@ namespace DiamondStore.Pages.Admin
 
         public IList<PaymentDTO> Payments { get; private set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            var userId = HttpContext.Session.GetString("UserId");
+            var role = HttpContext.Session.GetString("Roles");
+
+            if (string.IsNullOrEmpty(userId) || (!role.Equals("Admin") && !role.Equals("Staff")))
+            {
+                return Redirect("/Auth/Login");
+            }
+
             Payments = (await _paymentAdminService.GetAllPaymentsAsync()).ToList();
+
+            return Page();
         }
     }
 }

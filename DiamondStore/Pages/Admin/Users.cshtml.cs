@@ -16,9 +16,19 @@ namespace DiamondStore.Pages.Admin
 
         public IList<UserDTO> Users { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            var userId = HttpContext.Session.GetString("UserId");
+            var role = HttpContext.Session.GetString("Roles");
+
+            if (string.IsNullOrEmpty(userId) || (!role.Equals("Admin") && !role.Equals("Staff")))
+            {
+                return Redirect("/Auth/Login");
+            }
+
             Users = (await _userService.GetAllActiveUsersAsync()).ToList();
+
+            return Page();
         }
 
         //public async Task<IActionResult> OnGetDetailsAsync(string id)
