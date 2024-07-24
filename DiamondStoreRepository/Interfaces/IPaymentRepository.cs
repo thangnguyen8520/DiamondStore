@@ -1,4 +1,5 @@
 ﻿using DiamondBusinessObject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,8 @@ namespace DiamondStoreRepository.Interfaces
 {
     public interface IPaymentRepository : IGenericRepository<Payment>
     {
+        Task<User> GetUserWithCarts(string userId);
+        Task UpdatePayment(Payment payment);
+        Task SaveChangesAsync();
     }
 }

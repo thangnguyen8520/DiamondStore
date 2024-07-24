@@ -6,6 +6,8 @@ namespace DiamondStoreService.Interfaces
 {
     public interface ICartService
     {
+        void Add(Cart cart);
+        Task<Cart> GetActiveCartByUserId(string userId);
         Task AddToCart(Cart cart);
         Task<List<Cart>> GetCartItems(string userId);
         Task<Cart> GetCartItem(int cartId);

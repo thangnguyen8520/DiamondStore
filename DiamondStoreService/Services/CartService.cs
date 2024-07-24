@@ -19,9 +19,19 @@ namespace DiamondStoreService.Services
             _logger = logger;
         }
 
+        public async Task<Cart> GetActiveCartByUserId(string userId)
+        {
+            return await _cartRepository.GetActiveCartByUserIdAsync(userId);
+        }
+
         public async Task AddToCart(Cart cart)
         {
             await _cartRepository.AddToCart(cart);
+        }
+
+        public void Add(Cart cart)
+        {
+            _cartRepository.Add(cart);
         }
 
         public async Task<List<Cart>> GetCartItems(string userId)

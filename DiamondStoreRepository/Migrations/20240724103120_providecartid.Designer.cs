@@ -4,6 +4,7 @@ using DiamondBusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiamondStoreRepository.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    partial class DiamondStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240724103120_providecartid")]
+    partial class providecartid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -407,6 +410,9 @@ namespace DiamondStoreRepository.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -444,6 +450,8 @@ namespace DiamondStoreRepository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PaymentId");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("PaymentMethodId");
 
@@ -960,6 +968,12 @@ namespace DiamondStoreRepository.Migrations
 
             modelBuilder.Entity("DiamondBusinessObject.Models.Payment", b =>
                 {
+                    b.HasOne("DiamondBusinessObject.Models.Cart", "Cart")
+                        .WithMany("Payments")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DiamondBusinessObject.Models.PaymentMethod", "PaymentMethod")
                         .WithMany("Payments")
                         .HasForeignKey("PaymentMethodId");
@@ -967,6 +981,8 @@ namespace DiamondStoreRepository.Migrations
                     b.HasOne("DiamondBusinessObject.Models.User", "User")
                         .WithMany("Payments")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Cart");
 
                     b.Navigation("PaymentMethod");
 
@@ -1083,6 +1099,8 @@ namespace DiamondStoreRepository.Migrations
                     b.Navigation("CartJewelries");
 
                     b.Navigation("CartPromotions");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("DiamondBusinessObject.Models.Diamond", b =>

@@ -1,4 +1,5 @@
 ﻿using DiamondStoreRepository.Common;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,6 @@ namespace DiamondStoreRepository.Interfaces
         Task<Pagination<TEntity>> ToPagination(int pageIndex = 0, int pageSize = 10);
         Task<Pagination<TEntity>> ToPaginationAsync(IQueryable<TEntity> query, int pageIndex = 0, int pageSize = 10);
 
+        Task SaveAsync();
     }
 }

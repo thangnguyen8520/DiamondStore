@@ -7,6 +7,7 @@ namespace DiamondStoreRepository.Interfaces
 {
     public interface ICartRepository
     {
+        void Add(Cart cart);
         Task AddToCart(Cart cart);
         Task<List<Cart>> GetCartItems(string userId);
         Task<Cart> GetCartItem(int cartId);
@@ -22,5 +23,8 @@ namespace DiamondStoreRepository.Interfaces
         Task UpdateCartJewelry(CartJewelry cartJewelry);
         Task DeleteCartDiamond(int cartDiamondId);
         Task DeleteCartJewelry(int cartJewelryId);
+        Task<List<Cart>> GetCartsByUserIdAsync(string userId);
+        Task SaveChangesAsync();
+        Task<Cart> GetActiveCartByUserIdAsync(string userId);
     }
 }

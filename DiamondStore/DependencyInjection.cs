@@ -27,9 +27,6 @@ namespace DiamondStore
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
-            services.AddScoped<IPaymentService, PaymentService>();
-            services.AddScoped<IPaymentDiamondRepository, PaymentDiamondRepository>();
-            services.AddScoped<IPaymentDiamondService, PaymentDiamondService>();
             services.AddScoped<IDiamondRepository, DiamondRepository>();
             services.AddScoped<IDiamondService, DiamondService>();
             services.AddScoped<IJewelryRepository, JewelryRepository>();
@@ -41,6 +38,11 @@ namespace DiamondStore
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IPromotionRepository, PromotionRepository>();
             services.AddScoped<IPromotionService, PromotionService>();
+            services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+            services.AddHttpClient<IPaymentService, PaymentService>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
 
 

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="payOS" Version="1.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DiamondBusinessObject\DiamondBusinessObject.csproj" />
   </ItemGroup>
 

@@ -61,9 +61,6 @@ public partial class Diamond
     public virtual DiamondClarity DiamondClarity { get; set; }
 
     [InverseProperty("Diamond")]
-    public virtual ICollection<PaymentDiamond> PaymentDiamonds { get; set; } = new List<PaymentDiamond>();
-
-    [InverseProperty("Diamond")]
     public virtual ICollection<Warranty> Warranties { get; set; } = new List<Warranty>();
 
     [InverseProperty("Diamond")]

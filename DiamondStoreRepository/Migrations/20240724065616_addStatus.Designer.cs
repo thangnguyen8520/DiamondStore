@@ -4,6 +4,7 @@ using DiamondBusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiamondStoreRepository.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    partial class DiamondStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240724065616_addStatus")]
+    partial class addStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -37,7 +40,6 @@ namespace DiamondStoreRepository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CartId");
@@ -418,10 +420,6 @@ namespace DiamondStoreRepository.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("PaymentLink")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<int?>("PaymentMethodId")
                         .HasColumnType("int");
 
@@ -450,6 +448,29 @@ namespace DiamondStoreRepository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Payment");
+                });
+
+            modelBuilder.Entity("DiamondBusinessObject.Models.PaymentDiamond", b =>
+                {
+                    b.Property<int>("PaymentDiamondId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentDiamondId"));
+
+                    b.Property<int?>("DiamondId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PaymentDiamondId");
+
+                    b.HasIndex("DiamondId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("PaymentDiamond");
                 });
 
             modelBuilder.Entity("DiamondBusinessObject.Models.PaymentMethod", b =>
@@ -814,9 +835,7 @@ namespace DiamondStoreRepository.Migrations
                 {
                     b.HasOne("DiamondBusinessObject.Models.User", "User")
                         .WithMany("Carts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -973,6 +992,21 @@ namespace DiamondStoreRepository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DiamondBusinessObject.Models.PaymentDiamond", b =>
+                {
+                    b.HasOne("DiamondBusinessObject.Models.Diamond", "Diamond")
+                        .WithMany("PaymentDiamonds")
+                        .HasForeignKey("DiamondId");
+
+                    b.HasOne("DiamondBusinessObject.Models.Payment", "Payment")
+                        .WithMany("PaymentDiamonds")
+                        .HasForeignKey("PaymentId");
+
+                    b.Navigation("Diamond");
+
+                    b.Navigation("Payment");
+                });
+
             modelBuilder.Entity("DiamondBusinessObject.Models.SecondaryDiamond", b =>
                 {
                     b.HasOne("DiamondBusinessObject.Models.Diamond", "Diamond")
@@ -1091,6 +1125,8 @@ namespace DiamondStoreRepository.Migrations
 
                     b.Navigation("Jewelries");
 
+                    b.Navigation("PaymentDiamonds");
+
                     b.Navigation("SecondaryDiamonds");
 
                     b.Navigation("Warranties");
@@ -1145,6 +1181,11 @@ namespace DiamondStoreRepository.Migrations
             modelBuilder.Entity("DiamondBusinessObject.Models.JewelryType", b =>
                 {
                     b.Navigation("Jewelries");
+                });
+
+            modelBuilder.Entity("DiamondBusinessObject.Models.Payment", b =>
+                {
+                    b.Navigation("PaymentDiamonds");
                 });
 
             modelBuilder.Entity("DiamondBusinessObject.Models.PaymentMethod", b =>

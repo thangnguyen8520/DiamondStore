@@ -156,6 +156,9 @@ namespace DiamondStoreRepository.Repositories
             };
         }
 
-
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
