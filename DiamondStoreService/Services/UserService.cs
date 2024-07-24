@@ -118,78 +118,78 @@ namespace DiamondStoreService.Services
             return new ResponseModel { Success = true };
         }
 
-        //public async Task<List<OrderHistoryDTO>> GetOrderHistoryAsync(string userId)
-        //{
-        //    // Lấy dữ liệu từ repository với các sản phẩm kim cương
-        //    var payments = await _unitOfWork.PaymentRepository.GetAsync(
-        //        filter: p => p.UserId == userId,
-        //        orderBy: q => q.OrderByDescending(p => p.CreateDate),
-        //        includeProperties: "PaymentDiamonds.Diamond"
-        //    );
+        public async Task<List<OrderHistoryDTO>> GetOrderHistoryAsync(string userId)
+        {
+            // Lấy dữ liệu từ repository với các sản phẩm kim cương
+            var payments = await _unitOfWork.PaymentAdminRepository.GetAsync(
+                filter: p => p.UserId == userId,
+                orderBy: q => q.OrderByDescending(p => p.CreateDate),
+                includeProperties: "PaymentDiamonds.Diamond"
+            );
 
-        //    var orderHistory = payments.Select(payment => new OrderHistoryDTO
-        //    {
-        //        PaymentId = payment.PaymentId,
-        //        ProductName = payment.ProductName,
-        //        TotalAmount = (decimal)payment.TotalAmount,
-        //        Status = payment.Status,
-        //        CreateDate = payment.CreateDate,
-        //        FuName = payment.FullName,
-        //        Email = payment.Email,
-        //        PhoneNumber = payment.PhoneNumber,
-        //        Address = payment. // Chuyển đổi từ Payment sang OrderHistoryDTO
-        //     Address,
-        //        PaymentDiamonds = payment.PaymentDiamonds.Select(pd => new PaymentDiamondDTO
-        //        {
-        //            PaymentDiamondId = pd.PaymentDiamondId,
-        //            DiamondName = pd.Diamond.DiamondName,
-        //            CaratWeight = pd.Diamond.DiamondWeight,
-        //            //Color = pd.Diamond.DiamondColorId,
-        //            //Clarity = pd.Diamond.DiamondClarityId,
-        //        }).ToList()
-        //    }).ToList();
+            var orderHistory = payments.Select(payment => new OrderHistoryDTO
+            {
+                PaymentId = payment.PaymentId,
+                ProductName = payment.ProductName,
+                TotalAmount = (decimal)payment.TotalAmount,
+                Status = payment.Status,
+                CreateDate = payment.CreateDate,
+                FuName = payment.FullName,
+                Email = payment.Email,
+                PhoneNumber = payment.PhoneNumber,
+                Address = payment. // Chuyển đổi từ Payment sang OrderHistoryDTO
+             Address,
+                PaymentDiamonds = payment.PaymentDiamonds.Select(pd => new PaymentDiamondDTO
+                {
+                    PaymentDiamondId = pd.PaymentDiamondId,
+                    DiamondName = pd.Diamond.DiamondName,
+                    CaratWeight = pd.Diamond.DiamondWeight,
+                    //Color = pd.Diamond.DiamondColorId,
+                    //Clarity = pd.Diamond.DiamondClarityId,
+                }).ToList()
+            }).ToList();
 
-        //    return orderHistory;
-        //}
+            return orderHistory;
+        }
 
-        //public async Task<OrderHistoryDTO> GetOrderDetailsAsync(int orderId)
-        //{
-        //    var payment = await _unitOfWork.PaymentRepository
-        //                                    .GetByIdAsync(orderId, "PaymentDiamonds.Diamond");
+        public async Task<OrderHistoryDTO> GetOrderDetailsAsync(int orderId)
+        {
+            var payment = await _unitOfWork.PaymentAdminRepository
+                                            .GetByIdAsync(orderId, "PaymentDiamonds.Diamond");
 
-        //    if (payment == null)
-        //    {
-        //        return null;
-        //    }
+            if (payment == null)
+            {
+                return null;
+            }
 
-        //    var orderHistoryDTO = new OrderHistoryDTO
-        //    {
-        //        PaymentId = payment.PaymentId,
-        //        ProductName = payment.ProductName,
-        //        TotalAmount = (decimal)payment.TotalAmount,
-        //        Status = payment.Status,
-        //        CreateDate = payment.CreateDate,
-        //        FuName = payment.FullName,
-        //        Email = payment.Email,
-        //        PhoneNumber = payment.PhoneNumber,
-        //        Address = payment.Address,
-        //        Cash = 0,
-        //        BankTransfer = (decimal)payment.TotalAmount,
-        //        Subtotal = (decimal)payment.TotalAmount,
-        //        Discount = "0",
-        //        ShippingFee = "Free",
-        //        PaymentDiamonds = payment.PaymentDiamonds.Select(d => new PaymentDiamondDTO
-        //        {
-        //            PaymentDiamondId = d.PaymentDiamondId,
-        //            DiamondName = d.Diamond.DiamondName,
-        //            CaratWeight = d.Diamond.DiamondWeight,
-        //            //Color = d.Diamond.DiamondColorId,
-        //            //Clarity = d.Diamond.DiamondClarityId
-        //        }).ToList()
-        //    };
+            var orderHistoryDTO = new OrderHistoryDTO
+            {
+                PaymentId = payment.PaymentId,
+                ProductName = payment.ProductName,
+                TotalAmount = (decimal)payment.TotalAmount,
+                Status = payment.Status,
+                CreateDate = payment.CreateDate,
+                FuName = payment.FullName,
+                Email = payment.Email,
+                PhoneNumber = payment.PhoneNumber,
+                Address = payment.Address,
+                Cash = 0,
+                BankTransfer = (decimal)payment.TotalAmount,
+                Subtotal = (decimal)payment.TotalAmount,
+                Discount = "0",
+                ShippingFee = "Free",
+                PaymentDiamonds = payment.PaymentDiamonds.Select(d => new PaymentDiamondDTO
+                {
+                    PaymentDiamondId = d.PaymentDiamondId,
+                    DiamondName = d.Diamond.DiamondName,
+                    CaratWeight = d.Diamond.DiamondWeight,
+                    //Color = d.Diamond.DiamondColorId,
+                    //Clarity = d.Diamond.DiamondClarityId
+                }).ToList()
+            };
 
-        //    return orderHistoryDTO;
-        //}
+            return orderHistoryDTO;
+        }
 
 
         public async Task<IEnumerable<UserDTO>> GetAllActiveUsersAsync()
@@ -226,16 +226,45 @@ namespace DiamondStoreService.Services
 
         public async Task<UserDTO> GetUserInAdminByIdAsync(string userId)
         {
-            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            var user = await _unitOfWork.UserRepository.GetByIdNoIncludeAsync(userId);
             if (user == null)
             {
                 return null;
             }
 
-            var userDto = _mapper.Map<UserDTO>(user);
+            var userDto = new UserDTO
+            {
+                Id = user.Id,
+                FullName = $"{user.FirstName} {user.LastName}",
+                UserName = user.UserName,
+                Email = user.Email,
+                Gender = user.Gender == true ? "Female" : "Male",
+                Status = user.Status == true ? "Active" : "Blocked",
+                Address = user.Address,
+                LastLogin = user.LastLogin,
+                ImageUrl = user.Image?.ImageUrl
+            };
             return userDto;
         }
-
+        public async Task<List<UserDTO>> GetUserAsync(string userId)
+        {
+            var user = await _unitOfWork.UserRepository.GetAsync(
+                filter: p => p.Id == userId,
+                orderBy: q => q.OrderByDescending(p => p.LastLogin));
+            var userDto = user.Select(user => new UserDTO
+            {
+                Id = user.Id,
+                FullName = $"{user.FirstName} {user.LastName}",
+                UserName = user.UserName,
+                Email = user.Email,
+                Gender = user.Gender == true ? "Female" : "Male",
+                Status = user.Status == true ? "Active" : "Blocked",
+                Address = user.Address,
+                LastLogin = user.LastLogin,
+                ImageUrl = user.Image?.ImageUrl
+            }).ToList();
+            return userDto;
+        }
         public async Task<bool> UpdateUserAsync(UserDTO userDTO)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(userDTO.Id);
@@ -277,5 +306,25 @@ namespace DiamondStoreService.Services
 
             return true;
         }
+        public async Task<UserDTO> GetUserDetailAsync(string userId)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId, includeProperties: "Image");
+            if (user == null) return null;
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                FullName = $"{user.FirstName} {user.LastName}",
+                UserName = user.UserName,
+                Email = user.Email,
+                Gender = user.Gender == true ? "Female" : "Male",
+                Status = user.Status == true ? "Active" : "Blocked",
+                Address = user.Address,
+                LastLogin = user.LastLogin,
+                ImageUrl = user.Image?.ImageUrl
+            };
+        }
+
+
     }
 }

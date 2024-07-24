@@ -1,39 +1,37 @@
 ﻿@page
 @model DiamondStore.Pages.Admin.PaymentsModel
 @{
-    ViewData["Title"] = "Payments";
+    ViewData["Title"] = "Orders";
     Layout = "_LayoutAdmin";
 }
 <main class="h-full pb-16 overflow-y-auto">
     <div class="container grid px-6 mx-auto">
         <h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Payment List
+            Order Info
         </h1>
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">Full Name</th>
-                            <th class="px-4 py-3">Phone Number</th>
-                            <th class="px-4 py-3">Email</th>
-                            <th class="px-4 py-3">Product Name</th>
+                            <th class="px-4 py-3">Order Date</th>
+                            <th class="px-4 py-3">Customer</th>
                             <th class="px-4 py-3">Payment Method</th>
                             <th class="px-4 py-3">Total Amount</th>
                             <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach (var payment in Model.Payments)
                         {
                             <tr class="text-gray-700 dark:text-gray-400">
+                                <td class="px-4 py-3">@payment.OrderDate</td>
                                 <td class="px-4 py-3">@payment.FullName</td>
-                                <td class="px-4 py-3">@payment.PhoneNumber</td>
-                                <td class="px-4 py-3">@payment.Email</td>
-                                <td class="px-4 py-3">@payment.ProductName</td>
                                 <td class="px-4 py-3">@payment.PaymentMethodName</td>
-                                <td class="px-4 py-3">@payment.TotalAmount</td>
+                                <td class="px-4 py-3">@payment.TotalAmount ₫</td>
                                 <td class="px-4 py-3">@payment.Status</td>
+                                <td class="px-4 py-3"></td>
                             </tr>
                         }
                     </tbody>

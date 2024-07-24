@@ -11,7 +11,7 @@ namespace DiamondStoreRepository.Interfaces
         IUserRepository UserRepository { get; }
         IImageRepository ImageRepository { get; }
         IPaymentRepository PaymentRepository { get; }
-
+        IPaymentAdminRepository PaymentAdminRepository { get; }
         Task<int> SaveChangeAsync();
     }
 }

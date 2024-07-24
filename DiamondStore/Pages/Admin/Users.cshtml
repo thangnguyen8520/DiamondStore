@@ -20,7 +20,7 @@
                             <th class="px-4 py-3" style="text-align: center">Last Login</th>
                             <th class="px-4 py-3" style="text-align: center">Gender</th>
                             <th class="px-4 py-3" style="text-align: center">Status</th>
-                            <th class="px-4 py-3">Actions</th>
+                            <th class="px-4 py-3" style="text-align: center">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -38,7 +38,7 @@
                                 <td class="px-4 py-3" style="text-align: center">@user.LastLogin</td>
                                 <td class="px-4 py-3" style="text-align: center">@user.Gender</td>
                                 <td class="px-4 py-3" style="text-align: center">@user.Status</td>
-                                <td class="px-4 py-3">
+                                <td class="px-4 py-3" style="display: flex; justify-content: center">
                                     <div class="flex items-center space-x-4 text-sm">
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userDetailsModal" data-userid="@user.Id">Details</button>
                                     </div>
@@ -132,6 +132,64 @@
                         modal.find('#user-details-content').html('<p>Error loading user details.</p>');
                     }
                 });
+            });
+        });
+<!-- Modal for User Details -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="detailsModalLabel">User Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content">
+                    <!-- User details will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#detailsModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var userId = button.data('id'); // Extract info from data-* attributes
+            var modal = $(this);
+
+            // Clear previous content
+            modal.find('#modal-content').empty();
+
+            // Make an AJAX request to fetch the user details
+            $.ajax({
+                url: '@Url.Page("Users", "Details")',
+                type: 'GET',
+                data: { id: userId },
+                success: function (data) {
+                    var userDetailsHtml = `
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold">User Details</h3>
+                                    <div class="mt-4">
+                                        <div><label class="font-semibold">Full Name:</label> <span>${data.fullName}</span></div>
+                                        <div><label class="font-semibold">Address:</label> <span>${data.address}</span></div>
+                                        <div><label class="font-semibold">Gender:</label> <span>${data.gender}</span></div>
+                                        <div><label class="font-semibold">Status:</label> <span>${data.status}</span></div>
+                                        <div><label class="font-semibold">Last Login:</label> <span>${data.lastLogin}</span></div>
+                                        <div><label class="font-semibold">User Name:</label> <span>${data.userName}</span></div>
+                                        <div><label class="font-semibold">Email:</label> <span>${data.email}</span></div>
+                                    </div>
+                                </div>`;
+                    modal.find('#modal-content').html(userDetailsHtml);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to load user details:', error);
+                }
             });
         });
     </script>

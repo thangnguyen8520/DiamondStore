@@ -7,18 +7,18 @@ namespace DiamondStore.Pages.Admin
 {
     public class PaymentsModel : PageModel
     {
-        private readonly IPaymentService _paymentService;
+        private readonly IPaymentAdminService _paymentAdminService;
 
-        public PaymentsModel(IPaymentService paymentService)
+        public PaymentsModel(IPaymentAdminService paymentAdminService)
         {
-            _paymentService = paymentService;
+            _paymentAdminService = paymentAdminService;
         }
 
         public IList<PaymentDTO> Payments { get; private set; }
 
         public async Task OnGetAsync()
         {
-            Payments = (await _paymentService.GetAllPaymentsAsync()).ToList();
+            Payments = (await _paymentAdminService.GetAllPaymentsAsync()).ToList();
         }
     }
 }
