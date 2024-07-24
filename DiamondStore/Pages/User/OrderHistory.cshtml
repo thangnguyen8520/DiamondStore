@@ -98,7 +98,7 @@
     <div class="modal-dialog modal-lg" role="document" style="max-width: none;">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title text-center" id="orderDetailsModalLabel">Chi tiết đơn hàng</h5>
+                <h5 class="modal-title text-center" id="orderDetailsModalLabel">Order Details</h5>
                 <!-- Nút đóng modal -->
                 @* <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -112,11 +112,11 @@
                         <div class="mb-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p>Đơn hàng: <span id="order-code"></span></p>
-                                    <p>Ngày đặt: <span id="order-date"></span></p>
+                                    <p>Order Code: <span id="order-code"></span></p>
+                                    <p>Order date: <span id="order-date"></span></p>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <p>Trạng thái: <span id="order-status"></span></p>
+                                    <p>Status: <span id="order-status"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -126,9 +126,9 @@
                             <div class="col-md-6">
                                 <div class="tab-content pt-3 mb-4 info w-100 bg-light">
                                     <div class="border p-3">
-                                        <h6 class="text-primary">KHÁCH HÀNG</h6>
-                                        <p>Tên: <b><span id="order-full-name"></span></b></p>
-                                        <p>Số điện thoại: <span id="order-phone-number"></span></p>
+                                        <h6 class="text-primary">CUSTOMER</h6>
+                                        <p>Name: <b><span id="order-full-name"></span></b></p>
+                                        <p>Phone Number: <span id="order-phone-number"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -137,10 +137,10 @@
                             <div class="col-md-6">
                                 <div class="tab-content pt-3 mb-4 info w-100 bg-light">
                                     <div class="border p-3">
-                                        <h6 class="text-primary">NGƯỜI NHẬN</h6>
-                                        <p>Tên: <b><span id="recipient-name"></span></b></p>
-                                        <p>Số điện thoại: <span id="recipient-phone"></span></p>
-                                        <p>Địa chỉ: <span id="order-address"></span></p>
+                                        <h6 class="text-primary">RECIPIENT</h6>
+                                        <p>Name: <b><span id="recipient-name"></span></b></p>
+                                        <p>Phone Number: <span id="recipient-phone"></span></p>
+                                        <p>Address: <span id="order-address"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -152,10 +152,10 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Số lượng</th>
-                                        <th>Đơn giá</th>
-                                        <th>Tổng tiền</th>
+                                        <th>Diamond Name</th>
+                                        <th>Quanity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody id="order-diamonds">
@@ -169,17 +169,35 @@
                     <div class="col-md-4">
                         <!-- Payment Method -->
                         <div class="tab-content pt-3 border p-3 mt-4 w-100 bg-light">
-                            <h6 class="text-primary">PHƯƠNG THỨC THANH TOÁN</h6>
-                            <p>Tiền mặt: <span id="cash-amount"></span> ₫</p>
-                            <p>VnpayQR: <span id="vnpayqr-amount"></span> ₫</p>
+                            <h6 class="text-primary" style="margin-bottom: 10px">PAYMENT METHODS</h6>
+                            <div class="payment-item">
+                                <p class="payment-label">Cash: </p>
+                                <span class="payment-value" id="cash-amount"></span> ₫
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Bank Transfer:</p>
+                                <span class="payment-value" id="bank-amount"></span> ₫
+                            </div>
                         </div>
 
                         <div class="tab-content pt-3 border p-3 w-100 bg-light">
-                            <h6 class="text-primary">THANH TOÁN</h6>
-                            <p>Tạm tính: <span id="subtotal"></span> ₫</p>
-                            <p>Khuyến mãi: <span id="discount"></span> ₫</p>
-                            <p>Phí vận chuyển: <span id="shipping"></span> ₫</p>
-                            <p>Thành tiền: <span id="order-total-amount"></span> ₫</p>
+                            <h6 class="text-primary" style="margin-bottom: 10px">PAY</h6>
+                            <div class="payment-item">
+                                <p class="payment-label">Subtotal:</p>
+                                <span class="payment-value" id="subtotal"></span> ₫
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Discount:</p>
+                                <span class="payment-value" id="discount"></span> ₫
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Shipping Fee:</p>
+                                <span class="payment-value" id="shipping"></span>
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Total:</p>
+                                <span class="payment-value" id="order-total-amount"></span> ₫
+                            </div>
                         </div>
 
                     </div>
@@ -188,7 +206,7 @@
 
             <!-- Footer: Đóng modal -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -228,8 +246,8 @@
                     // modal.find('#recipient-phone').text(data.recipientPhoneNumber);
                     modal.find('#order-address').text(data.address);
 
-                    modal.find('#cash-amount').text(data.cashAmount); // Updated field
-                    modal.find('#vnpayqr-amount').text(data.vnpayqrAmount); // Updated field
+                    modal.find('#cash-amount').text(data.cash); // Updated field
+                    modal.find('#bank-amount').text(data.bankTransfer); // Updated field
                     modal.find('#subtotal').text(data.subtotal);
                     modal.find('#discount').text(data.discount);
                     modal.find('#shipping').text(data.shippingFee);
@@ -262,6 +280,24 @@
 
     .tab-content.info {
         min-height: 200px; /* Đặt chiều cao tối thiểu */
+    }
+
+    .payment-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .payment-label {
+        flex: 1;
+        margin: 0;
+        white-space: nowrap; /* Giữ văn bản trên một dòng */
+    }
+
+    .payment-value {
+        flex: 1;
+        text-align: right;
     }
 </style>
 

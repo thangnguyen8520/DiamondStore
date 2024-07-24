@@ -25,7 +25,7 @@ namespace DiamondStore.Pages.User
             var userId = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userId))
             {
-                return RedirectToPage("/Login");
+                return Redirect("/Auth/Login");
             }
 
             var user = await _userService.GetUserByIdAsync(userId); // Lấy thông tin người dùng
@@ -78,7 +78,7 @@ namespace DiamondStore.Pages.User
             var userId = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userId))
             {
-                return RedirectToPage("/Login");
+                return Redirect("/Auth/Login");
             }
 
             if (avatarImage == null || avatarImage.Length == 0)

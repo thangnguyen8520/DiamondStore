@@ -127,18 +127,18 @@ namespace DiamondStoreService.Services
                 includeProperties: "PaymentDiamonds.Diamond"
             );
 
-            // Chuyển đổi từ Payment sang OrderHistoryDTO
-            var orderHistory = payments.Select(payment => new OrderHistoryDTO
+           var orderHistory = payments.Select(payment => new OrderHistoryDTO
             {
                 PaymentId = payment.PaymentId,
                 ProductName = payment.ProductName,
-                TotalAmount = payment.TotalAmount,
+                TotalAmount = (decimal)payment.TotalAmount,
                 Status = payment.Status,
                 CreateDate = payment.CreateDate,
                 FuName = payment.FullName,
                 Email = payment.Email,
                 PhoneNumber = payment.PhoneNumber,
-                Address = payment.Address,
+                Address = payment. // Chuyển đổi từ Payment sang OrderHistoryDTO
+            Address,
                 PaymentDiamonds = payment.PaymentDiamonds.Select(pd => new PaymentDiamondDTO
                 {
                     PaymentDiamondId = pd.PaymentDiamondId,
@@ -166,13 +166,18 @@ namespace DiamondStoreService.Services
             {
                 PaymentId = payment.PaymentId,
                 ProductName = payment.ProductName,
-                TotalAmount = payment.TotalAmount,
+                TotalAmount = (decimal)payment.TotalAmount,
                 Status = payment.Status,
                 CreateDate = payment.CreateDate,
                 FuName = payment.FullName,
                 Email = payment.Email,
                 PhoneNumber = payment.PhoneNumber,
                 Address = payment.Address,
+                Cash = 0,
+                BankTransfer = (decimal)payment.TotalAmount,
+                Subtotal = (decimal)payment.TotalAmount,
+                Discount = "0",
+                ShippingFee = "Free",
                 PaymentDiamonds = payment.PaymentDiamonds.Select(d => new PaymentDiamondDTO
                 {
                     PaymentDiamondId = d.PaymentDiamondId,

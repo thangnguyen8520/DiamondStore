@@ -25,7 +25,7 @@ namespace DiamondStore.Pages.User
             var userId = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userId))
             {
-                return RedirectToPage("/Login");
+                return Redirect("/Auth/Login");
             }
 
             ChangePassword = new ChangePasswordDTO();
@@ -43,7 +43,7 @@ namespace DiamondStore.Pages.User
             var userId = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userId))
             {
-                return RedirectToPage("/Login");
+                return Redirect("/Auth/Login");
             }
 
             var result = await _userService.ChangePasswordAsync(userId, ChangePassword);
