@@ -89,7 +89,7 @@ namespace DiamondStoreService.Services
             }
 
             _unitOfWork.UserRepository.Update(user);
-            await _unitOfWork.SaveChangeAsync(); 
+            await _unitOfWork.SaveChangeAsync();
 
             return new ResponseModel { Success = true };
         }
@@ -127,23 +127,23 @@ namespace DiamondStoreService.Services
         //        includeProperties: "PaymentDiamonds.Diamond"
         //    );
 
-        //    // Chuyển đổi từ Payment sang OrderHistoryDTO
         //    var orderHistory = payments.Select(payment => new OrderHistoryDTO
         //    {
         //        PaymentId = payment.PaymentId,
         //        ProductName = payment.ProductName,
-        //        TotalAmount = payment.TotalAmount,
+        //        TotalAmount = (decimal)payment.TotalAmount,
         //        Status = payment.Status,
         //        CreateDate = payment.CreateDate,
         //        FuName = payment.FullName,
         //        Email = payment.Email,
         //        PhoneNumber = payment.PhoneNumber,
-        //        Address = payment.Address,
-        //        //PaymentDiamonds = payment.PaymentDiamonds.Select(pd => new PaymentDiamondDTO
-        //        //{
-        //        //    PaymentDiamondId = pd.PaymentDiamondId,
-        //        //    DiamondName = pd.Diamond.DiamondName,
-        //        //    CaratWeight = pd.Diamond.DiamondWeight,
+        //        Address = payment. // Chuyển đổi từ Payment sang OrderHistoryDTO
+        //     Address,
+        //        PaymentDiamonds = payment.PaymentDiamonds.Select(pd => new PaymentDiamondDTO
+        //        {
+        //            PaymentDiamondId = pd.PaymentDiamondId,
+        //            DiamondName = pd.Diamond.DiamondName,
+        //            CaratWeight = pd.Diamond.DiamondWeight,
         //            //Color = pd.Diamond.DiamondColorId,
         //            //Clarity = pd.Diamond.DiamondClarityId,
         //        }).ToList()
@@ -166,13 +166,18 @@ namespace DiamondStoreService.Services
         //    {
         //        PaymentId = payment.PaymentId,
         //        ProductName = payment.ProductName,
-        //        TotalAmount = payment.TotalAmount,
+        //        TotalAmount = (decimal)payment.TotalAmount,
         //        Status = payment.Status,
         //        CreateDate = payment.CreateDate,
         //        FuName = payment.FullName,
         //        Email = payment.Email,
         //        PhoneNumber = payment.PhoneNumber,
         //        Address = payment.Address,
+        //        Cash = 0,
+        //        BankTransfer = (decimal)payment.TotalAmount,
+        //        Subtotal = (decimal)payment.TotalAmount,
+        //        Discount = "0",
+        //        ShippingFee = "Free",
         //        PaymentDiamonds = payment.PaymentDiamonds.Select(d => new PaymentDiamondDTO
         //        {
         //            PaymentDiamondId = d.PaymentDiamondId,
@@ -187,5 +192,74 @@ namespace DiamondStoreService.Services
         //}
 
 
+        public async Task<IEnumerable<UserDTO>> GetAllActiveUsersAsync()
+        {
+            var users = await _unitOfWork.UserRepository.GetAsync(u => u.Status == true, includeProperties: "Image");
+            var userDTOs = users.Select(user => new UserDTO
+            {
+                ImageUrl = user.Image?.ImageUrl,
+                FullName = $"{user.FirstName} {user.LastName}",
+                UserName = user.UserName,
+                Email = user.Email,
+                Gender = user.Gender.HasValue ? (user.Gender.Value ? "Female" : "Male") : "Unknown",
+                Status = user.Status.HasValue ? (user.Status.Value ? "Active" : "Blocked") : "Unknown",
+            }).ToList();
+
+            return userDTOs;
+        }
+
+        public async Task<UserDTO> GetUserInAdminByIdAsync(string userId)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var userDto = _mapper.Map<UserDTO>(user);
+            return userDto;
+        }
+
+        public async Task<bool> UpdateUserAsync(UserDTO userDTO)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userDTO.Id);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Map the changes from userDTO to the user entity
+            _mapper.Map(userDTO, user);
+
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return true;
+        }
+
+        public async Task DeleteUserAsync(string userId)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user != null)
+            {
+                user.Status = false;
+                _unitOfWork.UserRepository.Update(user);
+                await _unitOfWork.UserRepository.SaveAsync(user);
+            }
+        }
+        public async Task<bool> UpdateUserStatusAsync(string userId, bool status)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.Status = status;
+            await _unitOfWork.UserRepository.UpdateTaskAsync(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return true;
+        }
     }
 }

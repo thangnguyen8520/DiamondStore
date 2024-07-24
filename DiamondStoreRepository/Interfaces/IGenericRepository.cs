@@ -26,7 +26,10 @@ namespace DiamondStoreRepository.Interfaces
         Task<int> CountAsync(Expression<Func<TEntity, bool>> filter = null);
         Task<Pagination<TEntity>> ToPagination(int pageIndex = 0, int pageSize = 10);
         Task<Pagination<TEntity>> ToPaginationAsync(IQueryable<TEntity> query, int pageIndex = 0, int pageSize = 10);
-
-        Task SaveAsync();
+        Task<int> SaveAsync(TEntity entity);
+        void UpdateAsync(TEntity entity);
+        Task UpdateTaskAsync(TEntity entity); // Change void to Task
+        Task DeleteTaskAsync(object id);       // Change void to Task
+        Task DeleteTaskAsync(TEntity entityToDelete); // Change void to Task
     }
 }

@@ -21,7 +21,7 @@ namespace DiamondStore.Pages.User
         //    var userId = HttpContext.Session.GetString("UserId");
         //    if (string.IsNullOrEmpty(userId))
         //    {
-        //        return RedirectToPage("/Login");
+        //        return Redirect("/Auth/Login");
         //    }
 
         //    OrderHistory = await _userService.GetOrderHistoryAsync(userId);

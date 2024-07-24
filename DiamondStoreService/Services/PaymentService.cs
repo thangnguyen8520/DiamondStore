@@ -6,6 +6,11 @@ using DiamondStoreService.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Net.payOS.Errors;
 using Net.payOS.Types;
+using DiamondStoreRepository.Interfaces;
+using DiamondStoreService.Interfaces;
+using DiamondStoreService.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,8 +22,10 @@ namespace DiamondStoreService.Services
         private readonly ICartRepository _cartRepository;
         private readonly IMapper _mapper;
         private readonly PayOSPaymentService _payOSPaymentService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PaymentService(IPaymentRepository paymentRepository, ICartRepository cartRepository, IMapper mapper, IConfiguration configuration)
+
+        public PaymentService(IUnitOfWork unitOfWork, IPaymentRepository paymentRepository, ICartRepository cartRepository, IMapper mapper, IConfiguration configuration)
         {
             _paymentRepository = paymentRepository;
             _cartRepository = cartRepository;
@@ -165,6 +172,23 @@ namespace DiamondStoreService.Services
             const string chars = "0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+
+        public async Task<IEnumerable<PaymentDTO>> GetAllPaymentsAsync()
+        {
+            var payments = await _unitOfWork.PaymentRepository.GetAsync(includeProperties: "PaymentMethod,User");
+            return payments.Select(payment => new PaymentDTO
+            {
+                PaymentId = payment.PaymentId,
+                FullName = payment.FullName,
+                PhoneNumber = payment.PhoneNumber,
+                Email = payment.Email,
+                ProductName = payment.ProductName,
+                PaymentMethodName = payment.PaymentMethod.PaymentMethodName,
+                TotalAmount = payment.TotalAmount,
+                Status = payment.Status
+            });
         }
     }
 }

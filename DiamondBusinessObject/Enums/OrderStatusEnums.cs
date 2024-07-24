@@ -14,7 +14,9 @@ namespace DiamondBusinessObject.Enums
         Shipping,
         DeliveryFailed,
         DeliverySuccessful,
+        DeliveryAgain,
         Received,
-        Completed
+        Completed,
+        Refund
     }
 }
