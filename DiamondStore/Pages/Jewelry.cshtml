@@ -97,7 +97,7 @@
                             @foreach (var jewelry in Model.Pagination.Items)
                             {
                                 <div class="col-sm-4 space_left">
-                                    <div class="feature_2im clearfix">
+                                    <div class="feature_2im clearfix @(jewelry.JewelryInventory == 0 ? "out-of-stock" : "")">
                                         <div class="feature_2im1 clearfix">
                                             <a asp-page="/JewelryDetail" asp-route-id="@jewelry.JewelryId">
                                                 @if (jewelry.Image != null)
@@ -109,6 +109,10 @@
                                                     <img src="~/images/default-product.png" class="iw" alt="product" />
                                                 }
                                             </a>
+                                            @if (jewelry.JewelryInventory == 0)
+                                            {
+                                                <div class="out-of-stock-overlay">Out of Stock</div>
+                                            }
                                         </div>
                                         <div class="feature_2im2 clearfix">
                                             <h6 class="mgt"><a asp-page="/JewelryDetail" asp-route-id="@jewelry.JewelryId" class="bg_1">@jewelry.JewelryName</a></h6>
@@ -160,3 +164,24 @@
         </div>
     </div>
 </section>
+
+<style>
+    .out-of-stock {
+        opacity: 0.6;
+    }
+
+    .out-of-stock-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: red;
+        font-size: 1.5rem;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>

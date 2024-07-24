@@ -11,7 +11,6 @@
         new SelectListItem { Value = "PriceHighToLow", Text = "Price, High To Low" },
         new SelectListItem { Value = "AlphabeticalAZ", Text = "Alphabetically, A-Z" },
         new SelectListItem { Value = "AlphabeticalZA", Text = "Alphabetically, Z-A" }
-        
     };
 }
 
@@ -143,12 +142,18 @@
                             @foreach (var diamond in Model.Pagination.Items)
                             {
                                 <div class="col-sm-4 space_left">
-                                    <div class="feature_2im clearfix">
+                                    <div class="feature_2im clearfix @(diamond.DiamondInventory == 0 ? "out-of-stock" : "")">
                                         <div class="feature_2im1 clearfix">
-                                            <a asp-page="/DiamondDetail" asp-route-id="@diamond.DiamondId"><img src="img/8.jpg" class="iw" alt="product"></a>
+                                            <a asp-page="/DiamondDetail" asp-route-id="@diamond.DiamondId">
+                                                <img src="@(diamond.Image != null ? diamond.Image.ImageUrl : "~/images/default-product.png")" class="iw" alt="product" />
+                                            </a>
+                                            @if (diamond.DiamondInventory == 0)
+                                            {
+                                                <div class="out-of-stock-overlay">Out of Stock</div>
+                                            }
                                         </div>
                                         <div class="feature_2im2 clearfix">
-                                            <h6 class="mgt"><a class="bg_1" href="#">@diamond.DiamondName</a></h6>
+                                            <h6 class="mgt"><a asp-page="/DiamondDetail" asp-route-id="@diamond.DiamondId" class="bg_1">@diamond.DiamondName</a></h6>
                                             <h6 class="pull-right mgt"><a class="bg_4" href="#">Sale</a></h6>
                                         </div>
                                         <div class="feature_2im4 clearfix">
@@ -167,7 +172,7 @@
                                     <div class="item_last text-center clearfix">
                                         <h4><a asp-page="/DiamondDetail" asp-route-id="@diamond.DiamondId">@diamond.DiamondName</a></h4>
                                         <h6>
-                                            <span class="span_1 col_1 bold">@diamond.DiamondPrice</span>
+                                            <span class="span_1 col_1 bold">@diamond.DiamondPrice.ToString("C")</span>
                                         </h6>
                                     </div>
                                 </div>
@@ -197,3 +202,24 @@
         </div>
     </div>
 </section>
+
+<style>
+    .out-of-stock {
+        opacity: 0.6;
+    }
+
+    .out-of-stock-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: red;
+        font-size: 1.5rem;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>

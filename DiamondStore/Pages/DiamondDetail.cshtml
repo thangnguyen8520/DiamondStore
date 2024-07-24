@@ -42,10 +42,19 @@
                 </dl>
 
                 <div class="actions">
-                    <form method="post" asp-page-handler="AddToCart">
-                        <button class="btn btn-primary" type="submit">Add to Cart</button>
-                        <button class="btn btn-success">Buy Now</button>
-                    </form>
+                    @if (Model.Diamond.DiamondInventory > 0)
+                    {
+                        <form method="post" asp-page-handler="AddToCart">
+                            <button class="btn btn-primary" type="submit">Add to Cart</button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            Out of Stock
+                        </div>
+                    }
                 </div>
             </div>
         </div>

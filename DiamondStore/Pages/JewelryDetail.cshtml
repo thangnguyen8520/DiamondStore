@@ -41,22 +41,31 @@
                     </div>
 
                     <div class="product-actions">
-                        <form method="post" asp-page-handler="AddToCart">
-                            <input type="hidden" name="id" value="@Model.Jewelry.JewelryId" />
-                            <div class="product-size">
-                                <label for="sizeId">Size:</label>
-                                <select id="sizeId" class="form-control" name="sizeId">
-                                    <option value="0">Select Size</option>
-                                    @foreach (var size in Model.Sizes)
-                                    {
-                                        <option value="@size.JewelrySizeId">@size.JewelrySizeName</option>
-                                    }
-                                </select>
-                                <a href="#" class="size-guide">Size Guide</a>
+                        @if (Model.Jewelry.JewelryInventory > 0)
+                        {
+                            <form method="post" asp-page-handler="AddToCart">
+                                <input type="hidden" name="id" value="@Model.Jewelry.JewelryId" />
+                                <div class="product-size">
+                                    <label for="sizeId">Size:</label>
+                                    <select id="sizeId" class="form-control" name="sizeId">
+                                        <option value="0">Select Size</option>
+                                        @foreach (var size in Model.Sizes)
+                                        {
+                                            <option value="@size.JewelrySizeId">@size.JewelrySizeName</option>
+                                        }
+                                    </select>
+                                    <a href="#" class="size-guide">Size Guide</a>
+                                </div>
+                                <button class="btn btn-secondary" type="submit">Add to Cart</button>
+                                <button class="btn btn-success" type="submit">Buy Now</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                Out of Stock
                             </div>
-                            <button class="btn btn-secondary" type="submit">Add to Cart</button>
-                            <button class="btn btn-success" type="submit">Buy Now</button>
-                        </form>
+                        }
                     </div>
                 </div>
             </div>
