@@ -37,6 +37,8 @@ namespace DiamondStoreRepository.Data
             {
                 var adminUser = new User
                 {
+                    FirstName = "Admin",
+                    LastName = "Diamond",
                     UserName = "admin",
                     Email = "admin@example.com",
                     EmailConfirmed = true,
@@ -55,6 +57,8 @@ namespace DiamondStoreRepository.Data
             {
                 var staffUser = new User
                 {
+                    FirstName = "Staff",
+                    LastName = "Diamond",
                     UserName = "staff",
                     Email = "staff@example.com",
                     EmailConfirmed = true,
@@ -73,6 +77,8 @@ namespace DiamondStoreRepository.Data
             {
                 var customerUser = new User
                 {
+                    FirstName = "Customer",
+                    LastName = "Diamond",
                     UserName = "customer",
                     Email = "customer@example.com",
                     EmailConfirmed = true,

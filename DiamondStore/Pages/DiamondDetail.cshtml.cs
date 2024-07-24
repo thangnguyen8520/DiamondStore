@@ -23,6 +23,12 @@ namespace DiamondStore.Pages
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            var userId = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Redirect("/Auth/Login");
+            }
+
             Diamond = await _diamondService.GetById(id, "DiamondColor,DiamondClarity,DiamondCut,Image");
 
             if (Diamond == null)
