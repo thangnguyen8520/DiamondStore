@@ -6,8 +6,11 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/tailwind.output.css" />
     <link rel="stylesheet" href="~/tailwind/tailwind.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen bg-gray-50">
@@ -35,6 +38,22 @@
                                 <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
                             </svg>
                             <span class="ml-4">User</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800" href="./AdminDiamond">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                            </svg>
+                            <span class="ml-4">Diamond</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800" href="./AdminJewelry">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                            </svg>
+                            <span class="ml-4">Jewelry</span>
                         </a>
                     </li>
                     <li class="relative px-6 py-3">
@@ -301,6 +320,7 @@
     <script src="~/js/charts-pie.js"></script>
     <script src="~/js/focus-trap.js"></script>
     <script src="~/js/init-alpine.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @* <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script> *@
 

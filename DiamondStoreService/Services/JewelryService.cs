@@ -3,6 +3,7 @@ using DiamondStoreRepository.Common;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreRepository.Repositories;
 using DiamondStoreService.Interfaces;
+using DiamondStoreService.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,29 @@ namespace DiamondStoreService.Services
             _jewelryMaterialRepository = jewelryMaterialRepository;
             _jewelrySizeRepository = jewelrySizeRepository;
         }
+
+        public async Task<IList<JewelryDTO>> GetAllJewelriesAsync()
+        {
+            var jewelries = await _jewelryRepository.GetAllAsync();
+            return jewelries.Select(j =>
+            {
+                j.TotalPrice = _jewelryRepository.CalculateTotalPrice(j);
+                return new JewelryDTO
+                {
+                    JewelryId = j.JewelryId,
+                    JewelryName = j.JewelryName,
+                    JewelryPrice = j.JewelryPrice,
+                    TotalPrice = j.TotalPrice,
+                    JewelryMaterialName = j.JewelryMaterial?.JewelryMaterialName,
+                    JewelryTypeName = j.JewelryType?.JewelryTypeName,
+                    CreateDate = j.CreateDate,
+                    Status = j.Status,
+                    MainDiamondName = j.Diamond?.DiamondName,
+                    SecondaryDiamondsNames = j.SecondaryDiamonds.Select(sd => sd.Diamond?.DiamondName).ToList()
+                };
+            }).ToList();
+        }
+
 
         public async Task<Pagination<Jewelry>> GetJewelries(int pageIndex, int pageSize, string sortOption, int? typeId, string material, int? sizeId, string priceRange)
         {

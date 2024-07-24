@@ -2,6 +2,7 @@
 using DiamondStoreRepository.Common;
 using DiamondStoreRepository.Interfaces;
 using DiamondStoreService.Interfaces;
+using DiamondStoreService.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,6 +15,26 @@ namespace DiamondStoreService.Services
         public DiamondService(IDiamondRepository diamondRepository)
         {
             _diamondRepository = diamondRepository;
+        }
+
+        public async Task<IList<DiamondDTO>> GetAllDiamondsAsync()
+        {
+            var diamonds = await _diamondRepository.GetAllAsync();
+            return diamonds.Select(d => new DiamondDTO
+            {
+                DiamondId = d.DiamondId,
+                DiamondName = d.DiamondName,
+                DiamondPrice = d.DiamondPrice,
+                DiamondWeight = d.DiamondWeight,
+                DiamondColorName = d.DiamondColor?.DiamondColorName,
+                DiamondClarityName = d.DiamondClarity?.DiamondClarityName,
+                DiamondCutName = d.DiamondCut?.DiamondCutName,
+                DiamondTypeName = d.DiamondType?.DiamondTypeName,
+                DiamondDiameter = d.DiamondDiameter,
+                DiamondCertificate = d.DiamondCertificate,
+                DiamondInventory = d.DiamondInventory,
+                CreateDate = d.CreateDate
+            }).ToList();
         }
 
         public async Task<Pagination<Diamond>> GetDiamonds(int pageIndex, int pageSize, string sortOption, int? categoryId, string color, string clarity, string cut, double? minPrice, double? maxPrice, double? minDiameter, double? maxDiameter, double? minWeight, double? maxWeight)
