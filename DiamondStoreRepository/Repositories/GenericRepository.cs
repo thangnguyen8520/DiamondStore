@@ -156,6 +156,39 @@ namespace DiamondStoreRepository.Repositories
             };
         }
 
+        public async Task<int> SaveAsync(TEntity entity)
+        {
+            _dbSet.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+            return await _context.SaveChangesAsync();
+        }
+        public void UpdateAsync(TEntity entity)
+        {
+            _dbSet.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+        }
 
+        public async Task UpdateTaskAsync(TEntity entity)
+        {
+            _dbSet.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();  // Ensure SaveChangesAsync is called here if needed
+        }
+
+        public async Task DeleteTaskAsync(object id)
+        {
+            TEntity entityToDelete = await _dbSet.FindAsync(id);
+            await DeleteTaskAsync(entityToDelete);
+        }
+
+        public async Task DeleteTaskAsync(TEntity entityToDelete)
+        {
+            if (_context.Entry(entityToDelete).State == EntityState.Detached)
+            {
+                _dbSet.Attach(entityToDelete);
+            }
+            _dbSet.Remove(entityToDelete);
+            await _context.SaveChangesAsync();  // Ensure SaveChangesAsync is called here if needed
+        }
     }
 }

@@ -15,5 +15,11 @@ namespace DiamondStoreService.Interfaces
         Task<ResponseModel> ChangePasswordAsync(string userId, ChangePasswordDTO changePasswordDto);
         Task<List<OrderHistoryDTO>> GetOrderHistoryAsync(string userId);
         Task<OrderHistoryDTO> GetOrderDetailsAsync(int orderId);
+
+        Task<IEnumerable<UserDTO>> GetAllActiveUsersAsync();
+        Task<UserDTO> GetUserInAdminByIdAsync(string userId);
+        Task<bool> UpdateUserAsync(UserDTO userDTO);
+        Task DeleteUserAsync(string userId);
+        Task<bool> UpdateUserStatusAsync(string userId, bool status);
     }
 }
