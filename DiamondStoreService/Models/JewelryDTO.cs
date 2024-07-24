@@ -16,5 +16,22 @@ namespace DiamondStoreService.Models
         public string Status { get; set; }
         public string MainDiamondName { get; set; }
         public List<string> SecondaryDiamondsNames { get; set; } = new List<string>();
+
+        public int JewelryMaterialId { get; set; }
+        public int JewelryTypeId { get; set; }
+        public int MainDiamondId { get; set; }
+        public float LaborCost { get; set; }
+    }
+
+    public class JewelryMaterialDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class JewelryTypeDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -1,0 +1,58 @@
+﻿@page "{id:int}"
+@model DiamondStore.Pages.Admin.EditDiamondModel
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Edit Diamond";
+}
+
+<main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 mx-auto">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Edit Diamond
+        </h2>
+        <form method="post">
+            <div class="mb-4">
+                <label class="block text-sm">Diamond Name</label>
+                <input type="text" name="DiamondName" class="form-input mt-1 block w-full" value="@Model.Diamond.DiamondName" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Price</label>
+                <input type="number" name="DiamondPrice" class="form-input mt-1 block w-full" value="@Model.Diamond.DiamondPrice" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Weight</label>
+                <input type="number" name="DiamondWeight" class="form-input mt-1 block w-full" value="@Model.Diamond.DiamondWeight" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Color</label>
+                <select name="Diamond.DiamondColorId" class="form-select mt-1 block w-full">
+                    @foreach (var color in Model.Colors)
+                    {
+                        <option value="@color.Id">@color.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Clarity</label>
+                <select name="Diamond.DiamondClarityId" class="form-select mt-1 block w-full">
+                    @foreach (var clarity in Model.Clarities)
+                    {
+                        <option value="@clarity.Id">@clarity.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Cut</label>
+                <select name="Diamond.DiamondCutId" class="form-select mt-1 block w-full">
+                    @foreach (var cut in Model.Cuts)
+                    {
+                        <option value="@cut.Id">@cut.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-4">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</main>

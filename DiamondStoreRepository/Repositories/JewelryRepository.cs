@@ -127,5 +127,38 @@ namespace DiamondStoreRepository.Repositories
 
             return items;
         }
+
+        public async Task<Jewelry> GetJewelryByIdAsync(int id)
+        {
+            return await _context.Jewelries
+                                 .Include(j => j.JewelryMaterial)
+                                 .Include(j => j.JewelryType)
+                                 .Include(j => j.Diamond)
+                                 .Include(j => j.SecondaryDiamonds)
+                                 .ThenInclude(d => d.Diamond)
+                                 .FirstOrDefaultAsync(j => j.JewelryId == id);
+        }
+
+        public async Task AddJewelryAsync(Jewelry jewelry)
+        {
+            await _context.Jewelries.AddAsync(jewelry);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateJewelryAsync(Jewelry jewelry)
+        {
+            _context.Jewelries.Update(jewelry);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteJewelryAsync(int id)
+        {
+            var jewelry = await _context.Jewelries.FindAsync(id);
+            if (jewelry != null)
+            {
+                _context.Jewelries.Remove(jewelry);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

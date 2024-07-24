@@ -54,7 +54,67 @@ namespace DiamondStoreService.Services
             }).ToList();
         }
 
+        public async Task<JewelryDTO> GetJewelryByIdAsync(int id)
+        {
+            var jewelry = await _jewelryRepository.GetJewelryByIdAsync(id);
+            if (jewelry != null)
+            {
+                jewelry.TotalPrice = _jewelryRepository.CalculateTotalPrice(jewelry);
+                return new JewelryDTO
+                {
+                    JewelryId = jewelry.JewelryId,
+                    JewelryName = jewelry.JewelryName,
+                    JewelryPrice = jewelry.JewelryPrice,
+                    TotalPrice = jewelry.TotalPrice,
+                    JewelryMaterialName = jewelry.JewelryMaterial?.JewelryMaterialName,
+                    JewelryTypeName = jewelry.JewelryType?.JewelryTypeName,
+                    CreateDate = jewelry.CreateDate,
+                    Status = jewelry.Status,
+                    MainDiamondName = jewelry.Diamond?.DiamondName,
+                    SecondaryDiamondsNames = jewelry.SecondaryDiamonds.Select(sd => sd.Diamond?.DiamondName).ToList()
+                };
+            }
+            return null;
+        }
 
+        public async Task AddJewelryAsync(JewelryDTO jewelryDto)
+        {
+            var jewelry = new Jewelry
+            {
+                JewelryName = jewelryDto.JewelryName,
+                JewelryPrice = jewelryDto.JewelryPrice,
+                JewelryMaterialId = jewelryDto.JewelryMaterialId,
+                JewelryTypeId = jewelryDto.JewelryTypeId,
+                MainDiamondId = jewelryDto.MainDiamondId,
+                LaborCost = jewelryDto.LaborCost,
+                Status = jewelryDto.Status,
+                CreateDate = jewelryDto.CreateDate
+            };
+            await _jewelryRepository.AddJewelryAsync(jewelry);
+        }
+
+        public async Task UpdateJewelryAsync(JewelryDTO jewelryDto)
+        {
+            var jewelry = await _jewelryRepository.GetJewelryByIdAsync(jewelryDto.JewelryId);
+            if (jewelry != null)
+            {
+                jewelry.JewelryName = jewelryDto.JewelryName;
+                jewelry.JewelryPrice = jewelryDto.JewelryPrice;
+                jewelry.JewelryMaterialId = jewelryDto.JewelryMaterialId;
+                jewelry.JewelryTypeId = jewelryDto.JewelryTypeId;
+                jewelry.MainDiamondId = jewelryDto.MainDiamondId;
+                jewelry.LaborCost = jewelryDto.LaborCost;
+                jewelry.Status = jewelryDto.Status;
+                jewelry.CreateDate = jewelryDto.CreateDate;
+
+                await _jewelryRepository.UpdateJewelryAsync(jewelry);
+            }
+        }
+
+        public async Task DeleteJewelryAsync(int id)
+        {
+            await _jewelryRepository.DeleteJewelryAsync(id);
+        }
         public async Task<Pagination<Jewelry>> GetJewelries(int pageIndex, int pageSize, string sortOption, int? typeId, string material, int? sizeId, string priceRange)
         {
             return await _jewelryRepository.GetPaginated(pageIndex, pageSize, sortOption, typeId, material, sizeId, priceRange);

@@ -1,0 +1,62 @@
+﻿@page "{id:int}"
+@model DiamondStore.Pages.Admin.EditJewelryModel
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Edit Jewelry";
+}
+
+<main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 mx-auto">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Edit Jewelry
+        </h2>
+        <form method="post">
+            <div class="mb-4">
+                <label class="block text-sm">Jewelry Name</label>
+                <input type="text" name="JewelryName" class="form-input mt-1 block w-full" value="@Model.Jewelry.JewelryName" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Jewelry Price</label>
+                <input type="number" name="JewelryPrice" class="form-input mt-1 block w-full" value="@Model.Jewelry.JewelryPrice" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Labor Cost</label>
+                <input type="number" name="LaborCost" class="form-input mt-1 block w-full" value="@Model.Jewelry.LaborCost" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Material</label>
+                <select name="Jewelry.JewelryMaterialId" class="form-select mt-1 block w-full">
+                    @foreach (var material in Model.Materials)
+                    {
+                        <option value="@material.Id" selected="@(material.Id == Model.Jewelry.JewelryMaterialId ? "selected" : null)">@material.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Type</label>
+                <select name="Jewelry.JewelryTypeId" class="form-select mt-1 block w-full">
+                    @foreach (var type in Model.Types)
+                    {
+                        <option value="@type.Id" selected="@(type.Id == Model.Jewelry.JewelryTypeId ? "selected" : null)">@type.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Main Diamond</label>
+                <select name="Jewelry.MainDiamondId" class="form-select mt-1 block w-full">
+                    @foreach (var diamond in Model.Diamonds)
+                    {
+                        <option value="@diamond.DiamondId" selected="@(diamond.DiamondId == Model.Jewelry.MainDiamondId ? "selected" : null)">@diamond.DiamondName</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm">Status</label>
+                <input type="text" name="Status" class="form-input mt-1 block w-full" value="@Model.Jewelry.Status" />
+            </div>
+            <div class="mb-4">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</main>

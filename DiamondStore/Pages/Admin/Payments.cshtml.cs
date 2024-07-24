@@ -24,7 +24,7 @@ namespace DiamondStore.Pages.Admin
             var userId = HttpContext.Session.GetString("UserId");
             var role = HttpContext.Session.GetString("Roles");
 
-            if (string.IsNullOrEmpty(userId) || (!role.Equals("Admin") && !role.Equals("Staff")))
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(role) || (!role.Equals("Admin") && !role.Equals("Staff")))
             {
                 return Redirect("/Auth/Login");
             }

@@ -12,6 +12,10 @@ namespace DiamondStoreService.Interfaces
     public interface IJewelryService
     {
         Task<IList<JewelryDTO>> GetAllJewelriesAsync();
+        Task<JewelryDTO> GetJewelryByIdAsync(int id);
+        Task DeleteJewelryAsync(int id);
+        Task AddJewelryAsync(JewelryDTO jewelryDto);
+        Task UpdateJewelryAsync(JewelryDTO jewelryDto);
         Task<Pagination<Jewelry>> GetJewelries(int pageIndex, int pageSize, string sortOption, int? typeId, string material, int? sizeId, string priceRange);
         Task<IList<JewelryType>> GetAllJewelryTypes();
         Task<IList<JewelryMaterial>> GetAllJewelryMaterials();

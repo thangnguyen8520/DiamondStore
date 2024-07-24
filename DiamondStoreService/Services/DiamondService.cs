@@ -37,6 +37,75 @@ namespace DiamondStoreService.Services
             }).ToList();
         }
 
+        public async Task<DiamondDTO> GetDiamondByIdAsync(int id)
+        {
+            var diamond = await _diamondRepository.GetDiamondByIdAsync(id);
+            if (diamond != null)
+            {
+                return new DiamondDTO
+                {
+                    DiamondId = diamond.DiamondId,
+                    DiamondName = diamond.DiamondName,
+                    DiamondPrice = diamond.DiamondPrice,
+                    DiamondWeight = diamond.DiamondWeight,
+                    DiamondColorName = diamond.DiamondColor?.DiamondColorName,
+                    DiamondClarityName = diamond.DiamondClarity?.DiamondClarityName,
+                    DiamondCutName = diamond.DiamondCut?.DiamondCutName,
+                    DiamondTypeName = diamond.DiamondType?.DiamondTypeName,
+                    DiamondDiameter = diamond.DiamondDiameter,
+                    DiamondCertificate = diamond.DiamondCertificate,
+                    DiamondInventory = diamond.DiamondInventory,
+                    CreateDate = diamond.CreateDate
+                };
+            }
+            return null;
+        }
+
+        public async Task AddDiamondAsync(DiamondDTO diamondDto)
+        {
+            var diamond = new Diamond
+            {
+                DiamondName = diamondDto.DiamondName,
+                DiamondPrice = diamondDto.DiamondPrice,
+                DiamondWeight = diamondDto.DiamondWeight,
+                DiamondColorId = diamondDto.DiamondColorId,
+                DiamondClarityId = diamondDto.DiamondClarityId,
+                DiamondCutId = diamondDto.DiamondCutId,
+                DiamondTypeId = diamondDto.DiamondTypeId,
+                DiamondDiameter = diamondDto.DiamondDiameter,
+                DiamondCertificate = diamondDto.DiamondCertificate,
+                DiamondInventory = diamondDto.DiamondInventory,
+                CreateDate = diamondDto.CreateDate
+            };
+            await _diamondRepository.AddDiamondAsync(diamond);
+        }
+
+        public async Task UpdateDiamondAsync(DiamondDTO diamondDto)
+        {
+            var diamond = await _diamondRepository.GetDiamondByIdAsync(diamondDto.DiamondId);
+            if (diamond != null)
+            {
+                diamond.DiamondName = diamondDto.DiamondName;
+                diamond.DiamondPrice = diamondDto.DiamondPrice;
+                diamond.DiamondWeight = diamondDto.DiamondWeight;
+                diamond.DiamondColorId = diamondDto.DiamondColorId;
+                diamond.DiamondClarityId = diamondDto.DiamondClarityId;
+                diamond.DiamondCutId = diamondDto.DiamondCutId;
+                diamond.DiamondTypeId = diamondDto.DiamondTypeId;
+                diamond.DiamondDiameter = diamondDto.DiamondDiameter;
+                diamond.DiamondCertificate = diamondDto.DiamondCertificate;
+                diamond.DiamondInventory = diamondDto.DiamondInventory;
+                diamond.CreateDate = diamondDto.CreateDate;
+
+                await _diamondRepository.UpdateDiamondAsync(diamond);
+            }
+        }
+
+        public async Task DeleteDiamondAsync(int id)
+        {
+            await _diamondRepository.DeleteDiamondAsync(id);
+        }
+
         public async Task<Pagination<Diamond>> GetDiamonds(int pageIndex, int pageSize, string sortOption, int? categoryId, string color, string clarity, string cut, double? minPrice, double? maxPrice, double? minDiameter, double? maxDiameter, double? minWeight, double? maxWeight)
         {
             return await _diamondRepository.GetDiamonds(pageIndex, pageSize, sortOption, categoryId, color, clarity, cut, minPrice, maxPrice, minDiameter, maxDiameter, minWeight, maxWeight);
