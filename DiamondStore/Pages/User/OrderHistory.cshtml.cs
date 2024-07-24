@@ -16,27 +16,27 @@ namespace DiamondStore.Pages.User
 
         public List<OrderHistoryDTO> OrderHistory { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
-        {
-            var userId = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Redirect("/Auth/Login");
-            }
+        //public async Task<IActionResult> OnGetAsync()
+        //{
+        //    var userId = HttpContext.Session.GetString("UserId");
+        //    if (string.IsNullOrEmpty(userId))
+        //    {
+        //        return Redirect("/Auth/Login");
+        //    }
 
-            OrderHistory = await _userService.GetOrderHistoryAsync(userId);
+        //    OrderHistory = await _userService.GetOrderHistoryAsync(userId);
 
-            return Page();
-        }
+        //    return Page();
+        //}
 
-        public async Task<IActionResult> OnGetOrderDetailsAsync(int id)
-        {
-            var orderDetails = await _userService.GetOrderDetailsAsync(id);
-            if (orderDetails == null)
-            {
-                return NotFound();
-            }
-            return new JsonResult(orderDetails);
-        }
+        //public async Task<IActionResult> OnGetOrderDetailsAsync(int id)
+        //{
+        //    var orderDetails = await _userService.GetOrderDetailsAsync(id);
+        //    if (orderDetails == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return new JsonResult(orderDetails);
+        //}
     }
 }

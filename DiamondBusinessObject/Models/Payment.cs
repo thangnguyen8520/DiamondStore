@@ -41,12 +41,12 @@ public partial class Payment
     [StringLength(255)]
     public string Status { get; set; }
 
+    [StringLength(255)]
+    public string PaymentLink { get; set; }
+
     [ForeignKey("PaymentMethodId")]
     [InverseProperty("Payments")]
     public virtual PaymentMethod PaymentMethod { get; set; }
-
-    [InverseProperty("Payment")]
-    public virtual ICollection<PaymentDiamond> PaymentDiamonds { get; set; } = new List<PaymentDiamond>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Payments")]

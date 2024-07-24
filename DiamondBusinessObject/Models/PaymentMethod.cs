@@ -17,6 +17,8 @@ public partial class PaymentMethod
     [StringLength(255)]
     public string PaymentMethodName { get; set; }
 
+    public bool Status { get; set; }
+
     [InverseProperty("PaymentMethod")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 }

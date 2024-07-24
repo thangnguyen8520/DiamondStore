@@ -39,9 +39,9 @@
                     <div class="cart_3l clearfix">
                         <h5 class="mgt">PRODUCT</h5>
                     </div>
-                    @foreach (var item in Model.CartItems)
+                    @if (Model.ActiveCart != null)
                     {
-                        @foreach (var diamond in item.CartDiamonds)
+                        @foreach (var diamond in Model.ActiveCart.CartDiamonds)
                         {
                             <div class="cart_3l1 clearfix">
                                 <div class="col-sm-3 space_left">
@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="cart_3l1i2 clearfix">
                                         <form method="post">
-                                            <input type="hidden" name="cartId" value="@item.CartId" />
+                                            <input type="hidden" name="cartId" value="@Model.ActiveCart.CartId" />
                                             <input type="hidden" name="itemId" value="@diamond.CartDiamondId" />
                                             <input type="hidden" name="itemType" value="Diamond" />
                                             <div class="input-group number-spinner">
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                         }
-                        @foreach (var jewelry in item.CartJewelries)
+                        @foreach (var jewelry in Model.ActiveCart.CartJewelries)
                         {
                             <div class="cart_3l1 clearfix">
                                 <div class="col-sm-3 space_left">
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="cart_3l1i2 clearfix">
                                         <form method="post">
-                                            <input type="hidden" name="cartId" value="@item.CartId" />
+                                            <input type="hidden" name="cartId" value="@Model.ActiveCart.CartId" />
                                             <input type="hidden" name="itemId" value="@jewelry.CartJewelryId" />
                                             <input type="hidden" name="itemType" value="Jewelry" />
                                             <div class="input-group number-spinner">
@@ -141,7 +141,7 @@
                     <div class="cart_3r clearfix">
                         <h5 class="mgt head_1">SUBTOTAL</h5>
                         <h3 class="text-center">
-                            @Model.CartItems.Sum(i => (decimal)i.DisplayTotalPrice).ToString("C")
+                            @Model.ActiveCart.DisplayTotalPrice.ToString("C")
                         </h3>
                         <hr>
                         <h6>Available Promotions</h6>
@@ -163,27 +163,7 @@
                             <a class="button" href="checkout">PROCEED TO CHECKOUT</a>
                         </h5>
                         <br>
-                        <h5>GET SHIPPING ESTIMATES</h5>
                         <hr>
-                    </div>
-                    <div class="cart_3r1 clearfix">
-                        <h6>Country</h6>
-                        <select class="form-control" id="subject" name="subject">
-                            <option>America</option>
-                            <option>India</option>
-                            <option>England</option>
-                            <option>Africa</option>
-                        </select><br>
-                        <h6>State</h6>
-                        <select class="form-control" id="subject" name="subject">
-                            <option>Delhi</option>
-                            <option>Uttar Pradesh</option>
-                            <option>Punjab</option>
-                            <option>Madhya Pradesh</option>
-                        </select><br>
-                        <h6>Postal/Zip Code</h6>
-                        <input class="form-control" type="text">
-                        <h5 class="text-center"><a class="button_1" href="#">CALCULATE SHIPPING</a></h5>
                     </div>
                 </div>
             </div>
@@ -219,7 +199,7 @@
             var inputCartId = document.createElement("input");
             inputCartId.type = "hidden";
             inputCartId.name = "cartId";
-            inputCartId.value = "@Model.CartItems.FirstOrDefault()?.CartId";
+            inputCartId.value = "@Model.ActiveCart.CartId";
             form.appendChild(inputCartId);
 
             var token = document.querySelector('input[name="__RequestVerificationToken"]').cloneNode();

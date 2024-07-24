@@ -1,5 +1,4 @@
 using DiamondBusinessObject.Models;
-using DiamondStoreRepository.Interfaces;
 using DiamondStoreService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -46,41 +45,32 @@ namespace DiamondStore.Pages
 
             try
             {
-                // Check if the user already has an existing cart
-                var existingCart = await _cartService.GetCartByUserId(userId);
+                var activeCart = await _cartService.GetActiveCartByUserId(userId);
 
-                if (existingCart != null)
+                if (activeCart == null)
                 {
-                    var existingCartItem = existingCart.CartDiamonds.FirstOrDefault(cd => cd.DiamondId == id);
-                    if (existingCartItem != null)
-                    {
-                        existingCartItem.Quantity += 1;
-                        existingCartItem.AddDate = DateTime.Now;
-                    }
-                    else
-                    {
-                        existingCart.CartDiamonds.Add(new CartDiamond { DiamondId = id, Quantity = 1, AddDate = DateTime.Now });
-                    }
-                    existingCart.CreateDate = DateTime.Now;
-                    await _cartService.UpdateCartItem(existingCart);
+                    activeCart = new Cart { UserId = userId, Status = true };
+                    await _cartService.AddToCart(activeCart);
+                }
+
+                var existingCartItem = activeCart.CartDiamonds.FirstOrDefault(cd => cd.DiamondId == id);
+                if (existingCartItem != null)
+                {
+                    existingCartItem.Quantity += 1;
+                    existingCartItem.AddDate = DateTime.Now;
                 }
                 else
                 {
-                    var cartItem = new Cart
-                    {
-                        UserId = userId,
-                        CreateDate = DateTime.Now
-                    };
-                    cartItem.CartDiamonds.Add(new CartDiamond { DiamondId = id, Quantity = 1, AddDate = DateTime.Now });
-                    await _cartService.AddToCart(cartItem);
+                    activeCart.CartDiamonds.Add(new CartDiamond { DiamondId = id, Quantity = 1, AddDate = DateTime.Now });
                 }
+                activeCart.CreateDate = DateTime.Now;
+                await _cartService.UpdateCartItem(activeCart);
 
                 TempData["SuccessMessage"] = "Diamond added to cart successfully!";
                 return RedirectToPage(new { id });
             }
             catch (Exception ex)
             {
-                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
                 Console.WriteLine(ex.Message);
                 TempData["ErrorMessage"] = "An error occurred while adding the diamond to the cart.";
                 return RedirectToPage(new { id });
