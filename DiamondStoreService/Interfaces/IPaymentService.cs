@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiamondStoreService.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace DiamondStoreService.Interfaces
 {
     public interface IPaymentService
     {
+        Task<IEnumerable<PaymentDTO>> GetAllPaymentsAsync();
     }
 }
