@@ -17,12 +17,12 @@ namespace DiamondStoreService.Interfaces
         Task<OrderHistoryDTO> GetOrderDetailsAsync(int orderId);
 
         Task<IEnumerable<UserDTO>> GetAllActiveUsersAsync();
-        Task<UserDTO> GetUserInAdminByIdAsync(string userId);
-        Task<bool> UpdateUserAsync(UserDTO userDTO);
-        Task DeleteUserAsync(string userId);
-        Task<bool> UpdateUserStatusAsync(string userId, bool status);
-        Task<UserDTO> GetUserDetailAsync(string userId);
-        Task<List<UserDTO>> GetUserAsync(string userId);
+        //Task<UserDTO> GetUserInAdminByIdAsync(string userId);
+        //Task<bool> UpdateUserAsync(UserDTO userDTO);
+        //Task DeleteUserAsync(string userId);
+        //Task<bool> UpdateUserStatusAsync(string userId, bool status);
+        //Task<UserDTO> GetUserDetailAsync(string userId);
+        //Task<List<UserDTO>> GetUserAsync(string userId);
 
     }
 }

@@ -21,15 +21,15 @@ namespace DiamondStore.Pages.Admin
             Users = (await _userService.GetAllActiveUsersAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnGetDetailsAsync(string id)
-        {
-            var user = await _userService.GetUserDetailAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return new JsonResult(user);
-        }
+        //public async Task<IActionResult> OnGetDetailsAsync(string id)
+        //{
+        //    var user = await _userService.GetUserDetailAsync(id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return new JsonResult(user);
+        //}
     }
 
 }

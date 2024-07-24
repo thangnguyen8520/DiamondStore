@@ -224,106 +224,106 @@ namespace DiamondStoreService.Services
         }
 
 
-        public async Task<UserDTO> GetUserInAdminByIdAsync(string userId)
-        {
-            var user = await _unitOfWork.UserRepository.GetByIdNoIncludeAsync(userId);
-            if (user == null)
-            {
-                return null;
-            }
+        //public async Task<UserDTO> GetUserInAdminByIdAsync(string userId)
+        //{
+        //    var user = await _unitOfWork.UserRepository.GetByIdNoIncludeAsync(userId);
+        //    if (user == null)
+        //    {
+        //        return null;
+        //    }
 
-            var userDto = new UserDTO
-            {
-                Id = user.Id,
-                FullName = $"{user.FirstName} {user.LastName}",
-                UserName = user.UserName,
-                Email = user.Email,
-                Gender = user.Gender == true ? "Female" : "Male",
-                Status = user.Status == true ? "Active" : "Blocked",
-                Address = user.Address,
-                LastLogin = user.LastLogin,
-                ImageUrl = user.Image?.ImageUrl
-            };
-            return userDto;
-        }
-        public async Task<List<UserDTO>> GetUserAsync(string userId)
-        {
-            var user = await _unitOfWork.UserRepository.GetAsync(
-                filter: p => p.Id == userId,
-                orderBy: q => q.OrderByDescending(p => p.LastLogin));
-            var userDto = user.Select(user => new UserDTO
-            {
-                Id = user.Id,
-                FullName = $"{user.FirstName} {user.LastName}",
-                UserName = user.UserName,
-                Email = user.Email,
-                Gender = user.Gender == true ? "Female" : "Male",
-                Status = user.Status == true ? "Active" : "Blocked",
-                Address = user.Address,
-                LastLogin = user.LastLogin,
-                ImageUrl = user.Image?.ImageUrl
-            }).ToList();
-            return userDto;
-        }
-        public async Task<bool> UpdateUserAsync(UserDTO userDTO)
-        {
-            var user = await _unitOfWork.UserRepository.GetByIdAsync(userDTO.Id);
-            if (user == null)
-            {
-                return false;
-            }
+        //    var userDto = new UserDTO
+        //    {
+        //        Id = user.Id,
+        //        FullName = $"{user.FirstName} {user.LastName}",
+        //        UserName = user.UserName,
+        //        Email = user.Email,
+        //        Gender = user.Gender == true ? "Female" : "Male",
+        //        Status = user.Status == true ? "Active" : "Blocked",
+        //        Address = user.Address,
+        //        LastLogin = user.LastLogin,
+        //        ImageUrl = user.Image?.ImageUrl
+        //    };
+        //    return userDto;
+        //}
+        //public async Task<List<UserDTO>> GetUserAsync(string userId)
+        //{
+        //    var user = await _unitOfWork.UserRepository.GetAsync(
+        //        filter: p => p.Id == userId,
+        //        orderBy: q => q.OrderByDescending(p => p.LastLogin));
+        //    var userDto = user.Select(user => new UserDTO
+        //    {
+        //        Id = user.Id,
+        //        FullName = $"{user.FirstName} {user.LastName}",
+        //        UserName = user.UserName,
+        //        Email = user.Email,
+        //        Gender = user.Gender == true ? "Female" : "Male",
+        //        Status = user.Status == true ? "Active" : "Blocked",
+        //        Address = user.Address,
+        //        LastLogin = user.LastLogin,
+        //        ImageUrl = user.Image?.ImageUrl
+        //    }).ToList();
+        //    return userDto;
+        //}
+        //public async Task<bool> UpdateUserAsync(UserDTO userDTO)
+        //{
+        //    var user = await _unitOfWork.UserRepository.GetByIdAsync(userDTO.Id);
+        //    if (user == null)
+        //    {
+        //        return false;
+        //    }
 
-            // Map the changes from userDTO to the user entity
-            _mapper.Map(userDTO, user);
+        //    // Map the changes from userDTO to the user entity
+        //    _mapper.Map(userDTO, user);
 
-            _unitOfWork.UserRepository.Update(user);
-            await _unitOfWork.SaveChangeAsync();
+        //    _unitOfWork.UserRepository.Update(user);
+        //    await _unitOfWork.SaveChangeAsync();
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        public async Task DeleteUserAsync(string userId)
-        {
-            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
-            if (user != null)
-            {
-                user.Status = false;
-                _unitOfWork.UserRepository.Update(user);
-                await _unitOfWork.UserRepository.SaveAsync(user);
-            }
-        }
-        public async Task<bool> UpdateUserStatusAsync(string userId, bool status)
-        {
-            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
-            if (user == null)
-            {
-                return false;
-            }
+        //public async Task DeleteUserAsync(string userId)
+        //{
+        //    var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        //    if (user != null)
+        //    {
+        //        user.Status = false;
+        //        _unitOfWork.UserRepository.Update(user);
+        //        await _unitOfWork.UserRepository.SaveAsync(user);
+        //    }
+        //}
+        //public async Task<bool> UpdateUserStatusAsync(string userId, bool status)
+        //{
+        //    var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        //    if (user == null)
+        //    {
+        //        return false;
+        //    }
 
-            user.Status = status;
-            await _unitOfWork.UserRepository.UpdateTaskAsync(user);
-            await _unitOfWork.SaveChangeAsync();
+        //    user.Status = status;
+        //    await _unitOfWork.UserRepository.UpdateTaskAsync(user);
+        //    await _unitOfWork.SaveChangeAsync();
 
-            return true;
-        }
-        public async Task<UserDTO> GetUserDetailAsync(string userId)
-        {
-            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId, includeProperties: "Image");
-            if (user == null) return null;
+        //    return true;
+        //}
+        //public async Task<UserDTO> GetUserDetailAsync(string userId)
+        //{
+        //    var user = await _unitOfWork.UserRepository.GetByIdAsync(userId, includeProperties: "Image");
+        //    if (user == null) return null;
 
-            return new UserDTO
-            {
-                Id = user.Id,
-                FullName = $"{user.FirstName} {user.LastName}",
-                UserName = user.UserName,
-                Email = user.Email,
-                Gender = user.Gender == true ? "Female" : "Male",
-                Status = user.Status == true ? "Active" : "Blocked",
-                Address = user.Address,
-                LastLogin = user.LastLogin,
-                ImageUrl = user.Image?.ImageUrl
-            };
-        }
+        //    return new UserDTO
+        //    {
+        //        Id = user.Id,
+        //        FullName = $"{user.FirstName} {user.LastName}",
+        //        UserName = user.UserName,
+        //        Email = user.Email,
+        //        Gender = user.Gender == true ? "Female" : "Male",
+        //        Status = user.Status == true ? "Active" : "Blocked",
+        //        Address = user.Address,
+        //        LastLogin = user.LastLogin,
+        //        ImageUrl = user.Image?.ImageUrl
+        //    };
+        //}
 
 
     }
