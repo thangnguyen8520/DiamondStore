@@ -18,5 +18,8 @@ namespace DiamondStoreService.Models
         public double? TotalAmount { get; set; }
         public string Status { get; set; }
         public string Address { get; set; }
+
+        public List<PaymentDiamondDTO> CartDiamonds { get; set; }
+        public List<PaymentJewelryDTO> CartJewelries { get; set; }
     }
 }

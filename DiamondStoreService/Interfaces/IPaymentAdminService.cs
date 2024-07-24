@@ -10,6 +10,6 @@ namespace DiamondStoreService.Interfaces
     public interface IPaymentAdminService
     {
         Task<IEnumerable<PaymentDTO>> GetAllPaymentsAsync();
-
+        Task<PaymentDTO> GetPaymentDetailsAsync(int paymentId);
     }
 }

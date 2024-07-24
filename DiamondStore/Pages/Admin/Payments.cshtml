@@ -26,12 +26,19 @@
                         @foreach (var payment in Model.Payments)
                         {
                             <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3">@payment.OrderDate</td>
+                                <td class="px-4 py-3">@payment.OrderDate.ToString("dd-MM-yyyy")</td>
                                 <td class="px-4 py-3">@payment.FullName</td>
                                 <td class="px-4 py-3">@payment.PaymentMethodName</td>
-                                <td class="px-4 py-3">@payment.TotalAmount ₫</td>
+                                <td class="px-4 py-3">@payment.TotalAmount?.ToString("N0") ₫</td>
                                 <td class="px-4 py-3">@payment.Status</td>
-                                <td class="px-4 py-3"></td>
+                                <td class="px-4 py-3">
+                                    <button class="btn btn-outline-primary btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#paymentDetailsModal"
+                                            data-id="@payment.PaymentId">
+                                        Details
+                                    </button>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -40,3 +47,212 @@
         </div>
     </div>
 </main>
+
+<!-- Modal for Payment Details -->
+<div class="modal fade" id="paymentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="paymentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: none;">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title text-center" id="paymentDetailsModalLabel">Order Details</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>Order Code: <span id="order-code"></span></p>
+                                    <p>Order Date: <span id="order-date"></span></p>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <p>Status: <span id="order-status"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="tab-content pt-3 mb-4 info w-100 bg-light">
+                                    <div class="border p-3">
+                                        <h6 class="text-primary">CUSTOMER</h6>
+                                        <p>Name: <b><span id="order-full-name"></span></b></p>
+                                        <p>Phone Number: <span id="order-phone-number"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="tab-content pt-3 mb-4 info w-100 bg-light">
+                                    <div class="border p-3">
+                                        <h6 class="text-primary">RECIPIENT</h6>
+                                        <p>Name: <b><span id="recipient-name"></span></b></p>
+                                        <p>Phone Number: <span id="recipient-phone"></span></p>
+                                        <p>Address: <span id="order-address"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive mb-4" style="margin-top: 15px">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Product Name</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="order-diamonds">
+                                </tbody>
+                                <tbody id="order-jewelries">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="tab-content pt-3 border p-3 mt-4 w-100 bg-light">
+                            <h6 class="text-primary" style="margin-bottom: 10px">PAYMENT METHODS</h6>
+                            <div class="payment-item">
+                                <p class="payment-label">Cash: </p>
+                                <span class="payment-value" id="cash-amount"></span> ₫
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Bank Transfer:</p>
+                                <span class="payment-value" id="bank-amount"></span> ₫
+                            </div>
+                        </div>
+                        <div class="tab-content pt-3 border p-3 w-100 bg-light">
+                            <h6 class="text-primary" style="margin-bottom: 10px">PAY</h6>
+                            <div class="payment-item">
+                                <p class="payment-label">Subtotal:</p>
+                                <span class="payment-value" id="subtotal"></span> ₫
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Discount:</p>
+                                <span class="payment-value" id="discount"></span> ₫
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Shipping Fee:</p>
+                                <span class="payment-value" id="shipping"></span>
+                            </div>
+                            <div class="payment-item">
+                                <p class="payment-label">Total:</p>
+                                <span class="payment-value" id="order-total-amount"></span> ₫
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#paymentDetailsModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var paymentId = button.data('id');
+            var modal = $(this);
+
+            // Clear previous content
+            modal.find('#order-code').text('');
+            modal.find('#order-date').text('');
+            modal.find('#order-status').text('');
+            modal.find('#order-full-name').text('');
+            modal.find('#order-phone-number').text('');
+            modal.find('#recipient-name').text('');
+            modal.find('#recipient-phone').text('');
+            modal.find('#order-address').text('');
+            modal.find('#cash-amount').text('');
+            modal.find('#bank-amount').text('');
+            modal.find('#subtotal').text('');
+            modal.find('#discount').text('');
+            modal.find('#shipping').text('');
+            modal.find('#order-total-amount').text('');
+            modal.find('#order-diamonds').empty();
+            modal.find('#order-jewelries').empty();
+
+            $.ajax({
+                url: '/Admin/Payments?handler=PaymentDetails',
+                type: 'GET',
+                data: { id: paymentId },
+                success: function (data) {
+                    console.log(data); // Log the data for debugging
+                    modal.find('#order-code').text(data.paymentId);
+                    modal.find('#order-date').text(new Date(data.orderDate).toLocaleDateString("en-GB"));
+                    modal.find('#order-total-amount').text(data.totalAmount);
+                    modal.find('#order-status').text(data.status);
+                    modal.find('#order-full-name').text(data.fullName);
+                    modal.find('#order-email').text(data.email);
+                    modal.find('#order-phone-number').text(data.phoneNumber);
+                    modal.find('#recipient-name').text(data.fullName);
+                    modal.find('#recipient-phone').text(data.phoneNumber);
+                    modal.find('#order-address').text(data.address);
+
+                    modal.find('#cash-amount').text(data.cash);
+                    modal.find('#bank-amount').text(data.bankTransfer);
+                    modal.find('#subtotal').text(data.subtotal);
+                    modal.find('#discount').text(data.discount);
+                    modal.find('#shipping').text(data.shippingFee);
+
+                    data.cartDiamonds.forEach(function (diamond) {
+                        var row = `<tr>
+                                                    <td>Diamond</td>
+                                                    <td>${diamond.productName}</td>
+                                                    <td>${diamond.quantity}</td>
+                                                    <td>${diamond.price}</td>
+                                                    <td>${diamond.total}</td>
+                                                </tr>`;
+                        modal.find('#order-diamonds').append(row);
+                    });
+
+                    data.cartJewelries.forEach(function (jewelry) {
+                        var row = `<tr>
+                                                    <td>Jewelry</td>
+                                                    <td>${jewelry.productName}</td>
+                                                    <td>${jewelry.quantity}</td>
+                                                    <td>${jewelry.price}</td>
+                                                    <td>${jewelry.total}</td>
+                                                </tr>`;
+                        modal.find('#order-jewelries').append(row);
+                    });
+
+                    modal.find('#order-details-content').show();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to load order details:', error);
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .form-control {
+        font-size: 15px;
+    }
+
+    .tab-content.info {
+        min-height: 200px;
+    }
+
+    .payment-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .payment-label {
+        flex: 1;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .payment-value {
+        flex: 1;
+        text-align: right;
+    }
+</style>

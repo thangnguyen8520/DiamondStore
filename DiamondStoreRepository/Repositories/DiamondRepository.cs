@@ -17,6 +17,15 @@ namespace DiamondStoreRepository.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<Diamond>> GetAllAsync()
+        {
+            return await _context.Diamonds
+                                 .Include(d => d.DiamondColor)
+                                 .Include(d => d.DiamondClarity)
+                                 .ToListAsync();
+        }
+
+
         public async Task<Pagination<Diamond>> GetDiamonds(int pageIndex, int pageSize, string sortOption, int? categoryId, string color, string clarity, string cut, double? minPrice, double? maxPrice, double? minDiameter, double? maxDiameter, double? minWeight, double? maxWeight)
         {
             IQueryable<Diamond> query = _context.Diamonds
