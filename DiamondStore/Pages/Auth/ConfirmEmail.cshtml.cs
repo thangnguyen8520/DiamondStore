@@ -25,7 +25,7 @@ namespace DiamondStore.Pages.Auth
             if (result)
             {
                 TempData["ConfirmationSuccess"] = "Your email has been successfully confirmed.";
-                return RedirectToPage("/Login");
+                return RedirectToPage("/Auth/Login");
             }
             else
             {

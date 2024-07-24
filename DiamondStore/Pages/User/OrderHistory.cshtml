@@ -95,7 +95,7 @@
 
 <!-- Modal for Order Details -->
 <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="max-width: none;">
+    <div class="modal-dialog modal-lg" role="document" style="min-width: 1100px;">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title text-center" id="orderDetailsModalLabel">Order Details</h5>
@@ -260,9 +260,9 @@
                         var row = `<tr>
                                             <td>Diamond</td>
                                             <td>${diamond.productName}</td>
-                                            <td>${diamond.quantity}</td>
-                                            <td>${diamond.price}</td>
-                                            <td>${diamond.total}</td>
+                                            <td>x${diamond.quantity}</td>
+                                                    <td>${diamond.price}₫</td>
+                                                    <td>${diamond.total}₫</td>
                                         </tr>`;
                         modal.find('#order-diamonds').append(row);
                     });
@@ -271,9 +271,9 @@
                         var row = `<tr>
                                             <td>Jewelry</td>
                                             <td>${jewelry.productName}</td>
-                                            <td>${jewelry.quantity}</td>
-                                            <td>${jewelry.price}</td>
-                                            <td>${jewelry.total}</td>
+                                            <td>x${jewelry.quantity}</td>
+                                                    <td>${jewelry.price}₫</td>
+                                                    <td>${jewelry.total}₫</td>
                                         </tr>`;
                         modal.find('#order-diamonds').append(row);
                     });
