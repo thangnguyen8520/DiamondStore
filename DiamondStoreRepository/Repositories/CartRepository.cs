@@ -53,12 +53,17 @@ namespace DiamondStoreRepository.Repositories
         public async Task<List<Cart>> GetCartItems(string userId)
         {
             var carts = await _context.Carts
-                .Include(c => c.CartDiamonds).ThenInclude(cd => cd.Diamond)
-                .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
-                .ThenInclude(j => j.Diamond)
-                .Include(c => c.CartJewelries).ThenInclude(cj => cj.Jewelry)
-                .ThenInclude(j => j.SecondaryDiamonds).ThenInclude(sd => sd.Diamond)
-                .Include(c => c.CartPromotions).ThenInclude(cp => cp.Promotion)
+                .Include(c => c.CartDiamonds)
+                .ThenInclude(cd => cd.Diamond) // Ensure Diamond is loaded
+                .Include(c => c.CartJewelries)
+                .ThenInclude(cj => cj.Jewelry) // Ensure Jewelry is loaded
+                .ThenInclude(j => j.Diamond) // Ensure related Diamond is loaded
+                .Include(c => c.CartJewelries)
+                .ThenInclude(cj => cj.Jewelry)
+                .ThenInclude(j => j.SecondaryDiamonds)
+                .ThenInclude(sd => sd.Diamond) // Ensure SecondaryDiamonds are loaded
+                .Include(c => c.CartPromotions)
+                .ThenInclude(cp => cp.Promotion) // Ensure Promotions are loaded
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
 
@@ -146,12 +151,16 @@ namespace DiamondStoreRepository.Repositories
 
         public async Task<CartDiamond> GetCartDiamondById(int cartDiamondId)
         {
-            return await _context.CartDiamonds.FindAsync(cartDiamondId);
+            return await _context.CartDiamonds
+                .Include(cd => cd.Diamond) // Ensure Diamond is loaded
+                .FirstOrDefaultAsync(cd => cd.CartDiamondId == cartDiamondId);
         }
 
         public async Task<CartJewelry> GetCartJewelryById(int cartJewelryId)
         {
-            return await _context.CartJewelries.FindAsync(cartJewelryId);
+            return await _context.CartJewelries
+                .Include(cj => cj.Jewelry) // Ensure Jewelry is loaded
+                .FirstOrDefaultAsync(cj => cj.CartJewelryId == cartJewelryId);
         }
 
         public async Task UpdateCartDiamond(CartDiamond cartDiamond)
@@ -165,6 +174,8 @@ namespace DiamondStoreRepository.Repositories
             _context.CartJewelries.Update(cartJewelry);
             await _context.SaveChangesAsync();
         }
+
+
 
         public async Task DeleteCartDiamond(int cartDiamondId)
         {
