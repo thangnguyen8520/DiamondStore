@@ -1,13 +1,13 @@
 ﻿@page
 @model DiamondStore.Pages.Admin.PaymentsModel
 @{
-    ViewData["Title"] = "Payments";
+    ViewData["Title"] = "Orders";
     Layout = "_LayoutAdmin";
 }
 <main class="h-full pb-16 overflow-y-auto">
     <div class="container grid px-6 mx-auto">
         <h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Payment List
+            Order Info
         </h1>
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
@@ -17,6 +17,7 @@
                             <th class="px-4 py-3">Full Name</th>
                             <th class="px-4 py-3">Phone Number</th>
                             <th class="px-4 py-3">Email</th>
+                            <th class="px-4 py-3">Address</th>
                             <th class="px-4 py-3">Product Name</th>
                             <th class="px-4 py-3">Payment Method</th>
                             <th class="px-4 py-3">Total Amount</th>
@@ -30,6 +31,7 @@
                                 <td class="px-4 py-3">@payment.FullName</td>
                                 <td class="px-4 py-3">@payment.PhoneNumber</td>
                                 <td class="px-4 py-3">@payment.Email</td>
+                                <td class="px-4 py-3">@payment.Address</td>
                                 <td class="px-4 py-3">@payment.ProductName</td>
                                 <td class="px-4 py-3">@payment.PaymentMethodName</td>
                                 <td class="px-4 py-3">@payment.TotalAmount</td>

@@ -21,5 +21,8 @@ namespace DiamondStoreService.Interfaces
         Task<bool> UpdateUserAsync(UserDTO userDTO);
         Task DeleteUserAsync(string userId);
         Task<bool> UpdateUserStatusAsync(string userId, bool status);
+        Task<UserDTO> GetUserDetailAsync(string userId);
+        Task<List<UserDTO>> GetUserAsync(string userId);
+
     }
 }

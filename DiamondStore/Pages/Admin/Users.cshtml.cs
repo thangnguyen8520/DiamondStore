@@ -14,7 +14,7 @@ namespace DiamondStore.Pages.Admin
             _userService = userService;
         }
 
-        public IList<UserDTO> Users { get; private set; }
+        public IList<UserDTO> Users { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -23,44 +23,12 @@ namespace DiamondStore.Pages.Admin
 
         public async Task<IActionResult> OnGetDetailsAsync(string id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetUserDetailAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            return Partial("_UserDetailPartial", user);
-        }
-
-        public async Task<IActionResult> OnGetEditAsync(string id)
-        {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Partial("_UserEditPartial", user);
-        }
-
-        public async Task<IActionResult> OnPostEditAsync(UserDTO userDTO)
-        {
-            await _userService.UpdateUserAsync(userDTO);
-            return RedirectToPage();
-        }
-
-        public async Task<IActionResult> OnGetDeleteAsync(string id)
-        {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Partial("_UserDeletePartial", user);
-        }
-
-        public async Task<IActionResult> OnPostDeleteAsync(string id)
-        {
-            await _userService.DeleteUserAsync(id);
-            return RedirectToPage();
+            return new JsonResult(user);
         }
     }
 

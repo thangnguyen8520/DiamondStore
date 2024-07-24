@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace DiamondStoreService.Models
 {
-    public class PaymentDTO
+    public class UserDetailDTO
     {
-        public int PaymentId { get; set; }
+        public string UserId { get; set; }
         public string FullName { get; set; }
-        public string PhoneNumber { get; set; }
+        public string UserName { get; set; }
         public string Email { get; set; }
-        public string ProductName { get; set; }
-        public string PaymentMethodName { get; set; }
-        public double? TotalAmount { get; set; }
+        public string Gender { get; set; }
         public string Status { get; set; }
         public string Address { get; set; }
+        public DateTime? LastLogin { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

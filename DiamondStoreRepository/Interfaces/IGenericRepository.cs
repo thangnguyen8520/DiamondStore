@@ -15,8 +15,9 @@ namespace DiamondStoreRepository.Interfaces
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");
-        //Task<TEntity?> GetByIdAsync(object id);
         Task<TEntity?> GetByIdAsync(object id, string includeProperties = "");
+        Task<TEntity?> GetByIdNoIncludeAsync(object id);
+
         Task AddAsync(TEntity entity);
         Task AddRangeAsync(List<TEntity> entities);
         void Update(TEntity entity);

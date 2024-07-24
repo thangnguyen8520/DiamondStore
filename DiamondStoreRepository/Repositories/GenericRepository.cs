@@ -47,11 +47,6 @@ namespace DiamondStoreRepository.Repositories
             return await query.ToListAsync();
         }
 
-        //public async Task<TEntity?> GetByIdAsync(object id)
-        //{
-        //    return await _dbSet.FindAsync(id);
-        //}
-
         public async Task<TEntity?> GetByIdAsync(object id, string includeProperties = "")
         {
             IQueryable<TEntity> query = _dbSet;
@@ -72,6 +67,10 @@ namespace DiamondStoreRepository.Repositories
             return await query.FirstOrDefaultAsync(lambda);
         }
 
+        public async Task<TEntity?> GetByIdNoIncludeAsync(object id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
 
         public async Task AddAsync(TEntity entity)
         {
