@@ -19,5 +19,7 @@ namespace DiamondStoreService.Interfaces
         Task DeleteCartJewelry(int cartJewelryId);
         Task UpdateCartDiamondQuantity(int cartDiamondId, int quantity);
         Task UpdateCartJewelryQuantity(int cartJewelryId, int quantity);
+        Task<CartDiamond> GetCartDiamondById(int cartDiamondId); 
+        Task<CartJewelry> GetCartJewelryById(int cartJewelryId); 
     }
 }

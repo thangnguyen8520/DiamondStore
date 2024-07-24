@@ -126,13 +126,57 @@ namespace DiamondStore.Pages
                 {
                     if (itemType == "Diamond")
                     {
-                        _logger.LogInformation($"Updating diamond quantity. ItemId: {itemId}, Quantity: {quantity}");
-                        await _cartService.UpdateCartDiamondQuantity(itemId, quantity);
+                        var cartDiamond = await _cartService.GetCartDiamondById(itemId);
+                        if (cartDiamond != null)
+                        {
+                            if (cartDiamond.Diamond == null)
+                            {
+                                ModelState.AddModelError(string.Empty, "Diamond details not found.");
+                                return RedirectToPage();
+                            }
+
+                            if (quantity > cartDiamond.Diamond.DiamondInventory)
+                            {
+                                ModelState.AddModelError(string.Empty, $"Cannot update quantity. Only {cartDiamond.Diamond.DiamondInventory} items in stock.");
+                                return RedirectToPage();
+                            }
+
+                            _logger.LogInformation($"Updating diamond quantity. ItemId: {itemId}, Quantity: {quantity}");
+                            cartDiamond.Quantity = quantity;  // Update the quantity
+                            await _cartService.UpdateCartDiamondQuantity(itemId, quantity);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Cart diamond not found.");
+                            return RedirectToPage();
+                        }
                     }
                     else if (itemType == "Jewelry")
                     {
-                        _logger.LogInformation($"Updating jewelry quantity. ItemId: {itemId}, Quantity: {quantity}");
-                        await _cartService.UpdateCartJewelryQuantity(itemId, quantity);
+                        var cartJewelry = await _cartService.GetCartJewelryById(itemId);
+                        if (cartJewelry != null)
+                        {
+                            if (cartJewelry.Jewelry == null)
+                            {
+                                ModelState.AddModelError(string.Empty, "Jewelry details not found.");
+                                return RedirectToPage();
+                            }
+
+                            if (quantity > cartJewelry.Jewelry.JewelryInventory)
+                            {
+                                ModelState.AddModelError(string.Empty, $"Cannot update quantity. Only {cartJewelry.Jewelry.JewelryInventory} items in stock.");
+                                return RedirectToPage();
+                            }
+
+                            _logger.LogInformation($"Updating jewelry quantity. ItemId: {itemId}, Quantity: {quantity}");
+                            cartJewelry.Quantity = quantity;  // Update the quantity
+                            await _cartService.UpdateCartJewelryQuantity(itemId, quantity);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Cart jewelry not found.");
+                            return RedirectToPage();
+                        }
                     }
                 }
             }
@@ -144,6 +188,6 @@ namespace DiamondStore.Pages
 
             return RedirectToPage();
         }
-    }
 
+    }
 }

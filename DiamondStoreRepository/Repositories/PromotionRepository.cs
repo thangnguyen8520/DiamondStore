@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace DiamondStoreRepository.Repositories
 {
-    public class PromotionRepository : IPromotionRepository
+    public class PromotionRepository : GenericRepository<Promotion>, IPromotionRepository
     {
         private readonly DiamondStoreContext _context;
 
-        public PromotionRepository(DiamondStoreContext context)
+        public PromotionRepository(DiamondStoreContext context) : base(context)
         {
             _context = context;
         }

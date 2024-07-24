@@ -67,13 +67,13 @@
                                             <input type="hidden" name="itemType" value="Diamond" />
                                             <div class="input-group number-spinner">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" type="submit" formaction="/Cart?handler=Update" formmethod="post" name="quantity" value="@(diamond.Quantity - 1)">
+                                                    <button class="btn btn-default" type="button" onclick="updateQuantity(@diamond.CartDiamondId, @diamond.Quantity - 1, 'Diamond')">
                                                         <span class="glyphicon glyphicon-minus"></span>
                                                     </button>
                                                 </span>
-                                                <input type="text" class="form-control text-center" name="quantityInput" value="@diamond.Quantity" readonly>
+                                                <input type="text" class="form-control text-center" name="quantity" value="@diamond.Quantity" readonly>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" type="submit" formaction="/Cart?handler=Update" formmethod="post" name="quantity" value="@(diamond.Quantity + 1)">
+                                                    <button class="btn btn-default" type="button" onclick="updateQuantity(@diamond.CartDiamondId, @diamond.Quantity + 1, 'Diamond')">
                                                         <span class="glyphicon glyphicon-plus"></span>
                                                     </button>
                                                 </span>
@@ -114,13 +114,13 @@
                                             <input type="hidden" name="itemType" value="Jewelry" />
                                             <div class="input-group number-spinner">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" type="submit" formaction="/Cart?handler=Update" formmethod="post" name="quantity" value="@(jewelry.Quantity - 1)">
+                                                    <button class="btn btn-default" type="button" onclick="updateQuantity(@jewelry.CartJewelryId, @jewelry.Quantity - 1, 'Jewelry')">
                                                         <span class="glyphicon glyphicon-minus"></span>
                                                     </button>
                                                 </span>
-                                                <input type="text" class="form-control text-center" name="quantityInput" value="@jewelry.Quantity" readonly>
+                                                <input type="text" class="form-control text-center" name="quantity" value="@jewelry.Quantity" readonly>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" type="submit" formaction="/Cart?handler=Update" formmethod="post" name="quantity" value="@(jewelry.Quantity + 1)">
+                                                    <button class="btn btn-default" type="button" onclick="updateQuantity(@jewelry.CartJewelryId, @jewelry.Quantity + 1, 'Jewelry')">
                                                         <span class="glyphicon glyphicon-plus"></span>
                                                     </button>
                                                 </span>
@@ -192,33 +192,41 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            var secondaryNav = $('.cd-secondary-nav'),
-                secondaryNavTopPosition = secondaryNav.offset().top;
-            $(window).on('scroll', function () {
-                if ($(window).scrollTop() > secondaryNavTopPosition) {
-                    secondaryNav.addClass('is-fixed');
-                } else {
-                    secondaryNav.removeClass('is-fixed');
-                }
-            });
-        });
+        function updateQuantity(itemId, quantity, itemType) {
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "/Cart?handler=Update";
 
-        $(document).on('click', '.number-spinner button', function () {
-            var btn = $(this),
-                oldValue = btn.closest('.number-spinner').find('input').val().trim(),
-                newVal = 0;
-            if (btn.attr('data-dir') == 'up') {
-                newVal = parseInt(oldValue) + 1;
-            } else {
-                if (oldValue > 1) {
-                    newVal = parseInt(oldValue) - 1;
-                } else {
-                    newVal = 0;
-                }
-            }
-            btn.closest('.number-spinner').find('input').val(newVal);
-        });
+            var inputItemId = document.createElement("input");
+            inputItemId.type = "hidden";
+            inputItemId.name = "itemId";
+            inputItemId.value = itemId;
+            form.appendChild(inputItemId);
+
+            var inputQuantity = document.createElement("input");
+            inputQuantity.type = "hidden";
+            inputQuantity.name = "quantity";
+            inputQuantity.value = quantity;
+            form.appendChild(inputQuantity);
+
+            var inputItemType = document.createElement("input");
+            inputItemType.type = "hidden";
+            inputItemType.name = "itemType";
+            inputItemType.value = itemType;
+            form.appendChild(inputItemType);
+
+            var inputCartId = document.createElement("input");
+            inputCartId.type = "hidden";
+            inputCartId.name = "cartId";
+            inputCartId.value = "@Model.CartItems.FirstOrDefault()?.CartId";
+            form.appendChild(inputCartId);
+
+            var token = document.querySelector('input[name="__RequestVerificationToken"]').cloneNode();
+            form.appendChild(token);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 }
 

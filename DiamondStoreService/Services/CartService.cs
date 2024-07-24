@@ -80,9 +80,17 @@ namespace DiamondStoreService.Services
             var cartDiamond = await _cartRepository.GetCartDiamondById(cartDiamondId);
             if (cartDiamond != null)
             {
-                _logger.LogInformation($"Updating cart diamond quantity. CartDiamondId: {cartDiamondId}, Quantity: {quantity}");
-                cartDiamond.Quantity = quantity;
-                await _cartRepository.UpdateCartDiamond(cartDiamond);
+                if (cartDiamond.Diamond != null)
+                {
+                    _logger.LogInformation($"Updating cart diamond quantity. CartDiamondId: {cartDiamondId}, Quantity: {quantity}");
+                    cartDiamond.Quantity = quantity;
+                    await _cartRepository.UpdateCartDiamond(cartDiamond);
+                }
+                else
+                {
+                    _logger.LogWarning($"Diamond details not found for CartDiamondId: {cartDiamondId}");
+                    throw new Exception("Diamond details not found.");
+                }
             }
             else
             {
@@ -95,14 +103,34 @@ namespace DiamondStoreService.Services
             var cartJewelry = await _cartRepository.GetCartJewelryById(cartJewelryId);
             if (cartJewelry != null)
             {
-                _logger.LogInformation($"Updating cart jewelry quantity. CartJewelryId: {cartJewelryId}, Quantity: {quantity}");
-                cartJewelry.Quantity = quantity;
-                await _cartRepository.UpdateCartJewelry(cartJewelry);
+                if (cartJewelry.Jewelry != null)
+                {
+                    _logger.LogInformation($"Updating cart jewelry quantity. CartJewelryId: {cartJewelryId}, Quantity: {quantity}");
+                    cartJewelry.Quantity = quantity;
+                    await _cartRepository.UpdateCartJewelry(cartJewelry);
+                }
+                else
+                {
+                    _logger.LogWarning($"Jewelry details not found for CartJewelryId: {cartJewelryId}");
+                    throw new Exception("Jewelry details not found.");
+                }
             }
             else
             {
                 _logger.LogWarning($"CartJewelryId: {cartJewelryId} not found.");
             }
+        }
+
+
+
+        public async Task<CartDiamond> GetCartDiamondById(int cartDiamondId)
+        {
+            return await _cartRepository.GetCartDiamondById(cartDiamondId);
+        }
+
+        public async Task<CartJewelry> GetCartJewelryById(int cartJewelryId) 
+        {
+            return await _cartRepository.GetCartJewelryById(cartJewelryId);
         }
     }
 }
