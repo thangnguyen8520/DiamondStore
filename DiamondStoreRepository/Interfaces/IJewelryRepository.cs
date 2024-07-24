@@ -10,6 +10,8 @@ namespace DiamondStoreRepository.Interfaces
 {
     public interface IJewelryRepository : IGenericRepository<Jewelry>
     {
+        float CalculateTotalPrice(Jewelry jewelry);
+        Task<IEnumerable<Jewelry>> GetAllAsync();
         Task<Pagination<Jewelry>> GetPaginated(int pageIndex, int pageSize, string sortOption, int? typeId, string material, int? sizeId, string priceRange);
         Task<Jewelry> GetJewelryWithDetails(int jewelryId);
         Task<List<Jewelry>> GetRelatedJewelries(int typeId, int excludeId);

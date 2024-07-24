@@ -18,7 +18,18 @@ namespace DiamondStoreRepository.Repositories
             _context = context;
         }
 
-        private float CalculateTotalPrice(Jewelry jewelry)
+        public async Task<IEnumerable<Jewelry>> GetAllAsync()
+        {
+            return await _context.Jewelries
+                                 .Include(j => j.JewelryMaterial)
+                                 .Include(j => j.JewelryType)
+                                 .Include(j => j.Diamond)
+                                 .Include(j => j.SecondaryDiamonds)
+                                 .ThenInclude(d => d.Diamond)
+                                 .ToListAsync();
+        }
+
+        public float CalculateTotalPrice(Jewelry jewelry)
         {
             float mainDiamondPrice = jewelry.Diamond?.DiamondPrice ?? 0;
             float secondaryDiamondPrice = jewelry.SecondaryDiamonds.Sum(sd => sd.Diamond?.DiamondPrice ?? 0);
