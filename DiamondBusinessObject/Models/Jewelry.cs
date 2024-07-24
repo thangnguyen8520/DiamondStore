@@ -29,6 +29,8 @@ namespace DiamondBusinessObject.Models
 
         public float JewelryPrice { get; set; }
 
+        public int JewelryInventory { get; set; }
+
         [StringLength(255)]
         public string Status { get; set; }
         public DateTime? CreateDate { get; set; }

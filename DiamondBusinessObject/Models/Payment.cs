@@ -48,9 +48,6 @@ public partial class Payment
     [InverseProperty("Payment")]
     public virtual ICollection<PaymentDiamond> PaymentDiamonds { get; set; } = new List<PaymentDiamond>();
 
-    [InverseProperty("Payment")]
-    public virtual ICollection<PaymentPromotion> PaymentPromotions { get; set; } = new List<PaymentPromotion>();
-
     [ForeignKey("UserId")]
     [InverseProperty("Payments")]
     public virtual User User { get; set; }

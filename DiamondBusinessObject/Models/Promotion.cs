@@ -33,9 +33,6 @@ public partial class Promotion
     public bool Status { get; set; }
 
     [InverseProperty("Promotion")]
-    public virtual ICollection<PaymentPromotion> PaymentPromotions { get; set; } = new List<PaymentPromotion>();
-
-    [InverseProperty("Promotion")]
     public virtual ICollection<CartPromotion> CartPromotions { get; set; } = new List<CartPromotion>();
 
     [InverseProperty("Promotion")]
