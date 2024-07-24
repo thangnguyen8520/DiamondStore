@@ -195,18 +195,34 @@ namespace DiamondStoreService.Services
         public async Task<IEnumerable<UserDTO>> GetAllActiveUsersAsync()
         {
             var users = await _unitOfWork.UserRepository.GetAsync(u => u.Status == true, includeProperties: "Image");
-            var userDTOs = users.Select(user => new UserDTO
+            var userDTOs = new List<UserDTO>();
+
+            foreach (var user in users)
             {
-                ImageUrl = user.Image?.ImageUrl,
-                FullName = $"{user.FirstName} {user.LastName}",
-                UserName = user.UserName,
-                Email = user.Email,
-                Gender = user.Gender.HasValue ? (user.Gender.Value ? "Female" : "Male") : "Unknown",
-                Status = user.Status.HasValue ? (user.Status.Value ? "Active" : "Blocked") : "Unknown",
-            }).ToList();
+                var roles = await _userManager.GetRolesAsync(user);
+                var role = roles.FirstOrDefault();
+
+                if (role != "Admin")
+                {
+                    var userDTO = new UserDTO
+                    {
+                        ImageUrl = user.Image?.ImageUrl,
+                        FullName = $"{user.FirstName} {user.LastName}",
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        Role = role,
+                        LastLogin = user.LastLogin,
+                        Gender = user.Gender.HasValue ? (user.Gender.Value ? "Female" : "Male") : "Unknown",
+                        Status = user.Status.HasValue ? (user.Status.Value ? "Active" : "Blocked") : "Unknown",
+                    };
+
+                    userDTOs.Add(userDTO);
+                }
+            }
 
             return userDTOs;
         }
+
 
         public async Task<UserDTO> GetUserInAdminByIdAsync(string userId)
         {

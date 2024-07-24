@@ -211,7 +211,7 @@ namespace DiamondStoreService.Services
                 {
                     return new LoginResult { Success = false, ErrorMessage = "Failed to create user." };
                 }
-
+                await _userManager.AddToRoleAsync(user, RoleEnums.Customer.ToString());
                 await _userManager.AddLoginAsync(user, new UserLoginInfo("Google", user.Id, "Google"));
                 await _signInManager.SignInAsync(user, isPersistent: false);
             }
